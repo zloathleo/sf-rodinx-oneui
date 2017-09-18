@@ -26,6 +26,7 @@ module.exports = {
     ]
   },
 
+  
   // plugins: [
   //   new webpack.optimize.UglifyJsPlugin({
   //     //生成环境启用js压缩
