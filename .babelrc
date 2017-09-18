@@ -1,0 +1,20 @@
+{
+    "presets": [
+        "es2015",
+        "stage-0",
+        "react",
+        [
+            "env",
+            {
+                "targets": {
+                    "chrome": 53
+                }
+            }
+        ]
+    ],
+    "plugins": [
+        [
+            "transform-decorators-legacy"
+        ]
+    ]
+}
