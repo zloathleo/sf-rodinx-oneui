@@ -10,13 +10,14 @@ import BreadcrumbComponent from '../main/BreadcrumbComponent.jsx'
 class Descript extends React.Component {
 
     render() {
-        return (
-            <div className="col-xs-12" >
+
+        return ( 
+            <div className="col-xs-12 animated bounceInDown">
                 <div className="block block-bordered">
                     <div className="block-content">
 
                         <div className="row" >
-                            <div className="col-xs-6" >
+                            <div className="col-xs-12 col-sm-6" >
                                 <ul className="list-unstyled weather-info">
                                     <li><span>C</span><span className="pull-right">Celsius</span></li>
                                     <li><span>F</span><span className="pull-right">Fahrenhert</span></li>
@@ -25,7 +26,7 @@ class Descript extends React.Component {
                                     <li><span>Fault</span><span className="pull-right">Error Code(Hex)</span></li>
                                 </ul>
                             </div>
-                            <div className="col-xs-6" >
+                            <div className="col-xs-12 col-sm-6" >
                                 <ul className="list-unstyled weather-info">
                                     <li><span>MAX</span><span className="pull-right">AC Maximum</span></li>
                                     <li><span>MIN</span><span className="pull-right">AC Minimum</span></li>
@@ -38,7 +39,7 @@ class Descript extends React.Component {
 
                     </div>
                 </div>
-            </div>
+            </div> 
         )
     }
 
@@ -48,7 +49,7 @@ class CHDetail extends React.Component {
     render() {
         return (
 
-            <div className="col-xs-12 col-sm-6 " >
+            <div className="col-xs-12 col-sm-6 animated bounceInDown" >
                 <div className="block block-bordered">
                     <div className="block-header bg-gray-lighter">
                         <ul className="block-options">
@@ -142,9 +143,6 @@ class DeviceDetailComponent extends React.Component {
                 <div className="block" style={{ marginBottom: '0px' }}>
                     <div className="block-header">
                         <ul className="block-options-simple">
-                            <button className="btn btn-square btn-sm btn-primary" onClick={this.onClickUserSettingsButton.bind(this, dataJson)} data-toggle="modal" data-target="#modal-fromleft" style={{ margin: '0 2px' }}>
-                                <i className="glyphicon glyphicon-cog"></i> UserSettings</button>
-
                             <Switcher valueChangeFunc={this.unitSwitcherChange} items={[{ display: 'C', selected: true }, { display: 'F', selected: false }]} />
                         </ul>
                         <BreadcrumbComponent />

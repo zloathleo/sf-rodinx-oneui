@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Scrollbars } from 'react-custom-scrollbars';
+import { Scrollbars } from 'react-custom-scrollbars'; 
 
 import Constants from '../../constants/Constants.jsx';
 import StateManager from '../../states/StateManager.jsx';
@@ -76,7 +76,7 @@ class OverviewTopComponent extends React.Component {
                                 {
                                     _data.rows.map(function (row, i) {
                                         let items = row.items;
-                                        return (<div className="row" style={{ marginRight: '10px', marginLeft: '10px' }}>
+                                        return (<div className="row animated bounceInDown" style={{ marginRight: '10px', marginLeft: '10px' }}>
                                             {
                                                 items.map(function (item, num) {
                                                     return (<ItemComponent data={item} />)
