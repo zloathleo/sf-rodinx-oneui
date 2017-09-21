@@ -61,7 +61,7 @@ class ItemComponent extends React.Component {
     render() {
         let _item = this.props.data;
         return (<div className="col-xs-6 col-sm-2" style={{ paddingLeft: '3px', paddingRight: '3px' }}>
-            <div className="block block-bordered" style={{ marginBottom: '10px' }}>
+            <div className="block block-bordered" style={{ marginBottom: '5px' }}>
                 <div className="block-header bg-gray-lighter" style={{ margin: '1px', padding: '10px 10px 10px 15px' }}>
                     <ul className="block-options">
                         <li> <button type="button" onClick={this.onClickSetAddressButton.bind(this, _item)} data-toggle="modal" data-target="#modal-fromleft" ><i className="glyphicon glyphicon-link"></i></button> </li>

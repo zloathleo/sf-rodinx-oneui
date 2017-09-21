@@ -12,7 +12,7 @@ export default {
             "name": "Layout-Default",
             "com": "COM3",
             "baud_rate": 9600,
-            "rows|12-36": [
+            "rows|2-10": [
                 {
                     "index": 0,
                     "title": "A",
@@ -68,6 +68,438 @@ export default {
                 "fq": 99
             }
         }));
+
+        //查询/Read放大器settings
+        FetchMock.get('/detail/A1/settings/u/m', Mock.mock(
+            {
+                "addr": 1,
+                "ch1": {
+                    "ao_value": {
+                        "ao_20ma_value": 65295,
+                        "ao_4ma_value": 0
+                    },
+                    "enable": 1,
+                    "file": 1,
+                    "filea": {
+                        "ac": {
+                            "ac_gain": 1,
+                            "ac_on_th": 1998,
+                            "ac_on_tl": 600,
+                            "fc": 99,
+                            "l_band": 4,
+                            "l_d": 0.02,
+                            "l_weight": 0.333,
+                            "line_param": 1,
+                            "line_turn": 600,
+                            "max": 1999,
+                            "min": 300,
+                            "r_band": 4,
+                            "r_d": 0.02,
+                            "r_weight": 0.333,
+                            "weight_h": [
+                                0.575,
+                                0.225,
+                                0.1,
+                                0.1
+                            ],
+                            "weight_l": [
+                                0.1,
+                                0.5,
+                                0.2,
+                                0.2
+                            ],
+                            "weight_n": [
+                                0.05,
+                                0.2,
+                                0.2,
+                                0.55
+                            ],
+                            "weight_ph": 150,
+                            "weight_pl": 100
+                        },
+                        "dc": {
+                            "dc_gain": 1,
+                            "dc_on_th": 1999,
+                            "dc_on_tl": 0,
+                            "weight_h": [
+                                0.575,
+                                0.225,
+                                0.1,
+                                0.1
+                            ],
+                            "weight_l": [
+                                0.1,
+                                0.5,
+                                0.2,
+                                0.2
+                            ],
+                            "weight_n": [
+                                0.05,
+                                0.2,
+                                0.2,
+                                0.55
+                            ],
+                            "weight_ph": 150,
+                            "weight_pl": 100
+                        },
+                        "frequency": {
+                            "drop_num": 3,
+                            "drop_v1": 500,
+                            "drop_v2": 500,
+                            "freq_on_th": 126,
+                            "freq_on_tl": 0,
+                            "raise_num": 3,
+                            "raise_v1": 500,
+                            "raise_v2": 500,
+                            "weight_h": [
+                                0.575,
+                                0.225,
+                                0.1,
+                                0.1
+                            ],
+                            "weight_l": [
+                                0.1,
+                                0.5,
+                                0.2,
+                                0.2
+                            ],
+                            "weight_n": [
+                                0.05,
+                                0.2,
+                                0.2,
+                                0.55
+                            ],
+                            "weight_ph": 12,
+                            "weight_pl": 3
+                        },
+                        "public": {
+                            "ffrt": 3,
+                            "otd": 1
+                        }
+                    },
+                    "fileb": {
+                        "ac": {
+                            "ac_gain": 1,
+                            "ac_on_th": 1999,
+                            "ac_on_tl": 600,
+                            "fc": 99,
+                            "l_band": 3,
+                            "l_d": 0.02,
+                            "l_weight": 0.333,
+                            "line_param": 1,
+                            "line_turn": 600,
+                            "max": 1999,
+                            "min": 300,
+                            "r_band": 3,
+                            "r_d": 0.02,
+                            "r_weight": 0.333,
+                            "weight_h": [
+                                0.575,
+                                0.225,
+                                0.1,
+                                0.1
+                            ],
+                            "weight_l": [
+                                0.1,
+                                0.5,
+                                0.2,
+                                0.2
+                            ],
+                            "weight_n": [
+                                0.05,
+                                0.2,
+                                0.2,
+                                0.55
+                            ],
+                            "weight_ph": 150,
+                            "weight_pl": 100
+                        },
+                        "dc": {
+                            "dc_gain": 1,
+                            "dc_on_th": 1999,
+                            "dc_on_tl": 0,
+                            "weight_h": [
+                                0.575,
+                                0.225,
+                                0.1,
+                                0.1
+                            ],
+                            "weight_l": [
+                                0.1,
+                                0.5,
+                                0.2,
+                                0.2
+                            ],
+                            "weight_n": [
+                                0.05,
+                                0.2,
+                                0.2,
+                                0.55
+                            ],
+                            "weight_ph": 150,
+                            "weight_pl": 100
+                        },
+                        "frequency": {
+                            "drop_num": 3,
+                            "drop_v1": 500,
+                            "drop_v2": 500,
+                            "freq_on_th": 126,
+                            "freq_on_tl": 0,
+                            "raise_num": 3,
+                            "raise_v1": 500,
+                            "raise_v2": 500,
+                            "weight_h": [
+                                0.575,
+                                0.225,
+                                0.1,
+                                0.1
+                            ],
+                            "weight_l": [
+                                0.1,
+                                0.5,
+                                0.2,
+                                0.2
+                            ],
+                            "weight_n": [
+                                0.05,
+                                0.2,
+                                0.2,
+                                0.55
+                            ],
+                            "weight_ph": 12,
+                            "weight_pl": 3
+                        },
+                        "public": {
+                            "ffrt": 3,
+                            "otd": 1
+                        }
+                    },
+                    "name": "ch1",
+                    "type": "IR"
+                },
+                "ch2": {
+                    "ao_value": {
+                        "ao_20ma_value": 65295,
+                        "ao_4ma_value": 0
+                    },
+                    "enable": 1,
+                    "file": 1,
+                    "filea": {
+                        "ac": {
+                            "ac_gain": 1,
+                            "ac_on_th": 1999,
+                            "ac_on_tl": 600,
+                            "fc": 99,
+                            "l_band": 3,
+                            "l_d": 0.02,
+                            "l_weight": 0.333,
+                            "line_param": 1,
+                            "line_turn": 600,
+                            "max": 1999,
+                            "min": 300,
+                            "r_band": 3,
+                            "r_d": 0.02,
+                            "r_weight": 0.333,
+                            "weight_h": [
+                                0.575,
+                                0.225,
+                                0.1,
+                                0.1
+                            ],
+                            "weight_l": [
+                                0.1,
+                                0.5,
+                                0.2,
+                                0.2
+                            ],
+                            "weight_n": [
+                                0.05,
+                                0.2,
+                                0.2,
+                                0.55
+                            ],
+                            "weight_ph": 150,
+                            "weight_pl": 100
+                        },
+                        "dc": {
+                            "dc_gain": 1,
+                            "dc_on_th": 1999,
+                            "dc_on_tl": 0,
+                            "weight_h": [
+                                0.575,
+                                0.225,
+                                0.1,
+                                0.1
+                            ],
+                            "weight_l": [
+                                0.1,
+                                0.5,
+                                0.2,
+                                0.2
+                            ],
+                            "weight_n": [
+                                0.05,
+                                0.2,
+                                0.2,
+                                0.55
+                            ],
+                            "weight_ph": 150,
+                            "weight_pl": 100
+                        },
+                        "frequency": {
+                            "drop_num": 3,
+                            "drop_v1": 500,
+                            "drop_v2": 500,
+                            "freq_on_th": 126,
+                            "freq_on_tl": 0,
+                            "raise_num": 3,
+                            "raise_v1": 500,
+                            "raise_v2": 500,
+                            "weight_h": [
+                                0.575,
+                                0.225,
+                                0.1,
+                                0.1
+                            ],
+                            "weight_l": [
+                                0.1,
+                                0.5,
+                                0.2,
+                                0.2
+                            ],
+                            "weight_n": [
+                                0.05,
+                                0.2,
+                                0.2,
+                                0.55
+                            ],
+                            "weight_ph": 12,
+                            "weight_pl": 3
+                        },
+                        "public": {
+                            "ffrt": 3,
+                            "otd": 1
+                        }
+                    },
+                    "fileb": {
+                        "ac": {
+                            "ac_gain": 1,
+                            "ac_on_th": 1999,
+                            "ac_on_tl": 600,
+                            "fc": 99,
+                            "l_band": 3,
+                            "l_d": 0.02,
+                            "l_weight": 0.333,
+                            "line_param": 1,
+                            "line_turn": 600,
+                            "max": 1999,
+                            "min": 300,
+                            "r_band": 3,
+                            "r_d": 0.02,
+                            "r_weight": 0.333,
+                            "weight_h": [
+                                0.575,
+                                0.225,
+                                0.1,
+                                0.1
+                            ],
+                            "weight_l": [
+                                0.1,
+                                0.5,
+                                0.2,
+                                0.2
+                            ],
+                            "weight_n": [
+                                0.05,
+                                0.2,
+                                0.2,
+                                0.55
+                            ],
+                            "weight_ph": 150,
+                            "weight_pl": 100
+                        },
+                        "dc": {
+                            "dc_gain": 1,
+                            "dc_on_th": 1999,
+                            "dc_on_tl": 0,
+                            "weight_h": [
+                                0.575,
+                                0.225,
+                                0.1,
+                                0.1
+                            ],
+                            "weight_l": [
+                                0.1,
+                                0.5,
+                                0.2,
+                                0.2
+                            ],
+                            "weight_n": [
+                                0.05,
+                                0.2,
+                                0.2,
+                                0.55
+                            ],
+                            "weight_ph": 150,
+                            "weight_pl": 100
+                        },
+                        "frequency": {
+                            "drop_num": 3,
+                            "drop_v1": 500,
+                            "drop_v2": 500,
+                            "freq_on_th": 126,
+                            "freq_on_tl": 0,
+                            "raise_num": 3,
+                            "raise_v1": 500,
+                            "raise_v2": 500,
+                            "weight_h": [
+                                0.575,
+                                0.225,
+                                0.1,
+                                0.1
+                            ],
+                            "weight_l": [
+                                0.1,
+                                0.5,
+                                0.2,
+                                0.2
+                            ],
+                            "weight_n": [
+                                0.05,
+                                0.2,
+                                0.2,
+                                0.55
+                            ],
+                            "weight_ph": 12,
+                            "weight_pl": 3
+                        },
+                        "public": {
+                            "ffrt": 3,
+                            "otd": 1
+                        }
+                    },
+                    "name": "ch2",
+                    "type": "IR"
+                },
+                "check_enables": {
+                    "da1": 1,
+                    "da2": 1,
+                    "fram": 1,
+                    "scan1": 1,
+                    "scan2": 1,
+                    "t1": 1,
+                    "t2": 1
+                },
+                "name": "A0",
+                "version_info": {
+                    "amp_version": 3,
+                    "ch1": 768,
+                    "ch2": 1,
+                    "fw_version": 513
+                }
+            }
+
+        ));
 
         // 其他路由使用原生fetch，这段代码必须放最后
         FetchMock.once('*', (url, options) => {

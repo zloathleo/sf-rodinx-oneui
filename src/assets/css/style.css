@@ -1,0 +1,30 @@
+/* 小屏幕（平板，大于等于 768px） */
+.overview-head-padding{
+    padding: 10px 15px !important 
+  }
+
+.setting-table-item-label-padding {
+    padding: 3px 20px 3px 0px !important
+}
+
+.setting-table-item-padding {
+    padding: 3px 0px !important
+}
+ 
+     
+/* 中等和大屏幕（桌面显示器，大于等于 992px） */
+@media only screen and (min-width: 992px){
+    .overview-head-padding{
+        padding: 15px !important
+    }
+
+    .setting-table-item-label-padding {
+        padding: 10px 20px 10px 0px !important
+    }
+
+    .setting-table-item-padding {
+        padding: 10px 0px !important
+    }
+}
+     
+ 

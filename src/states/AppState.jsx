@@ -3,10 +3,9 @@ import { observable, action } from 'mobx';
 import Constants from '../constants/Constants.jsx';
 
 export default class AppState {
-    uiName = Constants.Values.Module_UI_Main; //登录和主页面 
-
-    OverviewTopContentHeight = document.documentElement.clientHeight - (60 + 60 + 50);
-
+    //登录和主页面 
+    @observable uiName = Constants.Values.Module_UI_Main; 
+  
     //当前显示模块
     @observable isMainLoading = true;
     //主页面当前显示模块
@@ -15,6 +14,10 @@ export default class AppState {
     @observable activeModuleLevel1Name = undefined;
     // //层次2
     // @observable activeModuleLevel2Name = undefined;
+
+    @action setUIName(_uiName) {
+        this.uiName = _uiName;
+    }
 
     @action setMainLoading(loading) {
         this.isMainLoading = loading;

@@ -14,7 +14,7 @@ class Switcher extends React.Component {
         items[0].selected = !items[0].selected;
         items[1].selected = !items[0].selected;
         this.setState({ refreshCount: (this.state.refreshCount++) });
- 
+
         let func = this.props.valueChangeFunc;
         if (func) {
             func(items[0].selected);
@@ -27,15 +27,26 @@ class Switcher extends React.Component {
         let width = this.props.width ? this.props.width : 100;
         if (items[0].selected) {
             return (
-                <label className="css-input switch switch-primary" style={{ width: width + 'px' }}>
-                    <input type="checkbox" defaultChecked="true" onChange={this.onValueChange} /><span></span> {items[0].display}
-                </label>
+                <div className="btn-group" data-toggle="buttons" onClick={this.onValueChange} style={this.props.style}>
+                    <label className="btn btn-square btn-sm btn-primary" style={{ width: '50%'}}>
+                        <input type="radio" defaultChecked="true" />{items[0].display}
+                    </label>
+                    <label className="btn btn-square btn-sm btn-default" style={{ width: '50%' }}>
+                        <input type="radio" />{items[1].display}
+                    </label>
+                </div>
+
             )
         } else {
             return (
-                <label className="css-input switch switch-primary" style={{ width: width + 'px' }}>
-                    <input type="checkbox" onChange={this.onValueChange} /><span></span> {items[1].display}
-                </label>
+                <div className="btn-group" data-toggle="buttons" onClick={this.onValueChange} style={this.props.style}>
+                    <label className="btn btn-square btn-sm btn-default" style={{ width: '50%' }}>
+                        <input type="radio" />{items[0].display}
+                    </label>
+                    <label className="btn btn-square btn-sm btn-primary" style={{ width: '50%' }}>
+                        <input type="radio" defaultChecked="true" />{items[1].display}
+                    </label>
+                </div>
             )
         }
 

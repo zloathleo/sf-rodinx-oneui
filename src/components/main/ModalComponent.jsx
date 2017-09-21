@@ -13,6 +13,12 @@ class ModalTitle extends React.Component {
 }
 
 class OKButton extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.onClick = this.onClick.bind(this);
+    }
+
     onClick() {
         if (StateManager.modalsState.okFunc) {
             StateManager.modalsState.okFunc();

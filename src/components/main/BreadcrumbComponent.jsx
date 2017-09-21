@@ -20,7 +20,7 @@ class BreadcrumbComponent extends React.Component {
             return (
                 <ol className="breadcrumb push-10-t push-10-l">
                     <li><a className="link-effect" href="#" onClick={this.onClickModuleLink.bind(this)}>{StateManager.appState.activeMainModule}</a></li>
-                    <li>{StateManager.appState.activeModuleLevel1Name}</li>
+                    <li>{StateManager.dataState.detailJson.name}</li>
                 </ol>
             )
         } else {

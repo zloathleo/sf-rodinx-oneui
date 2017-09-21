@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
@@ -15,7 +16,7 @@ module.exports = {
 
   externals: {
     'react': "React",
-    'react-dom': 'ReactDOM', 
+    'react-dom': 'ReactDOM',
   },
 
   devtool: 'source-map',
@@ -23,20 +24,33 @@ module.exports = {
   module: {
     rules: [ //加载器   
       { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader' },
+      {
+        test: /\.css$/, exclude: /node_modules/,
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: ["css-loader"]
+        })
+      },
+      { test: /\.(eot|otf|woff|woff2|ttf|svg)(\?\S*)?$/, loader: 'file-loader', options: { limit: 1 } }
+
     ]
   },
 
-  
-  // plugins: [
-  //   new webpack.optimize.UglifyJsPlugin({
-  //     //生成环境启用js压缩
-  //     compress: {
-  //       warnings: false
-  //     }
-  //     //开发环境 
-  //     // compress: false,
-  //   }),
-  // ],
+
+  plugins: [
+
+    //生成css
+    new ExtractTextPlugin("index.css"),
+
+    // new webpack.optimize.UglifyJsPlugin({
+    //   //生成环境启用js压缩
+    //   compress: {
+    //     warnings: false
+    //   }
+    //   //开发环境 
+    //   // compress: false,
+    // }),
+  ],
 
 
 };

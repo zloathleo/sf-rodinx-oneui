@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Scrollbars } from 'react-custom-scrollbars'; 
+import { Scrollbars } from 'react-custom-scrollbars';
 
 import Constants from '../../constants/Constants.jsx';
 import StateManager from '../../states/StateManager.jsx';
@@ -57,13 +57,15 @@ class OverviewTopComponent extends React.Component {
         }.bind(this));
     }
 
+
     render() {
-        let _data = this.state.data; 
+        let _data = this.state.data;
+        // console.log(StateManager.uiState.OverviewHeadPadding);
         if (_data != null) {
             return (
                 <div className="col-xs-12" style={{ padding: '0 2%' }}>
                     <div className="block" style={{ marginBottom: '0px' }}>
-                        <div className="block-header">
+                        <div className="block-header bg-gray-lighter overview-head-padding">
                             <ul className="block-options-simple">
                                 <button className="btn btn-square btn-sm btn-primary" onClick={this.onClickConfigLayoutButton.bind(this, _data)} data-toggle="modal" data-target="#modal-fromleft" style={{ margin: '0 2px' }}>
                                     <i className="glyphicon glyphicon-cog"></i> {_data.com} | {_data.baud_rate}</button>
@@ -71,12 +73,12 @@ class OverviewTopComponent extends React.Component {
                             <BreadcrumbComponent />
                         </div>
 
-                        <div className="block-content" style={{ paddingTop: '1px', padding: '15px 15px 1px' }}>
-                            <Scrollbars style={{ height: StateManager.appState.OverviewTopContentHeight }}>
+                        <div className="block-content" style={{ padding: '10px 5px 10px' }}>
+                            <Scrollbars style={{ height: StateManager.uiState.OverviewTopContentHeight }}>
                                 {
                                     _data.rows.map(function (row, i) {
                                         let items = row.items;
-                                        return (<div className="row animated bounceInDown" style={{ marginRight: '10px', marginLeft: '10px' }}>
+                                        return (<div className="row animated bounceInDown" style={{ margin: '1px', padding: '1% 1% 0% 1%' }} >
                                             {
                                                 items.map(function (item, num) {
                                                     return (<ItemComponent data={item} />)

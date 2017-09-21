@@ -1,9 +1,16 @@
 import React from 'react';
 
+import Constants from '../../constants/Constants.jsx';
+import StateManager from '../../states/StateManager.jsx';
+
 class HeaderComponent extends React.Component {
 
     constructor(props) {
         super(props);
+    }
+
+    clickAdminLoginButton() {
+        StateManager.appState.setUIName(Constants.Values.Module_UI_Login);
     }
 
     render() {
@@ -11,7 +18,7 @@ class HeaderComponent extends React.Component {
             <header id="header-navbar" className="content-mini content-mini-full">
                 <ul className="nav-header pull-right">
                     <li>
-                        <button className="btn btn-default" data-toggle="layout" data-action="side_overlay_toggle" type="button">
+                        <button className="btn btn-default" type="button" onClick={this.clickAdminLoginButton}>
                             <i className="fa fa-tasks"></i>
                         </button>
                     </li>
@@ -30,6 +37,5 @@ class HeaderComponent extends React.Component {
     }
 
 }
-
 
 module.exports = HeaderComponent;
