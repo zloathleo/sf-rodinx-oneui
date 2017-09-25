@@ -501,6 +501,20 @@ export default {
 
         ));
 
+        //保存通道配置模板
+        FetchMock.post('/templates/aaa', Mock.mock(
+            {
+                "server_time": "2017-07-01 12:00:00"
+            }
+        ));
+
+        //应用通道配置模板
+        FetchMock.put('/templates/aaa', Mock.mock(
+            {
+                "server_time": "2017-07-01 12:00:00"
+            }
+        ));
+
         // 其他路由使用原生fetch，这段代码必须放最后
         FetchMock.once('*', (url, options) => {
             FetchMock.restore();

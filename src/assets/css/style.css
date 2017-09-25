@@ -1,30 +1,73 @@
 /* 小屏幕（平板，大于等于 768px） */
-.overview-head-padding{
-    padding: 10px 15px !important 
-  }
+.main-out-content-padding{
+    padding: 0px ; 
+} 
+
+.main-content-row-padding-margin {
+    padding: 10px 10px 0 10px !important;
+    margin: 1px;
+}  
 
 .setting-table-item-label-padding {
-    padding: 3px 20px 3px 0px !important
+    padding: 3px 20px 3px 0px !important;
 }
 
 .setting-table-item-padding {
-    padding: 3px 0px !important
+    padding: 3px 0px !important;
+} 
+
+/* 小屏手机 */
+@media only screen and (max-width: 992px){
+    .main-content-item-header{
+        margin: 1px;
+        padding: 10px 10px 10px 15px;
+    }
 }
- 
+
      
 /* 中等和大屏幕（桌面显示器，大于等于 992px） */
 @media only screen and (min-width: 992px){
-    .overview-head-padding{
-        padding: 15px !important
-    }
+    .main-out-content-padding{
+        padding: 0px 20px ; 
+    } 
+
+    .main-content-row-padding-margin {
+        padding: 10px 10px 0 10px !important;
+        margin: 1px;
+    } 
 
     .setting-table-item-label-padding {
-        padding: 10px 20px 10px 0px !important
+        padding: 10px 20px 10px 0px !important;
     }
 
     .setting-table-item-padding {
-        padding: 10px 0px !important
+        padding: 10px 0px !important;
     }
 }
      
- 
+/**
+*单个
+**/
+.overview-head-padding{
+    padding: 10px 15px !important ; 
+}
+
+.main-content-padding {
+    padding: 5px 5px !important;
+}
+
+.bs-callout {
+    padding: 20px;
+    margin: 5px 10px;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 3px;
+}
+
+.bs-callout-primary {
+    border-left-color: #5c90d2;
+} 
+
+.bs-callout-primary h4 {
+    color: #1b809e;
+}

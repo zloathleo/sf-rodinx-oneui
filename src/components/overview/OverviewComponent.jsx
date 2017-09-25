@@ -63,34 +63,31 @@ class OverviewTopComponent extends React.Component {
         // console.log(StateManager.uiState.OverviewHeadPadding);
         if (_data != null) {
             return (
-                <div className="col-xs-12" style={{ padding: '0 2%' }}>
-                    <div className="block" style={{ marginBottom: '0px' }}>
-                        <div className="block-header bg-gray-lighter overview-head-padding">
-                            <ul className="block-options-simple">
-                                <button className="btn btn-square btn-sm btn-primary" onClick={this.onClickConfigLayoutButton.bind(this, _data)} data-toggle="modal" data-target="#modal-fromleft" style={{ margin: '0 2px' }}>
-                                    <i className="glyphicon glyphicon-cog"></i> {_data.com} | {_data.baud_rate}</button>
-                            </ul>
-                            <BreadcrumbComponent />
-                        </div>
+                <div className="block" style={{ marginBottom: '0px' }}>
+                    <div className="block-header bg-gray-lighter overview-head-padding">
+                        <ul className="block-options-simple">
+                            <button className="btn btn-square btn-sm btn-primary" onClick={this.onClickConfigLayoutButton.bind(this, _data)} data-toggle="modal" data-target="#modal-fromleft" style={{ margin: '0 2px' }}>
+                                <i className="glyphicon glyphicon-cog"></i> {_data.com} | {_data.baud_rate}</button>
+                        </ul>
+                        <BreadcrumbComponent />
+                    </div>
 
-                        <div className="block-content" style={{ padding: '10px 5px 10px' }}>
-                            <Scrollbars style={{ height: StateManager.uiState.OverviewTopContentHeight }}>
-                                {
-                                    _data.rows.map(function (row, i) {
-                                        let items = row.items;
-                                        return (<div className="row animated bounceInDown" style={{ margin: '1px', padding: '1% 1% 0% 1%' }} >
-                                            {
-                                                items.map(function (item, num) {
-                                                    return (<ItemComponent data={item} />)
-                                                })
-                                            }
-                                        </div>)
-                                    })
+                    <div className="block-content main-content-padding">
+                        <Scrollbars style={{ height: StateManager.uiState.OverviewTopContentHeight }}>
+                            {
+                                _data.rows.map(function (row, i) {
+                                    let items = row.items;
+                                    return (<div className="row animated bounceInDown main-content-row-padding-margin" >
+                                        {
+                                            items.map(function (item, num) {
+                                                return (<ItemComponent data={item} />)
+                                            })
+                                        }
+                                    </div>)
+                                })
 
-                                }
-                            </Scrollbars>
-                        </div>
-
+                            }
+                        </Scrollbars>
                     </div>
                 </div>
             )
@@ -106,9 +103,14 @@ class OverviewComponent extends React.Component {
 
     render() {
         if (StateManager.appState.activeModuleLevel1Name == undefined) {
-            return <OverviewTopComponent />;
+            return (<div className="col-xs-12 main-out-content-padding">
+                <OverviewTopComponent />
+            </div>)
+
         } else if (StateManager.appState.activeModuleLevel1Name == Constants.Values.Overview_Level_Detail) {
-            return <DeviceDetailComponent />;
+            return (<div className="col-xs-12 main-out-content-padding">
+                <DeviceDetailComponent />
+            </div>)
         }
     }
 

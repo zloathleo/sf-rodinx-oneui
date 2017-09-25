@@ -31,7 +31,7 @@ class MainComponent extends React.Component {
   render() {
     return (
       <main id="main-container">
-        <div className="content" style={{ padding: '0px 0px' }}>
+        <div className="content" style={{ padding: '0px' }}>
           <Content />
           <LoadingComponent />
         </div>

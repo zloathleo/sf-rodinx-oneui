@@ -3,6 +3,8 @@ import React from 'react';
 import Constants from '../../constants/Constants.jsx';
 import StateManager from '../../states/StateManager.jsx';
 
+import OverviewService from '../../services/OverviewService.jsx'
+
 import Switcher from '../common/Switcher.jsx'
 
 class SettingItem extends React.Component {
@@ -40,12 +42,15 @@ class TemplateSaveModalContent extends React.Component {
 class DeviceCHSettings extends React.Component {
 
     onClickSaveTemplateButton() {
-        let _content = <TemplateSaveModalContent />
-        StateManager.modalsState.setModal('Template Save', _content, function () {
-            console.log('_content:', _content);
-            // let _content = StateManager.modalsState.content;
-            // let inputTemplateName = _content.inputTemplateName;
-            // console.log('inputTemplateName:', inputTemplateName);
+        StateManager.modalsState.setModal('Template Save', <TemplateSaveModalContent ref={(_ref) => this.templateSaveModalContent = _ref} />, function () {
+
+            const _inputTemplateName = this.templateSaveModalContent.inputTemplateName;
+            const _templateName = _inputTemplateName.value;
+
+            OverviewService.requestSaveTemplate(_templateName, StateManager.dataState.detailJson.name, this.props.name, 'u', function (json) {
+                console.log('ok:', json);
+            }.bind(this));
+
         }.bind(this));
     }
 
@@ -59,7 +64,7 @@ class DeviceCHSettings extends React.Component {
         let _enItem = this.props.data.enable == 1 ? [{ display: 'Enable', selected: true }, { display: 'Disable' }] : [{ display: 'Enable' }, { display: 'Disable', selected: true }];
         let _fileItem = this.props.data.file == 1 ? [{ display: 'File A', selected: true }, { display: 'File B' }] : [{ display: 'File A' }, { display: 'File B', selected: true }];
         return (
-            <div className="col-xs-12 col-sm-6" style={{ padding: '0px 5px' }} >
+            <div className="col-xs-12 col-sm-6" style={{ padding: '0px 3px' }} >
                 <div className="block block-bordered">
                     <div className="block-header bg-gray-lighter">
                         <ul className="block-options">
@@ -129,12 +134,12 @@ class DeviceCHSettings extends React.Component {
     }
 }
 
-class DeviceSettingsComponent extends React.Component {
+class DeviceUserSettingsComponent extends React.Component {
 
     render() {
         let _data = this.props.data;
         return (
-            <div className="row animated bounceInDown" style={{ marginRight: '10px', marginLeft: '10px' }}>
+            <div className="row animated bounceInDown main-content-row-padding-margin">
                 <DeviceCHSettings name={'CH1'} data={_data.ch1} />
                 <DeviceCHSettings name={'CH2'} data={_data.ch2} />
             </div>
@@ -143,4 +148,4 @@ class DeviceSettingsComponent extends React.Component {
 
 }
 
-module.exports = DeviceSettingsComponent;
+module.exports = DeviceUserSettingsComponent;

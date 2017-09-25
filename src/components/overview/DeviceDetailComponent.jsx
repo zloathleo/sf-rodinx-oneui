@@ -9,8 +9,8 @@ import OverviewService from '../../services/OverviewService.jsx'
 import Switcher from '../common/Switcher.jsx'
 import BreadcrumbComponent from '../main/BreadcrumbComponent.jsx'
 
-import DeviceSettingsComponent from './DeviceSettingsComponent.jsx'
-
+import DeviceUserSettingsComponent from './DeviceUserSettingsComponent.jsx'
+import DeviceFactorySettingsComponent from './DeviceFactorySettingsComponent.jsx'
 
 class Descript extends React.Component {
 
@@ -65,9 +65,9 @@ class CHDetail extends React.Component {
     render() {
         let _chdata = this.props.data;
         return (
-            <div className="col-xs-12 col-sm-6 animated bounceInDown" style={{ padding: '0px 5px' }} >
+            <div className="col-xs-12 col-sm-6 animated bounceInDown" style={{ padding: '0px 3px' }} >
                 <div className="block block-bordered">
-                    <div className="block-header bg-gray-lighter">
+                    <div className="block-header bg-gray-lighter main-content-item-header">
                         <h3 className="block-title">{this.props.name}</h3>
                     </div>
                     <div className="block-content">
@@ -100,23 +100,36 @@ class DeviceContentComponent extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { showSettings: false, userSettingsData: undefined };
+        this.state = { type: 0, showSettings: false, userSettingsData: undefined };
         this.onClickUserSettingsButton = this.onClickUserSettingsButton.bind(this);
+        this.onClickFactorySettingsButton = this.onClickFactorySettingsButton.bind(this);
         this.unitSwitcherChange = this.unitSwitcherChange.bind(this);
     }
 
     onClickUserSettingsButton() {
-        if (!this.state.showSettings) {
+        if (this.state.type != 1) {
             StateManager.appState.setMainLoading(true);
             OverviewService.requestDeviceUserSettings(StateManager.dataState.detailJson.name, 'u', 'm', function (json) {
                 StateManager.appState.setMainLoading(false);
                 console.log(json);
-                this.setState({ showSettings: true, userSettingsData: json });
+                this.setState({ type: 1, userSettingsData: json });
             }.bind(this));
         } else {
-            this.setState({ showSettings: false, userSettingsData: undefined });
+            this.setState({ type: 0, userSettingsData: undefined });
         }
+    }
 
+    onClickFactorySettingsButton() {
+        if (this.state.type != 2) {
+            StateManager.appState.setMainLoading(true);
+            OverviewService.requestDeviceUserSettings(StateManager.dataState.detailJson.name, 'u', 'm', function (json) {
+                StateManager.appState.setMainLoading(false);
+                console.log(json);
+                this.setState({ type: 2, userSettingsData: json });
+            }.bind(this));
+        } else {
+            this.setState({ type: 0, userSettingsData: undefined });
+        }
     }
 
     unitSwitcherChange(selected) {//第一选项是否选中 即摄氏度是否选中  
@@ -128,25 +141,21 @@ class DeviceContentComponent extends React.Component {
     }
 
     render() {
-        if (this.state.showSettings) {
+        if (this.state.type == 0) {
             return (
-                <div className="block-content" style={{ padding: '10px 5px 10px' }}>
-                    <Scrollbars style={{ height: StateManager.uiState.OverviewTopContentHeight }}>
-                        <DeviceSettingsComponent data={this.state.userSettingsData} />
-                    </Scrollbars>
+                <div className="row main-content-row-padding-margin">
+                    <CHDetail name={'CH1'} data={StateManager.dataState.detailJson.ch1} />
+                    <CHDetail name={'CH2'} data={StateManager.dataState.detailJson.ch1} />
+                    <Descript />
                 </div>
             )
-        } else {
+        } else if (this.state.type == 1) {
             return (
-                <div className="block-content" style={{ padding: '10px 5px 10px' }}>
-                    <Scrollbars style={{ height: StateManager.uiState.OverviewTopContentHeight }}>
-                        <div className="row" style={{ marginRight: '10px', marginLeft: '10px' }}>
-                            <CHDetail name={'CH1'} data={StateManager.dataState.detailJson.ch1} />
-                            <CHDetail name={'CH2'} data={StateManager.dataState.detailJson.ch1} />
-                            <Descript />
-                        </div>
-                    </Scrollbars>
-                </div>
+                <DeviceUserSettingsComponent data={this.state.userSettingsData} />
+            )
+        } else if (this.state.type == 2) {
+            return (
+                <DeviceFactorySettingsComponent data={this.state.userSettingsData} />
             )
         }
     }
@@ -158,7 +167,12 @@ class DeviceDetailComponent extends React.Component {
     constructor(props) {
         super(props);
         this.onClickUserSettingsDelegate = this.onClickUserSettingsDelegate.bind(this);
+        this.onClickFactorySettingsDelegate = this.onClickFactorySettingsDelegate.bind(this);
         this.unitSwitcherChangeDelegate = this.unitSwitcherChangeDelegate.bind(this);
+    }
+
+    onClickFactorySettingsDelegate() {
+        this.deviceContentComponent.onClickFactorySettingsButton();
     }
 
     onClickUserSettingsDelegate() {
@@ -171,18 +185,23 @@ class DeviceDetailComponent extends React.Component {
 
     render() {
         return (
-            <div className="col-xs-12" style={{ padding: '0 2%' }}>
-                <div className="block" style={{ marginBottom: '0px' }}>
-                    <div className="block-header bg-gray-lighter" style={{ padding: '15px 15px' }}>
-                        <ul className="block-options-simple">
-                            <button className="btn btn-square btn-sm btn-primary" onClick={this.onClickUserSettingsDelegate} style={{ margin: '0 5px' }}>
-                                <i className="glyphicon glyphicon-cog"></i> <span className="hidden-xs hidden-sm">UserSettings</span></button>
+            <div className="block" style={{ marginBottom: '0px' }}>
+                <div className="block-header bg-gray-lighter overview-head-padding">
+                    <ul className="block-options-simple">
+                        <button className="btn btn-square btn-sm btn-danger" onClick={this.onClickFactorySettingsDelegate} style={{ margin: '0 2px 0 0' }}>
+                            <i className="fa fa-wrench" aria-hidden="true"></i> <span className="hidden-xs hidden-sm">FactorySettings</span></button>
 
-                            <Switcher style={{ width: '100' }} valueChangeFunc={this.unitSwitcherChangeDelegate} items={[{ display: 'C', selected: true }, { display: 'F', selected: false }]} />
-                        </ul>
-                        <BreadcrumbComponent />
-                    </div>
-                    <DeviceContentComponent ref={(_ref) => this.deviceContentComponent = _ref} />
+                        <button className="btn btn-square btn-sm btn-primary" onClick={this.onClickUserSettingsDelegate} style={{ margin: '0 2px 0 0' }}>
+                            <i className="glyphicon glyphicon-cog"></i> <span className="hidden-xs hidden-sm">UserSettings</span></button>
+
+                        <Switcher style={{ width: '100' }} valueChangeFunc={this.unitSwitcherChangeDelegate} items={[{ display: 'C', selected: true }, { display: 'F', selected: false }]} />
+                    </ul>
+                    <BreadcrumbComponent />
+                </div>
+                <div className="block-content main-content-padding"  >
+                    <Scrollbars style={{ height: StateManager.uiState.OverviewTopContentHeight }}>
+                        <DeviceContentComponent ref={(_ref) => this.deviceContentComponent = _ref} />
+                    </Scrollbars>
                 </div>
             </div>
         )
