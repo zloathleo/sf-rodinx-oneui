@@ -7,7 +7,7 @@ export default {
         LocalStorage_Server_URL: 'localStorage_server_url',
     },
     Values: {
-        Mock: true,
+        Mock: false,
         Module_UI_Login: 'ui_login',
         Module_UI_Main: 'ui_main',
 

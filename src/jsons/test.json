@@ -5,30 +5,30 @@
         "file": 0,
         "filea": {
             "ac": {
-                "ac_gain": 1,
-                "ac_on_th": 1999,
-                "ac_on_tl": 600,
-                "fc": 99,
-                "max": 1999,
-                "min": 300
+                "ac_gain": "1",
+                "ac_on_th": 1998,
+                "ac_on_tl": 601,
+                "fc": 98,
+                "max": 1998,
+                "min": 301
             },
             "dc": {
-                "dc_gain": 1,
-                "dc_on_th": 1999,
-                "dc_on_tl": 0
+                "dc_gain": 2,
+                "dc_on_th": 1998,
+                "dc_on_tl": 1
             },
             "frequency": {
-                "freq_on_th": 126,
-                "freq_on_tl": 0
+                "freq_on_th": 125,
+                "freq_on_tl": 1
             },
             "public": {
-                "ffrt": 3,
-                "otd": 1
+                "ffrt": 4,
+                "otd": 2
             }
         },
         "fileb": {
             "ac": {
-                "ac_gain": 1,
+                "ac_gain": "1",
                 "ac_on_th": 1999,
                 "ac_on_tl": 600,
                 "fc": 99,
@@ -50,37 +50,37 @@
             }
         },
         "name": "ch1",
-        "type": "IR"
+        "type": "UV"
     },
     "ch2": {
         "enable": 1,
         "file": 0,
         "filea": {
             "ac": {
-                "ac_gain": 1,
-                "ac_on_th": 1999,
-                "ac_on_tl": 600,
-                "fc": 99,
-                "max": 1999,
-                "min": 300
+                "ac_gain": "3",
+                "ac_on_th": 1998,
+                "ac_on_tl": 601,
+                "fc": 98,
+                "max": 1998,
+                "min": 301
             },
             "dc": {
-                "dc_gain": 1,
-                "dc_on_th": 1999,
-                "dc_on_tl": 0
+                "dc_gain": 2,
+                "dc_on_th": 1998,
+                "dc_on_tl": 1
             },
             "frequency": {
-                "freq_on_th": 126,
-                "freq_on_tl": 0
+                "freq_on_th": 125,
+                "freq_on_tl": 1
             },
             "public": {
-                "ffrt": 3,
-                "otd": 1
+                "ffrt": 4,
+                "otd": 2
             }
         },
         "fileb": {
             "ac": {
-                "ac_gain": 1,
+                "ac_gain": "1",
                 "ac_on_th": 1999,
                 "ac_on_tl": 600,
                 "fc": 99,
@@ -102,7 +102,7 @@
             }
         },
         "name": "ch2",
-        "type": "IR"
+        "type": "UV"
     },
     "name": "A0"
 }

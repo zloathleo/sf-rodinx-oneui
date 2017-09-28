@@ -5,27 +5,35 @@ class Switcher extends React.Component {
     constructor(props) {
         super(props);
         this.state = { refreshCount: 0 };
-        this.items = undefined;
         this.onValueChange = this.onValueChange.bind(this);
+        this.value = this.value.bind(this);
     }
 
     onValueChange(_event) {
-        let items = this.props.items ;
-        items[0].selected = !items[0].selected;
-        items[1].selected = !items[0].selected;
+        let items = this.props.items;
+        let value = this.props.value;
+        if (items[0].value == value) {
+            this.props.value = items[1].value;
+        } else {
+            this.props.value = items[0].value;
+        }
         this.setState({ refreshCount: (this.state.refreshCount++) });
 
         let func = this.props.valueChangeFunc;
         if (func) {
-            func(items[0].selected);
+            func(this.props.value);
         }
+    }
 
+    value() {
+        return this.props.value;
     }
 
     render() {
-        let items = this.props.items ;
+        let items = this.props.items;//{display->value}
+        let value = this.props.value;
         let width = this.props.width ? this.props.width : 100;
-        if (items[0].selected) {
+        if (items[0].value == value) {
             return (
                 <div className="btn-group" data-toggle="buttons" onClick={this.onValueChange} style={this.props.style}>
                     <label className="btn btn-square btn-sm btn-primary" style={{ width: '50%' }}>

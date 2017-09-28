@@ -108,14 +108,17 @@ class DeviceContentComponent extends React.Component {
         this.onClickSaveSettings = this.onClickSaveSettings.bind(this);
     }
 
+    //保存settings
     onClickSaveSettings() {
         if (StateManager.appState.activeModuleLevel2Name == Constants.Values.Overview_Level2_UserSettings) {
+            this.userSettingsComponent.mergeData();
+            console.log(JSON.stringify(this.settingsData));
             OverviewService.requestUpdateDeviceSettings(StateManager.dataState.detailJson.name, 'u', this.settingsData, function (json) {
-                console.log(json);
+               
             });
         } else if (StateManager.appState.activeModuleLevel2Name == Constants.Values.Overview_Level2_FactorySettings) {
             OverviewService.requestUpdateDeviceSettings(StateManager.dataState.detailJson.name, 's', this.settingsData, function (json) {
-                console.log(json);
+               
             });
         }
     }
@@ -151,11 +154,11 @@ class DeviceContentComponent extends React.Component {
     render() {
         if (StateManager.appState.activeModuleLevel2Name == Constants.Values.Overview_Level2_UserSettings) {
             return (
-                <DeviceUserSettingsComponent data={this.settingsData} />
+                <DeviceUserSettingsComponent ref={(_ref) => this.userSettingsComponent = _ref} data={this.settingsData} />
             )
         } else if (StateManager.appState.activeModuleLevel2Name == Constants.Values.Overview_Level2_FactorySettings) {
             return (
-                <DeviceFactorySettingsComponent data={this.settingsData} />
+                <DeviceFactorySettingsComponent ref={(_ref) => this.factorySettingsComponent = _ref} data={this.settingsData} />
             )
         } else {
             return (
@@ -198,22 +201,10 @@ class ButtonGroup extends React.Component {
                     <button className="btn btn-square btn-sm btn-primary" onClick={_parent.onClickUserSettingsDelegate} style={{ margin: '0 2px 0 0' }}>
                         <i className="glyphicon glyphicon-cog"></i> <span className="hidden-xs hidden-sm">UserSettings</span></button>
 
-                    <Switcher style={{ width: '100' }} valueChangeFunc={_parent.unitSwitcherChangeDelegate} items={[{ display: 'C', selected: true }, { display: 'F', selected: false }]} />
+                    <Switcher style={{ width: '100' }} valueChangeFunc={_parent.unitSwitcherChangeDelegate} value='C' items={[{ display: 'C', value: 'C' }, { display: 'F', value: 'F' }]} />
                 </ul>
             )
-        }
-
-        return (
-            <ul className="block-options-simple">
-                <button className="btn btn-square btn-sm btn-danger" onClick={_parent.onClickFactorySettingsDelegate} style={{ margin: '0 2px 0 0' }}>
-                    <i className="fa fa-wrench" aria-hidden="true"></i> <span className="hidden-xs hidden-sm">FactorySettings</span></button>
-
-                <button className="btn btn-square btn-sm btn-primary" onClick={_parent.onClickUserSettingsDelegate} style={{ margin: '0 2px 0 0' }}>
-                    <i className="glyphicon glyphicon-cog"></i> <span className="hidden-xs hidden-sm">UserSettings</span></button>
-
-                <Switcher style={{ width: '100' }} valueChangeFunc={_parent.unitSwitcherChangeDelegate} items={[{ display: 'C', selected: true }, { display: 'F', selected: false }]} />
-            </ul>
-        )
+        } 
     }
 }
 
@@ -228,6 +219,7 @@ class DeviceDetailComponent extends React.Component {
         this.onClickSaveSettings = this.onClickSaveSettings.bind(this);
     }
 
+    //保存settings
     onClickSaveSettings() {
         console.log('onClickSaveSettings');
         this.deviceContentComponent.onClickSaveSettings();

@@ -3,12 +3,8 @@ import Switcher from './Switcher.jsx';
 class EnableSwitcher extends Switcher {
 
     componentWillMount() {
-        let _value = this.props.value;//0-1 
-        if (_value == 0) {
-            this.props.items = [{ display: 'Enable' }, { display: 'Disable', selected: true }];
-        } else {
-            this.props.items = [{ display: 'Enable', selected: true }, { display: 'Disable' }];
-        }
+        // let _value = this.props.value;//0-1 
+        this.props.items = [{ display: 'Enable', value: 1 }, { display: 'Disable', value: 0 }];
     }
 
     // render() { 
