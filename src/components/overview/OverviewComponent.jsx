@@ -13,22 +13,25 @@ import DeviceDetailComponent from './DeviceDetailComponent.jsx'
 
 class LayoutConfigModalContent extends React.Component {
     render() {
+        let _ports = this.props.ports.rows;
         return (
             <div>
                 <div className="form-group">
-                    <label className="col-xs-12" for="login1-username">I/O Port</label>
-                    <select className="form-control" size="1">
-                        <option value="1">COM3</option>
-                        <option value="2">COM4</option>
-                        <option value="3">COM5</option>
+                    <label className="col-xs-12">I/O Port</label>
+                    <select ref={(_ref) => this.inputPort = _ref} className="form-control" size="1">
+                        {
+                            _ports.map(function (item, i) {
+                                return <option value={item}>{item}</option>
+                            })
+                        }
                     </select>
                 </div>
 
                 <div className="form-group">
-                    <label className="col-xs-12" for="login1-username">Boad Rate</label>
-                    <select className="form-control" size="1">
-                        <option value="1">9600</option>
-                        <option value="2">38400</option>
+                    <label className="col-xs-12">Boad Rate</label>
+                    <select ref={(_ref) => this.inputBoadRate = _ref} className="form-control" size="1">
+                        <option value={9600} >9600</option>
+                        <option value={38400} >38400</option>
                     </select>
                 </div>
             </div>
@@ -43,7 +46,6 @@ class OverviewTopComponent extends React.Component {
     }
 
     componentDidMount() {
-        console.log('OverviewComponent componentDidMount');
         OverviewService.requestOverview(function (json) {
             this.setState({ data: json });
             StateManager.appState.setMainLoading(false);
@@ -51,12 +53,16 @@ class OverviewTopComponent extends React.Component {
     }
 
     onClickConfigLayoutButton(_layoutData) {
-        console.log('_layoutData:' + _layoutData);
-        StateManager.modalsState.setModal('Layout Config', <LayoutConfigModalContent />, function () {
-            console.log('Layout Config ok');
+        OverviewService.requestPorts(function (json) {
+            StateManager.modalsState.setModal('Layout Config', <LayoutConfigModalContent ref={(_ref) => this.modalContent = _ref} ports={json} />, function () {
+
+                const _inputPort = this.modalContent.inputPort.value;
+                const _inputBoadRate = this.modalContent.inputBoadRate.value;
+                console.log(_inputPort, _inputBoadRate);
+
+            }.bind(this));
         }.bind(this));
     }
-
 
     render() {
         let _data = this.state.data;
@@ -72,12 +78,12 @@ class OverviewTopComponent extends React.Component {
                         <BreadcrumbComponent />
                     </div>
 
-                    <div className="block-content main-content-padding">
+                    <div className="block-content main-content-padding animated bounceInDown ">
                         <Scrollbars style={{ height: StateManager.uiState.OverviewTopContentHeight }}>
                             {
                                 _data.rows.map(function (row, i) {
                                     let items = row.items;
-                                    return (<div className="row animated bounceInDown main-content-row-padding-margin" >
+                                    return (<div className="row main-overview-content-padding-margin bs-callout bs-callout-primary">
                                         {
                                             items.map(function (item, num) {
                                                 return (<ItemComponent data={item} />)
@@ -87,6 +93,7 @@ class OverviewTopComponent extends React.Component {
                                 })
 
                             }
+
                         </Scrollbars>
                     </div>
                 </div>
@@ -107,7 +114,7 @@ class OverviewComponent extends React.Component {
                 <OverviewTopComponent />
             </div>)
 
-        } else if (StateManager.appState.activeModuleLevel1Name == Constants.Values.Overview_Level_Detail) {
+        } else if (StateManager.appState.activeModuleLevel1Name == Constants.Values.Overview_Level1_Detail) {
             return (<div className="col-xs-12 main-out-content-padding">
                 <DeviceDetailComponent />
             </div>)

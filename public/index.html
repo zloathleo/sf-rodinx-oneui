@@ -24,12 +24,27 @@
 
 <body style="overflow: hidden;color:#333">
   <!-- Plugin Javascripts -->
-   
+
+  <script>
+    try {
+      if (process) {
+        // console.log('process.versions.node:' + process.versions.node);
+        // require('../scripts/renderer.js');
+        window.nodeRequire = require;
+        delete window.require;
+        delete window.exports;
+        delete window.module;
+      }
+    } catch (err) {
+
+    }
+  </script>
+
   <script src="plugins/react/dist/react.min.js"></script>
   <script src="plugins/react-dom/dist/react-dom.min.js"></script>
 
-  <!-- <script src="plugins/jquery/jquery-3.2.1.min.js"></script>
-  <script src="plugins/bootstrap/js/bootstrap.min.js"></script> -->
+  <!-- <script src="plugins/jquery/jquery-3.2.1.min.js"></script> -->
+  <!-- <script src="plugins/bootstrap/js/bootstrap.min.js"></script> -->
 
   <script src="plugins/oneui/js/oneui.min.js"></script>
   <!-- Plugin Javascripts -->

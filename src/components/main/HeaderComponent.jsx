@@ -24,9 +24,8 @@ class HeaderComponent extends React.Component {
                     </li>
                 </ul>
 
-                <ul className="nav-header pull-left">
-                    {/* 大屏幕不显示 */}
-                    <li className="hidden-md hidden-lg">
+                <ul className="nav-header pull-left"> 
+                    <li>
                         <button className="btn btn-default" data-toggle="layout" data-action="sidebar_toggle" type="button">
                             <i className="fa fa-navicon"></i>
                         </button>

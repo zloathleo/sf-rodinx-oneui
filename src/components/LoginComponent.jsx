@@ -10,8 +10,8 @@ class LoginComponent extends React.Component {
     }
 
     clickLoginButton() {
-        StateManager.appState.setActiveModuleLevel1Name(undefined);
-        StateManager.appState.setUIName(Constants.Values.Module_UI_Main); 
+        StateManager.appState.resetModuleRoot();
+        StateManager.appState.setUIName(Constants.Values.Module_UI_Main);
     }
 
     render() {

@@ -12,8 +12,8 @@ export default class AppState {
     @observable activeMainModule = Constants.Values.Main_Module_Overview;
     //层次1
     @observable activeModuleLevel1Name = undefined;
-    // //层次2
-    // @observable activeModuleLevel2Name = undefined;
+    //层次2
+    @observable activeModuleLevel2Name = undefined;
 
     @action setUIName(_uiName) {
         this.uiName = _uiName;
@@ -23,8 +23,17 @@ export default class AppState {
         this.isMainLoading = loading;
     }
 
+    @action resetModuleRoot() {
+        this.activeModuleLevel1Name = undefined;
+        this.activeModuleLevel2Name = undefined;
+    }
+
     @action setActiveModuleLevel1Name(_level1) {
         this.activeModuleLevel1Name = _level1;
+    }
+
+    @action setActiveModuleLevel2Name(_level2) {
+        this.activeModuleLevel2Name = _level2;
     }
 
 } 

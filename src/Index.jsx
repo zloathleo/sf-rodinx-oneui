@@ -25,6 +25,7 @@ class App extends React.Component {
     }
 
     _init_config() {
+        //模拟数据开关
         DataSim.init();
     }
 

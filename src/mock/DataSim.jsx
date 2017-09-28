@@ -8,6 +8,12 @@ export default {
             'user': 'guest'
         }));
 
+        FetchMock.get('/ports', Mock.mock({
+            'rows|2-8': [
+                'COM3'
+            ]
+        }));
+
         FetchMock.get('/dashboard', Mock.mock({
             "name": "Layout-Default",
             "com": "COM3",
@@ -69,8 +75,7 @@ export default {
             }
         }));
 
-        //查询/Read放大器settings
-        FetchMock.get('/detail/A1/settings/u/m', Mock.mock(
+        let _settings = Mock.mock(
             {
                 "addr": 1,
                 "ch1": {
@@ -484,7 +489,7 @@ export default {
                 "check_enables": {
                     "da1": 1,
                     "da2": 1,
-                    "fram": 1,
+                    "fram": 0,
                     "scan1": 1,
                     "scan2": 1,
                     "t1": 1,
@@ -498,13 +503,41 @@ export default {
                     "fw_version": 513
                 }
             }
+        );
+        FetchMock.get('/detail/A1/settings/u/m', _settings);
 
+        FetchMock.get('/detail/A1/settings/s/m', _settings);
+
+        //更新settings
+        FetchMock.put('/detail/A1/settings/u', Mock.mock(
+            {
+                "server_time": "2017-07-01 12:00:00"
+            }
+        ));
+
+        //更新settings
+        FetchMock.put('/detail/A1/settings/s', Mock.mock(
+            {
+                "server_time": "2017-07-01 12:00:00"
+            }
         ));
 
         //保存通道配置模板
         FetchMock.post('/templates/aaa', Mock.mock(
             {
                 "server_time": "2017-07-01 12:00:00"
+            }
+        ));
+
+        //查询模板
+        FetchMock.get('/templates/u', Mock.mock(
+            {
+                "rows": [
+                    "A1T1",
+                    "A2T2",
+                    "A3T1",
+                    "A4T4"
+                ]
             }
         ));
 

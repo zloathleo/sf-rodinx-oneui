@@ -5,7 +5,8 @@
   "main": "main.js",
   "author": "leo zhong",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "package": "electron-packager ./ rodinx --win --out rodinx --arch=x64 --version 1.6.2 --overwrite --ignore=node_modules --ignore=.jsx"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

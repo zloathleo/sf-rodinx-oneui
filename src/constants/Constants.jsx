@@ -7,6 +7,7 @@ export default {
         LocalStorage_Server_URL: 'localStorage_server_url',
     },
     Values: {
+        Mock: true,
         Module_UI_Login: 'ui_login',
         Module_UI_Main: 'ui_main',
 
@@ -14,8 +15,8 @@ export default {
         Main_Module_Overview: 'OVERVIEW',
         Main_Module_Alarm: 'ALARM',
 
-        Overview_Level_Detail: 'DETAIL',
-        Overview_Level_UserSettings: 'USERSETTINGS',
-        Overview_Level_SystemSettings: 'SYSTEMSETTINGS',
+        Overview_Level1_Detail: 'DETAIL',
+        Overview_Level2_UserSettings: 'UserSettings',
+        Overview_Level2_FactorySettings: 'FactorySettings',
     },
 }

@@ -23,10 +23,6 @@ class SettingItem extends React.Component {
 //保存模板modal
 class TemplateSaveModalContent extends React.Component {
 
-    okFunc() {
-        console.log(123);
-    }
-
     render() {
         return (
             <div>
@@ -39,12 +35,35 @@ class TemplateSaveModalContent extends React.Component {
     }
 }
 
+//应用模板modal
+class TemplateUseModalContent extends React.Component {
+
+    render() {
+        let _data = this.props.data;
+        return (
+            <div>
+                <div className="form-group">
+                    <label className="col-xs-12" for="login1-username">Template Name</label>
+                    <select ref={(_ref) => this.inputTemplateName = _ref} className="form-control" id="val-skill" name="val-skill">
+                        {
+                            _data.map(function (item, i) {
+                                return <option value={item}>{item}</option>
+                            })
+                        }
+                    </select>
+                </div>
+            </div>
+        )
+    }
+}
+
 class DeviceCHSettings extends React.Component {
 
+    //保存模板
     onClickSaveTemplateButton() {
-        StateManager.modalsState.setModal('Template Save', <TemplateSaveModalContent ref={(_ref) => this.templateSaveModalContent = _ref} />, function () {
+        StateManager.modalsState.setModal('Template Save', <TemplateSaveModalContent ref={(_ref) => this.modalContent = _ref} />, function () {
 
-            const _inputTemplateName = this.templateSaveModalContent.inputTemplateName;
+            const _inputTemplateName = this.modalContent.inputTemplateName;
             const _templateName = _inputTemplateName.value;
 
             OverviewService.requestSaveTemplate(_templateName, StateManager.dataState.detailJson.name, this.props.name, 'u', function (json) {
@@ -54,18 +73,33 @@ class DeviceCHSettings extends React.Component {
         }.bind(this));
     }
 
+    //使用模板
     onClickUseTemplateButton() {
+        OverviewService.requestTemplate('u', function (json) {
 
+            StateManager.modalsState.setModal('Template Choose', <TemplateUseModalContent data={json.rows} ref={(_ref) => this.modalContent = _ref} />, function () {
+
+                const _inputTemplateName = this.modalContent.inputTemplateName;
+                const _templateName = _inputTemplateName.value;
+
+                OverviewService.requestUseTemplate(_templateName, StateManager.dataState.detailJson.name, this.props.name, 'u', function (json) {
+                    console.log('ok:', json);
+                }.bind(this));
+
+            }.bind(this));
+
+            console.log('template:', json);
+        }.bind(this));
     }
 
     render() {
         let _ch = this.props.data;
-        let _typeItem = this.props.data.type == 'IR' ? [{ display: 'IR', selected: true }, { display: 'UV' }] : [{ display: 'IR' }, { display: 'UV', selected: true }];
-        let _enItem = this.props.data.enable == 1 ? [{ display: 'Enable', selected: true }, { display: 'Disable' }] : [{ display: 'Enable' }, { display: 'Disable', selected: true }];
-        let _fileItem = this.props.data.file == 1 ? [{ display: 'File A', selected: true }, { display: 'File B' }] : [{ display: 'File A' }, { display: 'File B', selected: true }];
+        let _typeItem = _ch.type == 'IR' ? [{ display: 'IR', selected: true }, { display: 'UV' }] : [{ display: 'IR' }, { display: 'UV', selected: true }];
+        let _enItem = _ch.enable == 1 ? [{ display: 'Enable', selected: true }, { display: 'Disable' }] : [{ display: 'Enable' }, { display: 'Disable', selected: true }];
+        let _fileItem = _ch.file == 1 ? [{ display: 'File A', selected: true }, { display: 'File B' }] : [{ display: 'File A' }, { display: 'File B', selected: true }];
         return (
             <div className="col-xs-12 col-sm-6" style={{ padding: '0px 3px' }} >
-                <div className="block block-bordered">
+                <div className="block block-bordered end-block-margin-bottom">
                     <div className="block-header bg-gray-lighter">
                         <ul className="block-options">
                             <li> <button type="button" onClick={this.onClickSaveTemplateButton.bind(this)} data-toggle="modal" data-target="#modal-fromleft" >
@@ -139,7 +173,7 @@ class DeviceUserSettingsComponent extends React.Component {
     render() {
         let _data = this.props.data;
         return (
-            <div className="row animated bounceInDown main-content-row-padding-margin">
+            <div className="row animated bounceIn main-detail-padding-margin">
                 <DeviceCHSettings name={'CH1'} data={_data.ch1} />
                 <DeviceCHSettings name={'CH2'} data={_data.ch2} />
             </div>

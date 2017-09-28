@@ -12,17 +12,31 @@ class BreadcrumbComponent extends React.Component {
     }
 
     onClickModuleLink() {
-        StateManager.appState.setActiveModuleLevel1Name(undefined);
+        StateManager.appState.resetModuleRoot();
+    }
+
+    onClickLevel1Link() {
+        StateManager.appState.setActiveModuleLevel2Name(undefined);
     }
 
     render() {
         if (StateManager.appState.activeModuleLevel1Name != undefined) {
-            return (
-                <ol className="breadcrumb push-10-t push-10-l">
-                    <li><a className="link-effect" href="#" onClick={this.onClickModuleLink.bind(this)}>{StateManager.appState.activeMainModule}</a></li>
-                    <li>{StateManager.dataState.detailJson.name}</li>
-                </ol>
-            )
+            if (StateManager.appState.activeModuleLevel2Name != undefined) {
+                return (
+                    <ol className="breadcrumb push-10-t push-10-l">
+                        <li><a className="link-effect" href="#" onClick={this.onClickModuleLink.bind(this)}>{StateManager.appState.activeMainModule}</a></li>
+                        <li><a className="link-effect" href="#" onClick={this.onClickLevel1Link.bind(this)}>{StateManager.dataState.detailJson.name}</a></li>
+                        <li>{StateManager.appState.activeModuleLevel2Name}</li>
+                    </ol>
+                )
+            } else {
+                return (
+                    <ol className="breadcrumb push-10-t push-10-l">
+                        <li><a className="link-effect" href="#" onClick={this.onClickModuleLink.bind(this)}>{StateManager.appState.activeMainModule}</a></li>
+                        <li>{StateManager.dataState.detailJson.name}</li>
+                    </ol>
+                )
+            }
         } else {
             return (
                 <ol className="breadcrumb push-10-t push-10-l">

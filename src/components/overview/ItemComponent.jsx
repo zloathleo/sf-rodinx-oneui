@@ -10,18 +10,18 @@ class AddressSetModalContent extends React.Component {
         return (
             <div>
                 <div className="form-group">
-                    <label className="col-xs-12" for="login1-username">Address</label>
-                    <input className="form-control" type="text" name="address" placeholder="Enter the Device Address.." />
+                    <label className="col-xs-12" >Address</label>
+                    <input ref={(_ref) => this.inputAddress = _ref} className="form-control" type="text" name="address" placeholder="Enter the Device Address.." />
                 </div>
 
                 <div className="form-group">
-                    <label className="col-xs-12" for="login1-username">CH1 Description</label>
-                    <input className="form-control" type="text" name="ch1-description" placeholder="Enter CH1 Description.." />
+                    <label className="col-xs-12" >CH1 Description</label>
+                    <input ref={(_ref) => this.inputCh1Desc = _ref} className="form-control" type="text" name="ch1-description" placeholder="Enter CH1 Description.." />
                 </div>
 
                 <div className="form-group">
-                    <label className="col-xs-12" for="login1-username">CH2 Description</label>
-                    <input className="form-control" type="text" name="ch2-description" placeholder="Enter CH2 Description.." />
+                    <label className="col-xs-12" >CH2 Description</label>
+                    <input ref={(_ref) => this.inputCh2Desc = _ref} className="form-control" type="text" name="ch2-description" placeholder="Enter CH2 Description.." />
                 </div>
             </div>
         )
@@ -34,10 +34,16 @@ class ItemComponent extends React.Component {
         super(props);
     }
 
+    //设置地址
     onClickSetAddressButton(_item, _event) {
-        StateManager.modalsState.setModal(_item.name + ' Device Settings', <AddressSetModalContent />, function () {
+        StateManager.modalsState.setModal(_item.name + ' Device Settings', <AddressSetModalContent ref={(_ref) => this.modalContent = _ref} />, function () {
             // let obj = arr.find(o => o.name === 'string 1');
-            console.log('Device Settings ok');
+            console.log('this.modalContent:' + this.modalContent.inputAddress.value);
+
+            OverviewService.requestUpdateDeviceAddress(_item.name, this.modalContent.inputAddress.value, '', '', function (json) {
+                console.log('result:' + json);
+            });
+            // MyFetch.fetch(this.ip + '/templates/' + templateName, { method: 'post', body: form }, _then);
         }.bind(this));
     }
 
@@ -53,7 +59,7 @@ class ItemComponent extends React.Component {
         StateManager.appState.setMainLoading(true);
         OverviewService.requestDeviceDetail(_item.name, function (json) {
             StateManager.dataState.detailJson = json;
-            StateManager.appState.setActiveModuleLevel1Name(Constants.Values.Overview_Level_Detail);
+            StateManager.appState.setActiveModuleLevel1Name(Constants.Values.Overview_Level1_Detail);
             StateManager.appState.setMainLoading(false);
         }.bind(this));
     }
@@ -61,7 +67,7 @@ class ItemComponent extends React.Component {
     render() {
         let _item = this.props.data;
         return (<div className="col-xs-6 col-sm-2" style={{ paddingLeft: '3px', paddingRight: '3px' }}>
-            <div className="block block-bordered" style={{ marginBottom: '5px' }}>
+            <div className="block block-bordered" style={{ marginBottom: '0px' }}>
                 <div className="block-header bg-gray-lighter" style={{ margin: '1px', padding: '10px 10px 10px 15px' }}>
                     <ul className="block-options">
                         <li> <button type="button" onClick={this.onClickSetAddressButton.bind(this, _item)} data-toggle="modal" data-target="#modal-fromleft" ><i className="glyphicon glyphicon-link"></i></button> </li>
