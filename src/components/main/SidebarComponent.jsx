@@ -4,11 +4,21 @@ class SidebarComponent extends React.Component {
 
     constructor(props) {
         super(props);
+        this.onClickOverviewMenu = this.onClickOverviewMenu.bind(this);
+        this.onClickAlarmMenu = this.onClickAlarmMenu.bind(this);
+    }
+
+    onClickOverviewMenu() {
+
+    }
+
+    onClickAlarmMenu() {
+
     }
 
     render() {
         return (
-            <nav id="sidebar">
+            <nav id="sidebar" data-toggle="layout" data-action="sidebar_close" >
                 <div id="sidebar-scroll">
                     <div className="sidebar-content">
                         <div className="side-header side-content bg-white-op">
@@ -18,12 +28,12 @@ class SidebarComponent extends React.Component {
                         <div className="side-content">
                             <ul className="nav-main">
                                 <li>
-                                    <a className="active" href="#"><i className="glyphicon glyphicon-home"></i>
+                                    <a className="active" href="#" onClick={this.onClickOverviewMenu}><i className="glyphicon glyphicon-home"></i>
                                         <span className="sidebar-mini-hide">OVERVIEW</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a className="active" href="#"><i className="glyphicon glyphicon-info-sign"></i>
+                                    <a className="active" href="#" onClick={this.onClickAlarmMenu}><i className="glyphicon glyphicon-info-sign"></i>
                                         <span className="sidebar-mini-hide">ALARM</span>
                                     </a>
                                 </li>

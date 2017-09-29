@@ -6,7 +6,7 @@
   "author": "leo zhong",
   "scripts": {
     "start": "electron .",
-    "package": "electron-packager ./ rodinx --win --out rodinx --arch=x64 --version 1.6.2 --overwrite --ignore=node_modules --ignore=.jsx"
+    "package": "electron-packager ./ RodinX --win --out dist_exe --arch=x64 --version 1.6.2 --overwrite --ignore=node_modules --ignore=src --ignore=oneui-310 --icon=./public/images/logo.png"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

@@ -508,6 +508,13 @@ export default {
 
         FetchMock.get('/detail/A1/settings/s/m', _settings);
 
+        //修改device地址
+        FetchMock.patch('/dashboard/A1', Mock.mock(
+            {
+                "server_time": "2017-07-01 12:00:00"
+            }
+        ));
+
         //更新settings
         FetchMock.put('/detail/A1/settings/u', Mock.mock(
             {

@@ -12,9 +12,12 @@ class PageContainerComponent extends React.Component {
     super(props);
   }
 
+  componentDidMount() { 
+  }
+
   render() {
     return (
-      <div id="page-container" className="sidebar-l sidebar-o side-scroll header-navbar-fixed">
+      <div id="page-container" className="sidebar-l sidebar_close side-scroll header-navbar-fixed">
         <SidebarComponent />
         <HeaderComponent />
         <MainComponent />
