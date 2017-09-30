@@ -182,14 +182,14 @@ class ButtonGroup extends React.Component {
             return (
                 <ul className="block-options-simple">
                     <button className="btn btn-square btn-sm btn-primary" onClick={_parent.onClickSaveSettings} style={{ margin: '0 2px 0 0' }}>
-                        <i className="fa fa-check"></i> <span className="hidden-xs hidden-sm">Save UserSettings</span></button>
+                        <i className="fa fa-check"></i> <span>Save</span></button>
                 </ul>
             )
         } else if (StateManager.appState.activeModuleLevel2Name == Constants.Values.Overview_Level2_FactorySettings) {
             return (
                 <ul className="block-options-simple">
                     <button className="btn btn-square btn-sm btn-danger" onClick={_parent.onClickSaveSettings} style={{ margin: '0 2px 0 0' }}>
-                        <i className="fa fa-check"></i> <span className="hidden-xs hidden-sm">Save FactorySettings</span></button>
+                        <i className="fa fa-check"></i> <span>Save</span></button>
                 </ul>
             )
         } else {

@@ -2,8 +2,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom';
 import { useStrict } from 'mobx';
-import { observer } from 'mobx-react';
-
+ 
 import Constants from './constants/Constants.jsx';
 import StateManager from './states/StateManager.jsx';
 
@@ -16,7 +15,6 @@ import LoginComponent from './components/LoginComponent.jsx';
 import './assets/css/font.css';
 import './assets/css/style.css';
 
-@observer
 class App extends React.Component {
 
     constructor(props) {
@@ -29,16 +27,10 @@ class App extends React.Component {
         DataSim.init();
     }
 
-    render() { 
-        if (StateManager.appState.uiName == Constants.Values.Module_UI_Login) {
-            return (
-                <LoginComponent />
-            )
-        } else if (StateManager.appState.uiName == Constants.Values.Module_UI_Main) {
-            return (
-                <PageContainerComponent />
-            )
-        }
+    render() {
+        return (
+            <PageContainerComponent />
+        )
     }
 
 };

@@ -37,19 +37,15 @@ class ItemComponent extends React.Component {
     //设置地址
     onClickSetAddressButton(_item, _event) {
         StateManager.modalsState.setModal(_item.name + ' Device Settings', <AddressSetModalContent ref={(_ref) => this.modalContent = _ref} />, function () {
-            // let obj = arr.find(o => o.name === 'string 1');
-            console.log('this.modalContent:' + this.modalContent.inputAddress.value);
-
+            
             OverviewService.requestUpdateDeviceAddress(_item.name, this.modalContent.inputAddress.value, '', '', function (json) {
                 console.log('result:' + json);
             });
-            // MyFetch.fetch(this.ip + '/templates/' + templateName, { method: 'post', body: form }, _then);
         }.bind(this));
     }
 
     onClickRemoveItem(_item, _event) {
-        StateManager.modalsState.setModal('Confirm', <div>Delete Device {_item.name} ?</div>, function () {
-            // let obj = arr.find(o => o.name === 'string 1');
+        StateManager.modalsState.setModal('Confirm', <div>Delete Device {_item.name} ?</div>, function () { 
             console.log('Delete ok');
         }.bind(this));
     }
@@ -58,15 +54,21 @@ class ItemComponent extends React.Component {
     onClickItem(_item) {
         StateManager.appState.setMainLoading(true);
         OverviewService.requestDeviceDetail(_item.name, function (json) {
-            StateManager.dataState.detailJson = json;
-            StateManager.appState.setActiveModuleLevel1Name(Constants.Values.Overview_Level1_Detail);
-            StateManager.appState.setMainLoading(false);
+            if (json.status == 0) {
+                StateManager.dataState.detailJson = undefined;
+                StateManager.appState.setActiveModuleLevel1Name(undefined);
+                StateManager.appState.setMainLoading(false);
+            } else {
+                StateManager.dataState.detailJson = json;
+                StateManager.appState.setActiveModuleLevel1Name(Constants.Values.Overview_Level1_Detail);
+                StateManager.appState.setMainLoading(false);
+            }
         }.bind(this));
     }
 
     render() {
         let _item = this.props.data;
-        return (<div className="col-xs-6 col-sm-2" style={{ paddingLeft: '3px', paddingRight: '3px' }}>
+        return (<div className="col-xs-6 col-sm-2" style={{ padding: '3px' }}>
             <div className="block block-bordered" style={{ marginBottom: '0px' }}>
                 <div className="block-header bg-gray-lighter" style={{ margin: '1px', padding: '10px 10px 10px 15px' }}>
                     <ul className="block-options">

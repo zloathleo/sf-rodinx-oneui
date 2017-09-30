@@ -1,21 +1,27 @@
 import React from 'react';
+import md5 from 'blueimp-md5';
 
 import Constants from '../constants/Constants.jsx';
 import StateManager from '../states/StateManager.jsx';
+import UserService from '../services/UserService.jsx';
 
 class LoginComponent extends React.Component {
 
     constructor(props) {
         super(props);
+        this.clickLoginButton = this.clickLoginButton.bind(this);
     }
 
     clickLoginButton() {
-        StateManager.appState.resetModuleRoot();
-        StateManager.appState.setUIName(Constants.Values.Module_UI_Main);
+        let _password = md5(this.inputPassword.value).toUpperCase();
+        UserService.requestLogin('admin', _password, function (json) {
+            StateManager.dataState.userType = 1;
+            StateManager.appState.resetModuleRoot();  
+        });
     }
 
     render() {
-        return ( 
+        return (
             <div className="content overflow-hidden">
                 <div className="row">
                     <div className="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
@@ -29,8 +35,8 @@ class LoginComponent extends React.Component {
 
                                 <div className="row push-50-t">
                                     <div className="col-xs-12">
-                                        <div className="form-material form-material-success">
-                                            <input className="form-control" type="password" id="register-password" name="register-password" placeholder="Choose a strong password.." />
+                                        <div className="form-material form-material-primary">
+                                            <input ref={(_ref) => this.inputPassword = _ref} className="form-control" type="password" placeholder="Enter the admin password.." />
                                             <label for="register-password">Password</label>
                                         </div>
                                     </div>

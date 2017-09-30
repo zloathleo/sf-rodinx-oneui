@@ -10,7 +10,12 @@ class HeaderComponent extends React.Component {
     }
 
     clickAdminLoginButton() {
-        StateManager.appState.setUIName(Constants.Values.Module_UI_Login);
+        if (StateManager.appState.activeMainModule == Constants.Values.Main_Module_Login) {
+            StateManager.appState.setActiveMainModule(Constants.Values.Main_Module_Overview);
+        } else {
+            StateManager.appState.setActiveMainModule(Constants.Values.Main_Module_Login);
+        }
+
     }
 
     render() {
@@ -24,7 +29,7 @@ class HeaderComponent extends React.Component {
                     </li>
                 </ul>
 
-                <ul className="nav-header pull-left"> 
+                <ul className="nav-header pull-left">
                     <li>
                         <button className="btn btn-default" data-toggle="layout" data-action="sidebar_toggle" type="button">
                             <i className="fa fa-navicon"></i>

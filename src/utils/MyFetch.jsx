@@ -1,5 +1,9 @@
 export default {
     fetch: function (url, _opt, _then) {
+        _opt.headers = {
+            "Content-Type": "application/x-www-form-urlencoded"
+        };
+
         fetch(url, _opt)
             .then(function (response) {
                 //ok 范围 200-299  

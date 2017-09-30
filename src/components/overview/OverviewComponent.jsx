@@ -4,6 +4,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 
 import Constants from '../../constants/Constants.jsx';
 import StateManager from '../../states/StateManager.jsx';
+import Utils from '../../utils/Utils.jsx'
 
 import OverviewService from '../../services/OverviewService.jsx'
 import BreadcrumbComponent from '../main/BreadcrumbComponent.jsx'
@@ -14,6 +15,7 @@ import DeviceDetailComponent from './DeviceDetailComponent.jsx'
 class LayoutConfigModalContent extends React.Component {
     render() {
         let _ports = this.props.ports.rows;
+        // let _currentBoadRate = this.props.currentBoadRate;
         return (
             <div>
                 <div className="form-group">
@@ -39,10 +41,33 @@ class LayoutConfigModalContent extends React.Component {
     }
 }
 
+class AppendButtonPanel extends React.Component {
+    render() {
+        let _paddingBottom = document.documentElement.clientWidth < 768 ? '11px' : '12px';
+        return (
+            <div className="col-xs-6 col-sm-2" style={{ padding: '3px' }} onClick={this.props.addCallback}>
+                <div className="block block-bordered" style={{ marginBottom: '0px' }}>
+                    <div className="block-header bg-gray-lighter" style={{ margin: '1px', padding: '10px 10px 10px 15px' }}>
+                        <h3 className="block-title">{this.props.title}</h3>
+                    </div>
+                    <div className="block-content" style={{ margin: '1px', textAlign: 'center', paddingBottom: _paddingBottom }}>
+                        <span className="fa fa-plus-circle fa-2x" style={{ padding: '0px' }}></span>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+}
+
 class OverviewTopComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = { data: undefined };
+        this.updateCurrentOverview = this.updateCurrentOverview.bind(this);
+        this.renderRows = this.renderRows.bind(this);
+        this.renderColumns = this.renderColumns.bind(this);
+        this.clickAddDeviceButton = this.clickAddDeviceButton.bind(this);
+        this.clickAddRowButton = this.clickAddRowButton.bind(this);
     }
 
     componentDidMount() {
@@ -59,9 +84,82 @@ class OverviewTopComponent extends React.Component {
                 const _inputPort = this.modalContent.inputPort.value;
                 const _inputBoadRate = this.modalContent.inputBoadRate.value;
                 console.log(_inputPort, _inputBoadRate);
+                this.state.data.com = _inputPort;
+                this.state.data.baud_rate = parseInt(_inputBoadRate);
 
+                console.log(this.state.data);
+                this.updateCurrentOverview();
             }.bind(this));
         }.bind(this));
+    }
+
+    clickAddDeviceButton(row) {
+        let length = row.items.length;
+        let newItem = {
+            name: row.title + length,
+            addr: -1,
+            chs: [
+                {
+                    name: "CH1"
+                },
+                {
+                    name: "CH2"
+                }
+            ]
+        }
+        row.items.push(newItem);
+        this.updateCurrentOverview();
+    }
+
+    updateCurrentOverview() {
+        StateManager.appState.setMainLoading(true);
+        OverviewService.requestUpdateOverview(this.state.data, function (json) {
+            OverviewService.requestOverview(function (json) {
+                this.setState({ data: json });
+                StateManager.appState.setMainLoading(false);
+            }.bind(this));
+        }.bind(this));
+    }
+
+    clickAddRowButton(rows) {
+        let length = rows.length;
+        if (length >= 22) {
+            alert('too many rows:' + length);
+        } else {
+            let newRow = {
+                index: length,
+                title: Utils.getCharForNumber(length),
+                items: []
+            }
+            rows.push(newRow);
+            this.updateCurrentOverview();
+        }
+    }
+
+    renderColumns(row) {
+        let items = row.items;
+
+        let existColumns = items.map(function (item, num) {
+            return (<ItemComponent data={item} />)
+        });
+        if (items.length < 6) {
+            existColumns.push(<AppendButtonPanel title='Add Device' addCallback={this.clickAddDeviceButton.bind(this, row)} />);
+        }
+        return existColumns;
+    }
+
+    renderRows(rows) {
+        let existRows = rows.map(function (row, i) {
+            return (<div className="row main-overview-content-padding-margin bs-callout bs-callout-primary">
+                {
+                    this.renderColumns(row)
+                }
+            </div>)
+        }.bind(this));
+        existRows.push(<div className="row main-overview-content-padding-margin bs-callout bs-callout-success">
+            <AppendButtonPanel title='Add Row' addCallback={this.clickAddRowButton.bind(this, rows)} />
+        </div>);
+        return existRows;
     }
 
     render() {
@@ -81,19 +179,8 @@ class OverviewTopComponent extends React.Component {
                     <div className="block-content main-content-padding animated bounceInDown ">
                         <Scrollbars style={{ height: StateManager.uiState.OverviewTopContentHeight }}>
                             {
-                                _data.rows.map(function (row, i) {
-                                    let items = row.items;
-                                    return (<div className="row main-overview-content-padding-margin bs-callout bs-callout-primary">
-                                        {
-                                            items.map(function (item, num) {
-                                                return (<ItemComponent data={item} />)
-                                            })
-                                        }
-                                    </div>)
-                                })
-
+                                this.renderRows(_data.rows)
                             }
-
                         </Scrollbars>
                     </div>
                 </div>

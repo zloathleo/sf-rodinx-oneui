@@ -14,6 +14,13 @@ export default {
             ]
         }));
 
+        //更新dashboard
+        FetchMock.put('/dashboard', Mock.mock(
+            {
+                "server_time": "2017-07-01 12:00:00"
+            }
+        ));
+
         FetchMock.get('/dashboard', Mock.mock({
             "name": "Layout-Default",
             "com": "COM3",
@@ -41,6 +48,7 @@ export default {
         FetchMock.get('/detail/A1', Mock.mock({
             "name": "A1",
             "addr": 1,
+            "status": 1,
             "ch1": {
                 "enable": true,
                 "file": 0,
@@ -552,6 +560,14 @@ export default {
         FetchMock.put('/templates/aaa', Mock.mock(
             {
                 "server_time": "2017-07-01 12:00:00"
+            }
+        ));
+
+        //登录
+        FetchMock.patch('/users/admin', Mock.mock(
+            {
+                "server_time": "2017-07-01 12:00:00",
+                "access_token": "abcdefg"
             }
         ));
 

@@ -4,7 +4,8 @@ import SidebarComponent from './SidebarComponent.jsx';
 import HeaderComponent from './HeaderComponent.jsx';
 import MainComponent from './MainComponent.jsx';
 import FootComponent from './FootComponent.jsx';
-import ModalComponent from './ModalComponent.jsx'
+import ModalComponent from './ModalComponent.jsx';
+import ToastrComponent from './ToastrComponent.jsx';
 
 class PageContainerComponent extends React.Component {
 
@@ -12,7 +13,7 @@ class PageContainerComponent extends React.Component {
     super(props);
   }
 
-  componentDidMount() { 
+  componentDidMount() {
   }
 
   render() {
@@ -23,6 +24,7 @@ class PageContainerComponent extends React.Component {
         <MainComponent />
         <FootComponent />
         <ModalComponent />
+        {/* <ToastrComponent /> */}
       </div>
     )
   }

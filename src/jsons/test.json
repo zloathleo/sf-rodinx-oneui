@@ -1,108 +1,379 @@
 {
-    "addr": 6,
-    "ch1": {
-        "enable": 1,
-        "file": 0,
-        "filea": {
-            "ac": {
-                "ac_gain": "1",
-                "ac_on_th": 1998,
-                "ac_on_tl": 601,
-                "fc": 98,
-                "max": 1998,
-                "min": 301
-            },
-            "dc": {
-                "dc_gain": 2,
-                "dc_on_th": 1998,
-                "dc_on_tl": 1
-            },
-            "frequency": {
-                "freq_on_th": 125,
-                "freq_on_tl": 1
-            },
-            "public": {
-                "ffrt": 4,
-                "otd": 2
-            }
+    "name": "layout_default",
+    "com": "",
+    "baud_rate": 0,
+    "rows": [
+        {
+            "index": 0,
+            "title": "A",
+            "items": [
+                {
+                    "name": "A0",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                },
+                {
+                    "name": "A1",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                },
+                {
+                    "name": "A2",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                },
+                {
+                    "name": "A3",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                }
+            ]
         },
-        "fileb": {
-            "ac": {
-                "ac_gain": "1",
-                "ac_on_th": 1999,
-                "ac_on_tl": 600,
-                "fc": 99,
-                "max": 1999,
-                "min": 300
-            },
-            "dc": {
-                "dc_gain": 1,
-                "dc_on_th": 1999,
-                "dc_on_tl": 0
-            },
-            "frequency": {
-                "freq_on_th": 126,
-                "freq_on_tl": 0
-            },
-            "public": {
-                "ffrt": 3,
-                "otd": 1
-            }
+        {
+            "index": 1,
+            "title": "B",
+            "items": [
+                {
+                    "name": "B0",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                },
+                {
+                    "name": "B1",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                },
+                {
+                    "name": "B2",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                },
+                {
+                    "name": "B3",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                },
+                {
+                    "name": "B4",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                }
+            ]
         },
-        "name": "ch1",
-        "type": "UV"
-    },
-    "ch2": {
-        "enable": 1,
-        "file": 0,
-        "filea": {
-            "ac": {
-                "ac_gain": "3",
-                "ac_on_th": 1998,
-                "ac_on_tl": 601,
-                "fc": 98,
-                "max": 1998,
-                "min": 301
-            },
-            "dc": {
-                "dc_gain": 2,
-                "dc_on_th": 1998,
-                "dc_on_tl": 1
-            },
-            "frequency": {
-                "freq_on_th": 125,
-                "freq_on_tl": 1
-            },
-            "public": {
-                "ffrt": 4,
-                "otd": 2
-            }
+        {
+            "index": 2,
+            "title": "C",
+            "items": [
+                {
+                    "name": "C0",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                },
+                {
+                    "name": "C1",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                },
+                {
+                    "name": "C2",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                },
+                {
+                    "name": "C3",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                }
+            ]
         },
-        "fileb": {
-            "ac": {
-                "ac_gain": "1",
-                "ac_on_th": 1999,
-                "ac_on_tl": 600,
-                "fc": 99,
-                "max": 1999,
-                "min": 300
-            },
-            "dc": {
-                "dc_gain": 1,
-                "dc_on_th": 1999,
-                "dc_on_tl": 0
-            },
-            "frequency": {
-                "freq_on_th": 126,
-                "freq_on_tl": 0
-            },
-            "public": {
-                "ffrt": 3,
-                "otd": 1
-            }
+        {
+            "index": 3,
+            "title": "D",
+            "items": [
+                {
+                    "name": "D0",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                },
+                {
+                    "name": "D1",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                },
+                {
+                    "name": "D2",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                }
+            ]
         },
-        "name": "ch2",
-        "type": "UV"
-    },
-    "name": "A0"
+        {
+            "index": 4,
+            "title": "E",
+            "items": [
+                {
+                    "name": "E0",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                },
+                {
+                    "name": "E1",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                },
+                {
+                    "name": "E2",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                },
+                {
+                    "name": "E3",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "index": 5,
+            "title": "F",
+            "items": [
+                {
+                    "name": "F0",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                },
+                {
+                    "name": "F1",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "index": 6,
+            "title": "G",
+            "items": [
+                {
+                    "name": "G0",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                },
+                {
+                    "name": "G1",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                },
+                {
+                    "name": "G2",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "index": 7,
+            "title": "H",
+            "items": [
+                {
+                    "name": "H0",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                },
+                {
+                    "name": "H1",
+                    "addr": -1,
+                    "chs": [
+                        {
+                            "name": "CH1"
+                        },
+                        {
+                            "name": "CH2"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }
