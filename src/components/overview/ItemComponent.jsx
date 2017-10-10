@@ -37,7 +37,7 @@ class ItemComponent extends React.Component {
     //设置地址
     onClickSetAddressButton(_item, _event) {
         StateManager.modalsState.setModal(_item.name + ' Device Settings', <AddressSetModalContent ref={(_ref) => this.modalContent = _ref} />, function () {
-            
+
             OverviewService.requestUpdateDeviceAddress(_item.name, this.modalContent.inputAddress.value, '', '', function (json) {
                 console.log('result:' + json);
             });
@@ -45,7 +45,7 @@ class ItemComponent extends React.Component {
     }
 
     onClickRemoveItem(_item, _event) {
-        StateManager.modalsState.setModal('Confirm', <div>Delete Device {_item.name} ?</div>, function () { 
+        StateManager.modalsState.setModal('Confirm', <div>Delete Device {_item.name} ?</div>, function () {
             console.log('Delete ok');
         }.bind(this));
     }
@@ -54,7 +54,7 @@ class ItemComponent extends React.Component {
     onClickItem(_item) {
         StateManager.appState.setMainLoading(true);
         OverviewService.requestDeviceDetail(_item.name, function (json) {
-            if (json.status == 0) {
+            if (json.status == 0) {//离线
                 StateManager.dataState.detailJson = undefined;
                 StateManager.appState.setActiveModuleLevel1Name(undefined);
                 StateManager.appState.setMainLoading(false);
@@ -75,7 +75,7 @@ class ItemComponent extends React.Component {
                         <li> <button type="button" onClick={this.onClickSetAddressButton.bind(this, _item)} data-toggle="modal" data-target="#modal-fromleft" ><i className="glyphicon glyphicon-link"></i></button> </li>
                         <li> <button type="button" onClick={this.onClickRemoveItem.bind(this, _item)} data-toggle="modal" data-target="#modal-fromleft" ><i className="glyphicon glyphicon-remove"></i></button> </li>
                     </ul>
-                    <h3 className="block-title">{_item.name}</h3>
+                    <h3 className="block-title">{_item.name}-{_item.addr == -1 ? 'N/A' : _item.addr}</h3>
                 </div>
                 <div className="block-content" style={{ margin: '1px', padding: '8px 20px 5px' }} onClick={this.onClickItem.bind(this, _item)}>
                     <div className="row">

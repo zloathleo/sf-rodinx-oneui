@@ -13,6 +13,7 @@ import BreadcrumbComponent from '../main/BreadcrumbComponent.jsx'
 import DeviceUserSettingsComponent from './DeviceUserSettingsComponent.jsx'
 import DeviceFactorySettingsComponent from './DeviceFactorySettingsComponent.jsx'
 
+//设备详情
 class Descript extends React.Component {
 
     render() {
@@ -49,6 +50,29 @@ class Descript extends React.Component {
 
 }
 
+
+@observer
+class CHDetailTempTr extends React.Component {
+
+    render() {
+        if (StateManager.uiState.tempUnit == 'C') {
+            return (
+                <tr>
+                    <td>{this.props.field}</td>
+                    <td className="text-right font-w600 font-ds-digital-s20">{this.props.value}</td>
+                </tr>
+            )
+        } else {
+            return (
+                <tr>
+                    <td>{this.props.field}</td>
+                    <td className="text-right font-w600 font-ds-digital-s20">{this.props.value * 1.8 + 32}</td>
+                </tr>
+            )
+        }
+    }
+}
+
 class CHDetailTr extends React.Component {
     render() {
         return (
@@ -72,6 +96,7 @@ class CHDetail extends React.Component {
                     <div className="block-content">
                         <table className="table table-borderless table-condensed table-vcenter font-s13">
                             <tbody>
+                                <CHDetailTr field='FILE' value={_chdata.file == 0 ? 'File A' : 'File B'} />
                                 <CHDetailTr field='ON_TH' value={_chdata.onth} />
                                 <CHDetailTr field='ON_TL' value={_chdata.ontl} />
                                 <CHDetailTr field='MAX' value={_chdata.max} />
@@ -82,9 +107,8 @@ class CHDetail extends React.Component {
                                 <CHDetailTr field='TYPE' value={_chdata.type} />
                                 <CHDetailTr field='STATUS' value={_chdata.status} />
                                 <CHDetailTr field='FAULT' value={_chdata.fault} />
-                                <CHDetailTr field='TEMP' value={_chdata.temp} />
+                                <CHDetailTempTr field='TEMP' value={_chdata.temp} />
                                 <CHDetailTr field='FQ' value={_chdata.fq} />
-
                             </tbody>
                         </table>
                     </div>
@@ -114,11 +138,11 @@ class DeviceContentComponent extends React.Component {
             this.userSettingsComponent.mergeData();
             console.log(JSON.stringify(this.settingsData));
             OverviewService.requestUpdateDeviceSettings(StateManager.dataState.detailJson.name, 'u', this.settingsData, function (json) {
-               
+
             });
         } else if (StateManager.appState.activeModuleLevel2Name == Constants.Values.Overview_Level2_FactorySettings) {
             OverviewService.requestUpdateDeviceSettings(StateManager.dataState.detailJson.name, 's', this.settingsData, function (json) {
-               
+
             });
         }
     }
@@ -143,12 +167,8 @@ class DeviceContentComponent extends React.Component {
         }.bind(this));
     }
 
-    unitSwitcherChange(selected) {//第一选项是否选中 即摄氏度是否选中  
-        if (selected) {
-            console.log('摄氏度');
-        } else {
-            console.log('华氏度');
-        }
+    unitSwitcherChange(selectedItem) {//第一选项是否选中 即摄氏度是否选中  
+        StateManager.uiState.setTempUnit(selectedItem);
     }
 
     render() {
@@ -204,7 +224,7 @@ class ButtonGroup extends React.Component {
                     <Switcher style={{ width: '100' }} valueChangeFunc={_parent.unitSwitcherChangeDelegate} value='C' items={[{ display: 'C', value: 'C' }, { display: 'F', value: 'F' }]} />
                 </ul>
             )
-        } 
+        }
     }
 }
 

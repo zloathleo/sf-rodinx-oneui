@@ -45,43 +45,46 @@ export default {
             ]
         }));
 
-        FetchMock.get('/detail/A1', Mock.mock({
-            "name": "A1",
-            "addr": 1,
-            "status": 1,
-            "ch1": {
-                "enable": true,
-                "file": 0,
-                "onth": 2000,
-                "ontl": 600,
-                "max": 1600,
-                "min": 400,
-                "ac": 1500,
-                "dc": 1000,
-                "freq": 99,
-                "type": "IR",
-                "status": 1,
-                "fault": "00",
-                "temp": 29,
-                "fq": 75
-            },
-            "ch2": {
-                "enable": true,
-                "file": 0,
-                "onth": 2000,
-                "ontl": 600,
-                "max": 1600,
-                "min": 400,
-                "ac": 1999,
-                "dc": 462,
-                "freq": 99,
-                "type": "IR",
-                "status": 1,
-                "fault": "00",
-                "temp": 29,
-                "fq": 99
+        FetchMock.get('/detail/A1', Mock.mock(
+            {
+                "addr": 1,
+                "name": "A1", 
+                "ch1": {
+                    "ac": 0,
+                    "dc": 163,
+                    "enable": 1,
+                    "fault": "0",
+                    "file": 1,
+                    "fq": 0,
+                    "freq": 0,
+                    "max": 1999,
+                    "min": 300,
+                    "name": "ch1",
+                    "onth": 1999,
+                    "ontl": 600,
+                    "status": 0,
+                    "temp": 0,
+                    "type": "IR"
+                },
+                "ch2": {
+                    "ac": 0,
+                    "dc": 214,
+                    "enable": 1,
+                    "fault": "0",
+                    "file": 0,
+                    "fq": 0,
+                    "freq": 0,
+                    "max": 1999,
+                    "min": 300,
+                    "name": "ch2",
+                    "onth": 1999,
+                    "ontl": 600,
+                    "status": 0,
+                    "temp": 0,
+                    "type": "IR"
+                }
             }
-        }));
+        ));
 
         let _settings = Mock.mock(
             {
