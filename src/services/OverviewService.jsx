@@ -6,8 +6,8 @@ export default {
     ip: Constants.Values.Mock ? '' : 'http://192.168.2.89:8080',
 
 
-    requestServer: function (_then) {
-        MyFetch.fetch(this.ip + '/server', { method: 'GET' }, _then);
+    requestServer: function (type, device, _then) {
+        MyFetch.fetch(this.ip + '/server?type=' + type + '&device=' + device, { method: 'GET' }, _then);
     },
 
     requestPorts: function (_then) {

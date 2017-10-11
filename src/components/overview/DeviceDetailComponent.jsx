@@ -84,9 +84,15 @@ class CHDetailTr extends React.Component {
     }
 }
 
+@observer
 class CHDetail extends React.Component {
     render() {
         let _chdata = this.props.data;
+
+        // let rtJson = StateManager.dataState.dashboardRTJson;
+        // if (rtJson) {
+        //     _chdata.temp = rtJson
+        // }
         return (
             <div className="col-xs-12 col-sm-6" style={{ padding: '0px 3px' }} >
                 <div className="block block-bordered end-block-margin-bottom">

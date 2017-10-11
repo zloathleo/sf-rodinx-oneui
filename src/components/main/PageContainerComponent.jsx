@@ -1,5 +1,7 @@
 import React from 'react';
 
+import AlertComponent from './AlertComponent.jsx';
+import RealtimeComponent from './RealtimeComponent.jsx';
 import SidebarComponent from './SidebarComponent.jsx';
 import HeaderComponent from './HeaderComponent.jsx';
 import MainComponent from './MainComponent.jsx';
@@ -13,7 +15,7 @@ class PageContainerComponent extends React.Component {
     super(props);
   }
 
-  componentDidMount() {
+  componentWillMount() {
   }
 
   render() {
@@ -24,6 +26,8 @@ class PageContainerComponent extends React.Component {
         <MainComponent />
         <FootComponent />
         <ModalComponent />
+        <AlertComponent />
+        <RealtimeComponent />
         {/* <ToastrComponent /> */}
       </div>
     )

@@ -1,9 +1,11 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 
 import Constants from '../../constants/Constants.jsx';
+import Utils from '../../utils/Utils.jsx';
 import StateManager from '../../states/StateManager.jsx';
 
-import OverviewService from '../../services/OverviewService.jsx'
+import OverviewService from '../../services/OverviewService.jsx';
 
 class AddressSetModalContent extends React.Component {
     render() {
@@ -28,6 +30,7 @@ class AddressSetModalContent extends React.Component {
     }
 }
 
+@observer
 class ItemComponent extends React.Component {
 
     constructor(props) {
@@ -52,9 +55,12 @@ class ItemComponent extends React.Component {
 
     //进入detail
     onClickItem(_item) {
+        // console.log('onClickItem');
+        // StateManager.modalsState.setModal('Confirm123', <div>aaaaa</div>, undefined);
+
         StateManager.appState.setMainLoading(true);
         OverviewService.requestDeviceDetail(_item.name, function (json) {
-            if (json.status == 0) {//离线
+            if (json.status == 0) {//离线 
                 StateManager.dataState.detailJson = undefined;
                 StateManager.appState.setActiveModuleLevel1Name(undefined);
                 StateManager.appState.setMainLoading(false);
@@ -68,6 +74,23 @@ class ItemComponent extends React.Component {
 
     render() {
         let _item = this.props.data;
+
+        let color1 = '#9E9E9E';
+        let color2 = '#9E9E9E';
+
+        let rtJson = StateManager.dataState.dashboardRTJson;
+        if (rtJson) {
+            let _status = rtJson.dashboard.status;
+            let _status_values = _status[_item.name];
+            if (_status_values) {
+                color1 = Utils.renderColor(_status_values[0]);
+                color2 = Utils.renderColor(_status_values[1]);
+            }
+
+        }
+
+
+
         return (<div className="col-xs-6 col-sm-2" style={{ padding: '3px' }}>
             <div className="block block-bordered" style={{ marginBottom: '0px' }}>
                 <div className="block-header bg-gray-lighter" style={{ margin: '1px', padding: '10px 10px 10px 15px' }}>
@@ -75,16 +98,16 @@ class ItemComponent extends React.Component {
                         <li> <button type="button" onClick={this.onClickSetAddressButton.bind(this, _item)} data-toggle="modal" data-target="#modal-fromleft" ><i className="glyphicon glyphicon-link"></i></button> </li>
                         <li> <button type="button" onClick={this.onClickRemoveItem.bind(this, _item)} data-toggle="modal" data-target="#modal-fromleft" ><i className="glyphicon glyphicon-remove"></i></button> </li>
                     </ul>
-                    <h3 className="block-title">{_item.name}-{_item.addr == -1 ? 'N/A' : _item.addr}</h3>
+                    <h3 className="block-title">{_item.name} - {_item.addr == -1 ? 'N/A' : _item.addr}</h3>
                 </div>
                 <div className="block-content" style={{ margin: '1px', padding: '8px 20px 5px' }} onClick={this.onClickItem.bind(this, _item)}>
                     <div className="row">
                         <div className="col-xs-6" style={{ padding: '0', textAlign: 'center' }}>
-                            <i className="glyphicon glyphicon-fire" style={{ fontSize: '1.6em' }}></i>
+                            <i className="glyphicon glyphicon-fire" style={{ fontSize: '1.6em', color: color1 }}></i>
                             <div className="font-w400" style={{ paddingLeft: '3px' }}>CH1</div>
                         </div>
                         <div className="col-xs-6" style={{ padding: '0', textAlign: 'center' }}>
-                            <i className="glyphicon glyphicon-fire" style={{ fontSize: '1.6em' }}></i>
+                            <i className="glyphicon glyphicon-fire" style={{ fontSize: '1.6em', color: color2 }}></i>
                             <div className="font-w400" style={{ paddingLeft: '3px' }}>CH2</div>
                         </div>
                     </div>
