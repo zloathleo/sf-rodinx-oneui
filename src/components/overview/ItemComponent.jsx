@@ -74,6 +74,7 @@ class ItemComponent extends React.Component {
 
     render() {
         let _item = this.props.data;
+        let _isLast = this.props.isLast;
 
         let color1 = '#9E9E9E';
         let color2 = '#9E9E9E';
@@ -86,19 +87,22 @@ class ItemComponent extends React.Component {
                 color1 = Utils.renderColor(_status_values[0]);
                 color2 = Utils.renderColor(_status_values[1]);
             }
-
         }
 
-
+        let tool = null;
+        if (_isLast) {
+            tool = <ul className="block-options">
+                <li> <button type="button" onClick={this.onClickRemoveItem.bind(this, _item)} data-toggle="modal" data-target="#modal-fromleft" ><i className="glyphicon glyphicon-remove"></i></button> </li>
+            </ul>
+        }
 
         return (<div className="col-xs-6 col-sm-2" style={{ padding: '3px' }}>
             <div className="block block-bordered" style={{ marginBottom: '0px' }}>
                 <div className="block-header bg-gray-lighter" style={{ margin: '1px', padding: '10px 10px 10px 15px' }}>
-                    <ul className="block-options">
-                        <li> <button type="button" onClick={this.onClickSetAddressButton.bind(this, _item)} data-toggle="modal" data-target="#modal-fromleft" ><i className="glyphicon glyphicon-link"></i></button> </li>
-                        <li> <button type="button" onClick={this.onClickRemoveItem.bind(this, _item)} data-toggle="modal" data-target="#modal-fromleft" ><i className="glyphicon glyphicon-remove"></i></button> </li>
-                    </ul>
-                    <h3 className="block-title">{_item.name} - {_item.addr == -1 ? 'N/A' : _item.addr}</h3>
+                    {tool}
+                    <a className="link-effect" href="#" data-toggle="modal" data-target="#modal-fromleft" onClick={this.onClickSetAddressButton.bind(this, _item)}>
+                        <span className="block-title">{_item.name} - {_item.addr == -1 ? 'N/A' : _item.addr}</span>
+                    </a>
                 </div>
                 <div className="block-content" style={{ margin: '1px', padding: '8px 20px 5px' }} onClick={this.onClickItem.bind(this, _item)}>
                     <div className="row">

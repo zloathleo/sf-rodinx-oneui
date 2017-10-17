@@ -3,10 +3,69 @@ import FetchMock from 'fetch-mock';
 
 export default {
     init: function () {
-        FetchMock.get('/server', Mock.mock({
-            'server_time': '2017-07-01 12:00:00',
-            'user': 'guest'
-        }));
+        FetchMock.get('/server?type=1&device=A0', Mock.mock(
+            {
+                "server_time": "2017-07-01 12:00:00",
+                "user": "guest1",
+                "dashboard": {
+                    "modify_time": "2017-07-01 12:00:00",
+                    "status": {
+                        "A1": [
+                            0,
+                            0
+                        ],
+                        "A2": [
+                            0,
+                            0
+                        ],
+                        "A3": [
+                            0,
+                            0
+                        ]
+                    }
+                },
+                "device_change": [
+                    "A0",
+                    "A1",
+                    "A2"
+                ],
+                "device": {
+                    "name": "A1",
+                    "addr": 1,
+                    "status": 0,
+                    "ch1": {
+                        "enable": true,
+                        "file": 0,
+                        "onth": 2000,
+                        "ontl": 600,
+                        "max": 1600,
+                        "min": 400,
+                        "ac": 1500,
+                        "dc": 1000,
+                        "freq": 99,
+                        "type": "IR",
+                        "status": 1,
+                        "fault": "00",
+                        "temp": 29,
+                        "fq": 75
+                    },
+                    "ch2": {
+                        "onth": 2000,
+                        "ontl": 600,
+                        "max": 1600,
+                        "min": 400,
+                        "ac": 1999,
+                        "dc": 462,
+                        "freq": 99,
+                        "type": "IR",
+                        "status": 1,
+                        "fault": "00",
+                        "temp": 29,
+                        "fq": 99
+                    }
+                }
+            }
+        ));
 
         FetchMock.get('/ports', Mock.mock({
             'rows|2-8': [
@@ -48,7 +107,7 @@ export default {
         FetchMock.get('/detail/A1', Mock.mock(
             {
                 "addr": 1,
-                "name": "A1", 
+                "name": "A1",
                 "ch1": {
                     "ac": 0,
                     "dc": 163,

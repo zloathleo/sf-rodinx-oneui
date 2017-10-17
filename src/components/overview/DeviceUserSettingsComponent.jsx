@@ -45,22 +45,45 @@ class TemplateSaveModalContent extends React.Component {
     }
 }
 
-//应用模板modal
+//上传应用模板modal
 class TemplateUseModalContent extends React.Component {
 
+    clickFileChoose(_event) {
+        let _files = _event.currentTarget.files;
+        console.log('clickFileChoose');
+        if (_files) {
+            let _selectedFile = _files[0];
+
+            // var data = new FormData()
+            // data.append('file', _selectedFile);
+            // data.append('device', 'A0');
+            // data.append('ch', 'ch1');
+
+            // fetch('/templates', {
+            //     method: 'post',
+            //     body: data
+            // }).then(function (response) {
+            //     //ok 范围 200-299  
+            //     if (response.ok) {
+            //         response.json().then(function (data) {
+            //             console.log(data);;
+            //         });
+            //     } else {
+            //         return new Error(response.statusText);
+            //     }
+            // })
+        }
+    }
+
     render() {
-        let _data = this.props.data;
+        // let _data = this.props.data;
         return (
             <div>
                 <div className="form-group">
-                    <label className="col-xs-12" for="login1-username">Template Name</label>
-                    <select ref={(_ref) => this.inputTemplateName = _ref} className="form-control" id="val-skill" name="val-skill">
-                        {
-                            _data.map(function (item, i) {
-                                return <option value={item}>{item}</option>
-                            })
-                        }
-                    </select>
+                    <label className="btn btn-primary" for="my-file-selector">
+                        <input type="file" ref={(_ref) => this.inputFilePath = _ref} onChange={this.clickFileChoose} style={{ display: 'none' }} />
+                        Update Template File
+                     </label>
                 </div>
             </div>
         )
@@ -96,15 +119,15 @@ class DeviceCHSettings extends React.Component {
         _ch.fileb.ac.max = parseInt(this.inputMax.valueB());
 
         _ch.filea.ac.min = parseInt(this.inputMin.valueA());
-        _ch.fileb.ac.min = parseInt(this.inputMin.valueB()); 
-        
+        _ch.fileb.ac.min = parseInt(this.inputMin.valueB());
+
         //dc
         _ch.filea.dc.dc_gain = parseInt(this.inputDCGain.valueA());
         _ch.fileb.dc.dc_gain = parseInt(this.inputDCGain.valueB());
 
         _ch.filea.dc.dc_on_th = parseInt(this.inputDCOnTh.valueA());
         _ch.fileb.dc.dc_on_th = parseInt(this.inputDCOnTh.valueB());
- 
+
         _ch.filea.dc.dc_on_tl = parseInt(this.inputDCOnTl.valueA());
         _ch.fileb.dc.dc_on_tl = parseInt(this.inputDCOnTl.valueB());
 
@@ -139,21 +162,22 @@ class DeviceCHSettings extends React.Component {
 
     //使用模板
     onClickUseTemplateButton() {
-        OverviewService.requestTemplate('u', function (json) {
+        StateManager.modalsState.setModal('Template Choose', <TemplateUseModalContent ref={(_ref) => this.modalContent = _ref} />, function () {
 
-            StateManager.modalsState.setModal('Template Choose', <TemplateUseModalContent data={json.rows} ref={(_ref) => this.modalContent = _ref} />, function () {
+            let _files = this.modalContent.inputFilePath.files;
+            if (_files) {
+                let _selectedFile = _files[0];
+                console.log(_selectedFile);
 
-                const _inputTemplateName = this.modalContent.inputTemplateName;
-                const _templateName = _inputTemplateName.value;
-
-                OverviewService.requestUseTemplate(_templateName, StateManager.dataState.detailJson.name, this.props.name, 'u', function (json) {
+                OverviewService.requestUpdateTemplate(StateManager.dataState.detailJson.name, this.props.name, _selectedFile, function (json) {
                     console.log('ok:', json);
                 }.bind(this));
 
-            }.bind(this));
+            }
 
-            console.log('template:', json);
+
         }.bind(this));
+
     }
 
     render() {

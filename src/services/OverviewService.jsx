@@ -3,7 +3,7 @@ import MyFetch from '../utils/MyFetch.jsx'
 
 export default {
 
-    ip: Constants.Values.Mock ? '' : 'http://192.168.2.89:8080',
+    ip: Constants.Values.Mock ? '' : Constants.Values.ServerUrl,
 
 
     requestServer: function (type, device, _then) {
@@ -59,25 +59,25 @@ export default {
         MyFetch.fetch(this.ip + '/templates/' + type, { method: 'GET' }, _then);
     },
 
-    //保存通道配置模板
+    //下载通道配置模板
     requestSaveTemplate: function (templateName, deviceName, ch, type, _then) {
         // let _body = 'deviceName=' + deviceName + '&ch=' + ch + '&type=' + type;
         var form = new URLSearchParams();
-        form.set('deviceName', deviceName);
-        form.set('ch', ch);
+        form.set('device', deviceName);
+        form.set('channel', ch);
         form.set('type', type);
 
         MyFetch.fetch(this.ip + '/templates/' + templateName, { method: 'POST', body: form }, _then);
     },
 
-    //保存通道配置模板
-    requestUseTemplate: function (templateName, deviceName, ch, type, _then) {
-        var form = new URLSearchParams();
-        form.set('deviceName', deviceName);
-        form.set('ch', ch);
-        form.set('type', type);
+    //上传通道配置模板
+    requestUpdateTemplate: function (deviceName, ch, _file, _then) {
+        var form = new FormData();
+        form.set('device', deviceName);
+        form.set('channel', ch);
+        form.set('file', _file);
 
-        MyFetch.fetch(this.ip + '/templates/' + templateName, { method: 'PUT', body: form }, _then);
+        MyFetch.fetchUpdateFile(this.ip + '/templates', { method: 'POST', body: form }, _then);
     },
 
 }

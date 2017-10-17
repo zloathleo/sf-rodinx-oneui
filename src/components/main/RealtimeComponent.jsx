@@ -15,7 +15,7 @@ class RealtimeComponent extends React.Component {
                 StateManager.dataState.setDashboardRTJson(_json);
                 this.doLoopRequest();
             }.bind(this));
-        }.bind(this), 1000);
+        }.bind(this), 100000);
     }
 
     componentWillMount() {

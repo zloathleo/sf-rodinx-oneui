@@ -16,8 +16,7 @@ class SidebarComponent extends React.Component {
 
     }
 
-    render() {
-        console.log('render SidebarComponent');
+    render() { 
         return (
             <nav id="sidebar" data-toggle="layout" data-action="sidebar_close" >
                 <div id="sidebar-scroll">

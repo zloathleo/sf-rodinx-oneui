@@ -2,7 +2,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom';
 import { useStrict } from 'mobx';
- 
+
 import Constants from './constants/Constants.jsx';
 import StateManager from './states/StateManager.jsx';
 
@@ -23,8 +23,10 @@ class App extends React.Component {
     }
 
     _init_config() {
-        //模拟数据开关
-        DataSim.init();
+        if (Constants.Values.Mock) {
+            //模拟数据开关
+            DataSim.init();
+        }
     }
 
     render() {

@@ -51,7 +51,7 @@ class AppendButtonPanel extends React.Component {
                         <h3 className="block-title">{this.props.title}</h3>
                     </div>
                     <div className="block-content" style={{ margin: '1px', textAlign: 'center', paddingBottom: _paddingBottom }}>
-                        <span className="fa fa-plus-circle fa-2x" style={{ padding: '0px' }}></span>
+                        <span className="fa fa-plus-circle fa-2x" style={{ padding: '0px', color: '#999999' }}></span>
                     </div>
                 </div>
             </div>
@@ -140,7 +140,7 @@ class OverviewTopComponent extends React.Component {
         let items = row.items;
 
         let existColumns = items.map(function (item, num) {
-            return (<ItemComponent data={item} />)
+            return (<ItemComponent data={item} isLast={(num + 1) == items.length} />)
         });
         if (items.length < 6) {
             existColumns.push(<AppendButtonPanel title='Add Device' addCallback={this.clickAddDeviceButton.bind(this, row)} />);
@@ -164,11 +164,10 @@ class OverviewTopComponent extends React.Component {
 
     render() {
         let _data = this.state.data;
-        // console.log(StateManager.uiState.OverviewHeadPadding);
         if (_data != null) {
             return (
-                <div className="block" style={{ marginBottom: '0px' }}>
-                    <div className="block-header bg-gray-lighter overview-head-padding">
+                <div>
+                    <div className="content bg-gray-lighter overview-head-padding">
                         <ul className="block-options-simple">
                             <button className="btn btn-square btn-sm btn-primary" onClick={this.onClickConfigLayoutButton.bind(this, _data)} data-toggle="modal" data-target="#modal-fromleft" style={{ margin: '0 2px' }}>
                                 <i className="glyphicon glyphicon-cog"></i> {_data.com} | {_data.baud_rate}</button>
@@ -176,7 +175,7 @@ class OverviewTopComponent extends React.Component {
                         <BreadcrumbComponent />
                     </div>
 
-                    <div className="block-content main-content-padding animated bounceInDown ">
+                    <div className="content main-content-padding animated bounceInDown">
                         <Scrollbars style={{ height: StateManager.uiState.OverviewTopContentHeight }}>
                             {
                                 this.renderRows(_data.rows)
@@ -197,14 +196,13 @@ class OverviewComponent extends React.Component {
 
     render() {
         if (StateManager.appState.activeModuleLevel1Name == undefined) {
-            return (<div className="col-xs-12 main-out-content-padding">
+            return (
                 <OverviewTopComponent />
-            </div>)
-
+            )
         } else if (StateManager.appState.activeModuleLevel1Name == Constants.Values.Overview_Level1_Detail) {
-            return (<div className="col-xs-12 main-out-content-padding">
+            return (
                 <DeviceDetailComponent />
-            </div>)
+            )
         }
     }
 
