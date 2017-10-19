@@ -15,7 +15,6 @@ import DeviceDetailComponent from './DeviceDetailComponent.jsx'
 class LayoutConfigModalContent extends React.Component {
     render() {
         let _ports = this.props.ports.rows;
-        // let _currentBoadRate = this.props.currentBoadRate;
         return (
             <div>
                 <div className="form-group">
@@ -41,19 +40,19 @@ class LayoutConfigModalContent extends React.Component {
     }
 }
 
+//Add item
 class AppendButtonPanel extends React.Component {
     render() {
-        let _paddingBottom = document.documentElement.clientWidth < 768 ? '11px' : '12px';
         return (
             <div className="col-xs-6 col-sm-2" style={{ padding: '3px' }} onClick={this.props.addCallback}>
-                <div className="block block-bordered" style={{ marginBottom: '0px' }}>
-                    <div className="block-header bg-gray-lighter" style={{ margin: '1px', padding: '10px 10px 10px 15px' }}>
-                        <h3 className="block-title">{this.props.title}</h3>
+                <a className="block block-link-hover3 text-center" href="#" style={{ marginBottom: '0px' }}>
+                    <div className="block block-bordered" style={{ marginBottom: '0px' }}>
+                        <div className="block-content" style={{ margin: '1px', textAlign: 'center', padding: '24px 0px' }}>
+                            <i className="fa fa-plus-circle fa-2x" style={{ padding: '0px', color: '#5c90d2' }}></i>
+                            <div className="font-w600 push-5-t">{this.props.title}</div>
+                        </div>
                     </div>
-                    <div className="block-content" style={{ margin: '1px', textAlign: 'center', paddingBottom: _paddingBottom }}>
-                        <span className="fa fa-plus-circle fa-2x" style={{ padding: '0px', color: '#999999' }}></span>
-                    </div>
-                </div>
+                </a>
             </div>
         )
     }
@@ -73,6 +72,7 @@ class OverviewTopComponent extends React.Component {
     componentDidMount() {
         OverviewService.requestOverview(function (json) {
             this.setState({ data: json });
+            StateManager.dataState.overviewJson = json;
             StateManager.appState.setMainLoading(false);
         }.bind(this));
     }
@@ -150,13 +150,18 @@ class OverviewTopComponent extends React.Component {
 
     renderRows(rows) {
         let existRows = rows.map(function (row, i) {
-            return (<div className="row main-overview-content-padding-margin bs-callout bs-callout-primary">
-                {
-                    this.renderColumns(row)
-                }
-            </div>)
+            return (
+                <div>
+                    <div className="row main-overview-content-padding-margin">
+                        {
+                            this.renderColumns(row)
+                        }
+                    </div>
+                    <hr className="main-overview-content-hr" />
+                </div>
+            )
         }.bind(this));
-        existRows.push(<div className="row main-overview-content-padding-margin bs-callout bs-callout-success">
+        existRows.push(<div className="row main-overview-content-padding-margin">
             <AppendButtonPanel title='Add Row' addCallback={this.clickAddRowButton.bind(this, rows)} />
         </div>);
         return existRows;
@@ -168,7 +173,7 @@ class OverviewTopComponent extends React.Component {
             return (
                 <div>
                     <div className="content bg-gray-lighter overview-head-padding">
-                        <ul className="block-options-simple">
+                        <ul className="block-options-simple push-10-r">
                             <button className="btn btn-square btn-sm btn-primary" onClick={this.onClickConfigLayoutButton.bind(this, _data)} data-toggle="modal" data-target="#modal-fromleft" style={{ margin: '0 2px' }}>
                                 <i className="glyphicon glyphicon-cog"></i> {_data.com} | {_data.baud_rate}</button>
                         </ul>

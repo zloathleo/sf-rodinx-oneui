@@ -148,16 +148,18 @@ class DeviceCHSettings extends React.Component {
 
     //保存模板
     onClickSaveTemplateButton() {
-        StateManager.modalsState.setModal('Template Save', <TemplateSaveModalContent ref={(_ref) => this.modalContent = _ref} />, function () {
+        OverviewService.requestDownloadTemplate(StateManager.dataState.device, this.props.name, 'u');
 
-            const _inputTemplateName = this.modalContent.inputTemplateName;
-            const _templateName = _inputTemplateName.value;
+        // StateManager.modalsState.setModal('Template Save', <TemplateSaveModalContent ref={(_ref) => this.modalContent = _ref} />, function () {
 
-            OverviewService.requestSaveTemplate(_templateName, StateManager.dataState.detailJson.name, this.props.name, 'u', function (json) {
-                console.log('ok:', json);
-            }.bind(this));
+        //     const _inputTemplateName = this.modalContent.inputTemplateName;
+        //     const _templateName = _inputTemplateName.value;
 
-        }.bind(this));
+        //     OverviewService.requestSaveTemplate(_templateName, StateManager.dataState.detailJson.name, this.props.name, 'u', function (json) {
+        //         console.log('ok:', json);
+        //     }.bind(this));
+
+        // }.bind(this));
     }
 
     //使用模板
@@ -169,7 +171,7 @@ class DeviceCHSettings extends React.Component {
                 let _selectedFile = _files[0];
                 console.log(_selectedFile);
 
-                OverviewService.requestUpdateTemplate(StateManager.dataState.detailJson.name, this.props.name, _selectedFile, function (json) {
+                OverviewService.requestUpdateTemplate(StateManager.dataState.device, this.props.name, _selectedFile, function (json) {
                     console.log('ok:', json);
                 }.bind(this));
 
@@ -187,10 +189,10 @@ class DeviceCHSettings extends React.Component {
                 <div className="block block-bordered end-block-margin-bottom">
                     <div className="block-header bg-gray-lighter">
                         <ul className="block-options">
-                            <li> <button type="button" onClick={this.onClickSaveTemplateButton.bind(this)} data-toggle="modal" data-target="#modal-fromleft" >
-                                <i className="glyphicon glyphicon-open"></i></button> </li>
-                            <li> <button type="button" onClick={this.onClickUseTemplateButton.bind(this)} data-toggle="modal" data-target="#modal-fromleft" >
+                            <li> <button type="button" onClick={this.onClickSaveTemplateButton.bind(this)} >
                                 <i className="glyphicon glyphicon-save"></i></button> </li>
+                            <li> <button type="button" onClick={this.onClickUseTemplateButton.bind(this)} data-toggle="modal" data-target="#modal-fromleft" >
+                                <i className="glyphicon glyphicon-open"></i></button> </li>
                         </ul>
                         <h3 className="block-title">{this.props.name}</h3>
                     </div>

@@ -60,14 +60,8 @@ export default {
     },
 
     //下载通道配置模板
-    requestSaveTemplate: function (templateName, deviceName, ch, type, _then) {
-        // let _body = 'deviceName=' + deviceName + '&ch=' + ch + '&type=' + type;
-        var form = new URLSearchParams();
-        form.set('device', deviceName);
-        form.set('channel', ch);
-        form.set('type', type);
-
-        MyFetch.fetch(this.ip + '/templates/' + templateName, { method: 'POST', body: form }, _then);
+    requestDownloadTemplate: function (deviceName, ch, type) {
+        MyFetch.downloadFile(this.ip + '/templates?device=' + deviceName + '&channel=' + ch + '&type=' + type);
     },
 
     //上传通道配置模板

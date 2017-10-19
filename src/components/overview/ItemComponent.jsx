@@ -30,6 +30,7 @@ class AddressSetModalContent extends React.Component {
     }
 }
 
+
 @observer
 class ItemComponent extends React.Component {
 
@@ -48,28 +49,26 @@ class ItemComponent extends React.Component {
     }
 
     onClickRemoveItem(_item, _event) {
+        console.log(_item);
         StateManager.modalsState.setModal('Confirm', <div>Delete Device {_item.name} ?</div>, function () {
-            console.log('Delete ok');
+            // StateManager.dataState.overviewJson.rows
         }.bind(this));
     }
 
     //进入detail
     onClickItem(_item) {
-        // console.log('onClickItem');
-        // StateManager.modalsState.setModal('Confirm123', <div>aaaaa</div>, undefined);
-
-        StateManager.appState.setMainLoading(true);
-        OverviewService.requestDeviceDetail(_item.name, function (json) {
-            if (json.status == 0) {//离线 
-                StateManager.dataState.detailJson = undefined;
-                StateManager.appState.setActiveModuleLevel1Name(undefined);
-                StateManager.appState.setMainLoading(false);
-            } else {
+        console.log('_item:', _item);
+        if (_item.addr != -1) {
+            StateManager.appState.setMainLoading(true);
+            OverviewService.requestDeviceDetail(_item.name, function (json) {
+                StateManager.dataState.device = _item.name;
                 StateManager.dataState.detailJson = json;
                 StateManager.appState.setActiveModuleLevel1Name(Constants.Values.Overview_Level1_Detail);
                 StateManager.appState.setMainLoading(false);
-            }
-        }.bind(this));
+            }.bind(this));
+        } else {
+            this.onClickSetAddressButton(_item, undefined);
+        }
     }
 
     render() {
@@ -81,11 +80,13 @@ class ItemComponent extends React.Component {
 
         let rtJson = StateManager.dataState.dashboardRTJson;
         if (rtJson) {
-            let _status = rtJson.dashboard.status;
+            let _status = rtJson.status;
             let _status_values = _status[_item.name];
             if (_status_values) {
-                color1 = Utils.renderColor(_status_values[0]);
-                color2 = Utils.renderColor(_status_values[1]);
+                let _status1 = _status_values[0];
+                let _status2 = _status_values[1];
+                color1 = Utils.renderColor(_status1);
+                color2 = Utils.renderColor(_status2);
             }
         }
 
@@ -96,27 +97,44 @@ class ItemComponent extends React.Component {
             </ul>
         }
 
+        //未设地址
+
+        let _row = <div className="row">
+            <div className="col-xs-6" style={{ padding: '0', textAlign: 'center' }}>
+                <i className="glyphicon glyphicon-fire" style={{ fontSize: '1.6em', color: color1 }}></i>
+                <div className="font-w400" style={{ paddingLeft: '3px' }}>CH1</div>
+            </div>
+            <div className="col-xs-6" style={{ padding: '0', textAlign: 'center' }}>
+                <i className="glyphicon glyphicon-fire" style={{ fontSize: '1.6em', color: color2 }}></i>
+                <div className="font-w400" style={{ paddingLeft: '3px' }}>CH2</div>
+            </div>
+        </div>
+
+        let _content = null;
+        if (_item.addr == -1) {
+            _content = <div className="block-content" style={{ margin: '1px', padding: '8px 20px 5px', cursor: 'pointer' }} data-toggle="modal" data-target="#modal-fromleft" onClick={this.onClickItem.bind(this, _item)}>
+                {_row}
+            </div>
+        } else {
+            _content = <div className="block-content" style={{ margin: '1px', padding: '8px 20px 5px', cursor: 'pointer' }} onClick={this.onClickItem.bind(this, _item)}>
+                {_row}
+            </div>
+        }
+
         return (<div className="col-xs-6 col-sm-2" style={{ padding: '3px' }}>
-            <div className="block block-bordered" style={{ marginBottom: '0px' }}>
+            <a className="block block-link-hover2 block-bordered" style={{ marginBottom: '0px' }}>
                 <div className="block-header bg-gray-lighter" style={{ margin: '1px', padding: '10px 10px 10px 15px' }}>
                     {tool}
                     <a className="link-effect" href="#" data-toggle="modal" data-target="#modal-fromleft" onClick={this.onClickSetAddressButton.bind(this, _item)}>
-                        <span className="block-title">{_item.name} - {_item.addr == -1 ? 'N/A' : _item.addr}</span>
+                        <span className="block-title">{_item.name}</span>
+                        <span className="block-title">-{_item.addr == -1 ? 'NA' : _item.addr}</span>
                     </a>
                 </div>
-                <div className="block-content" style={{ margin: '1px', padding: '8px 20px 5px' }} onClick={this.onClickItem.bind(this, _item)}>
-                    <div className="row">
-                        <div className="col-xs-6" style={{ padding: '0', textAlign: 'center' }}>
-                            <i className="glyphicon glyphicon-fire" style={{ fontSize: '1.6em', color: color1 }}></i>
-                            <div className="font-w400" style={{ paddingLeft: '3px' }}>CH1</div>
-                        </div>
-                        <div className="col-xs-6" style={{ padding: '0', textAlign: 'center' }}>
-                            <i className="glyphicon glyphicon-fire" style={{ fontSize: '1.6em', color: color2 }}></i>
-                            <div className="font-w400" style={{ paddingLeft: '3px' }}>CH2</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                {
+                    _content
+                }
+
+            </a>
         </div>)
     }
 

@@ -1,17 +1,30 @@
 import React from 'react';
 
-class VersionItem extends React.Component {
+class VersionLeftItem extends React.Component {
 
     render() {
         return (
-            <div className="col-xs-6 col-sm-3" style={{ display: 'flex', alignItems: 'center', padding: '0px 10px 0px 10px' }}>
+            <div className="col-xs-6 col-sm-3" style={{ display: 'flex', alignItems: 'center', padding: '0px 5px 0px 0px' }}>
                 <span style={{ width: '160%' }}>{this.props.label}</span>
-                <input type="text" className="form-control input-sm push-5-l font-ds-digital-s20" size="6" defaultValue={this.props.defaultValue} />
+                <input type="text" className="form-control input-sm font-ds-digital-s20" size="6" defaultValue={this.props.defaultValue} />
             </div>
         )
     }
 
 }
+
+class VersionRightItem extends React.Component {
+    
+        render() {
+            return (
+                <div className="col-xs-6 col-sm-3" style={{ display: 'flex', alignItems: 'center', padding: '0px 0px 0px 0px' }}>
+                    <span style={{ width: '160%' }}>{this.props.label}</span>
+                    <input type="text" className="form-control input-sm font-ds-digital-s20" size="6" defaultValue={this.props.defaultValue} />
+                </div>
+            )
+        }
+    
+    }
 
 class VersionInfo extends React.Component {
 
@@ -24,10 +37,10 @@ class VersionInfo extends React.Component {
                 </div>
                 <div className="block-content" style={{ padding: '10px' }}>
                     <div className="row" style={{ margin: '1px' }}>
-                        <VersionItem label='AMP Version' defaultValue={_data.amp_version} />
-                        <VersionItem label='FW Version' defaultValue={_data.fw_version} />
-                        <VersionItem label='CH1' defaultValue={_data.ch1} />
-                        <VersionItem label='CH2' defaultValue={_data.ch2} />
+                        <VersionLeftItem label='AMP Version' defaultValue={_data.amp_version} />
+                        <VersionRightItem label='FW Version' defaultValue={_data.fw_version} />
+                        <VersionLeftItem label='CH1' defaultValue={_data.ch1} />
+                        <VersionRightItem label='CH2' defaultValue={_data.ch2} />
                     </div>
                 </div>
             </div>

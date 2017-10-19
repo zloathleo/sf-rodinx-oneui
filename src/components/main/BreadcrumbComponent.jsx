@@ -12,6 +12,7 @@ class BreadcrumbComponent extends React.Component {
     }
 
     onClickModuleLink() {
+        StateManager.dataState.resetDetailJson(); 
         StateManager.appState.resetModuleRoot();
     }
 
@@ -25,7 +26,7 @@ class BreadcrumbComponent extends React.Component {
                 return (
                     <ol className="breadcrumb push-5-t push-10-l">
                         <li><a className="link-effect" href="#" onClick={this.onClickModuleLink.bind(this)}>{StateManager.appState.activeMainModule}</a></li>
-                        <li><a className="link-effect" href="#" onClick={this.onClickLevel1Link.bind(this)}>{StateManager.dataState.detailJson.name}</a></li>
+                        <li><a className="link-effect" href="#" onClick={this.onClickLevel1Link.bind(this)}>{StateManager.dataState.device}</a></li>
                         <li>{StateManager.appState.activeModuleLevel2Name}</li>
                     </ol>
                 )
@@ -33,7 +34,7 @@ class BreadcrumbComponent extends React.Component {
                 return (
                     <ol className="breadcrumb push-5-t push-10-l">
                         <li><a className="link-effect" href="#" onClick={this.onClickModuleLink.bind(this)}>{StateManager.appState.activeMainModule}</a></li>
-                        <li>{StateManager.dataState.detailJson.name}</li>
+                        <li>{StateManager.dataState.device}</li>
                     </ol>
                 )
             }

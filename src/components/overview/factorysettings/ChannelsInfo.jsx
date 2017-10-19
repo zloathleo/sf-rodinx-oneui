@@ -159,14 +159,14 @@ class Channel extends React.Component {
         let _data = this.props.data;
         return (
             <div className="row" style={{ margin: '1px' }}>
-                <div className="col-xs-6" style={{ display: 'flex', alignItems: 'center', padding: '0px 10px 0px 10px' }}>
-                    <span>ao_4mA_Value</span>  <input className="form-control input-sm push-5-l font-ds-digital-s20" type="text" size="6" defaultValue={_data.ao_value.ao_4ma_value} />
+                <div className="col-xs-6" style={{ display: 'flex', alignItems: 'center', padding: '0px 0px 5px' }}>
+                    <span>ao_4mA_Value</span>  <input className="form-control input-sm push-5-l push-5-r font-ds-digital-s20" type="text" size="6" defaultValue={_data.ao_value.ao_4ma_value} />
                 </div>
-                <div className="col-xs-6" style={{ display: 'flex', alignItems: 'center', padding: '0px 10px 0px 10px' }}>
+                <div className="col-xs-6" style={{ display: 'flex', alignItems: 'center', padding: '0px 0px 5px' }}>
                     <span>ao_20mA_Value</span>  <input className="form-control input-sm push-5-l font-ds-digital-s20" type="text" size="6" defaultValue={_data.ao_value.ao_20ma_value} />
                 </div>
 
-                <div className="col-xs-12 main-content-padding">
+                <div className="col-xs-12" style={{ margin: '1px', padding: '0px' }}>
                     <div className="block end-block-margin-bottom">
 
                         <ul className="nav nav-pills" data-toggle="tabs">
@@ -207,7 +207,7 @@ class ChannelsInfo extends React.Component {
                         </h3>
                     </div>
                     <div id="faq1_q1" className="panel-collapse collapse in" aria-expanded="true">
-                        <div className="panel-body">
+                        <div className="panel-body" style={{ padding: '10px' }}>
                             <Channel data={_data.ch1} />
                         </div>
                     </div>
@@ -219,7 +219,7 @@ class ChannelsInfo extends React.Component {
                           </h3>
                     </div>
                     <div id="faq1_q2" className="panel-collapse collapse" aria-expanded="false" style={{ height: '0px' }}>
-                        <div className="panel-body">
+                        <div className="panel-body" style={{ padding: '10px' }}>
                             <Channel data={_data.ch2} />
                         </div>
                     </div>

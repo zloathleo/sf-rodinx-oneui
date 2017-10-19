@@ -5,7 +5,7 @@ class Item extends React.Component {
 
     render() {
         return (
-            <div className="col-xs-12 col-sm-3" style={{ display: 'flex', alignItems: 'center', padding: '0px 10px 0px 10px' }}>
+            <div className="col-xs-12 col-sm-3" style={{ display: 'flex', alignItems: 'center', padding: '0px 0px' }}>
                 <span style={{ width: '50%' }}>{this.props.label}</span>
                 <EnableSwitcher style={{ width: '100%' }} value={this.props.defaultValue} />
             </div>
