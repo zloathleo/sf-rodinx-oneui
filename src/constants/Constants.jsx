@@ -8,8 +8,8 @@ export default {
     },
     Values: {
         Mock: false, 
-        ServerUrl: '', 
-        // ServerUrl: 'http://192.168.2.70:80', 
+        // ServerUrl: '', 
+        ServerUrl: 'http://192.168.2.70:80', 
 
         Main_Is_Loading: 'main_is_loading',
         Main_Module_Login: 'LOGIN',

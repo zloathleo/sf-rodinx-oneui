@@ -297,7 +297,7 @@ class DeviceDetailComponent extends React.Component {
 
     render() {
         return (
-            <div className="block" style={{ marginBottom: '0px' }}>
+            <div>
                 <div className="block-header bg-gray-lighter overview-head-padding">
                     <ButtonGroup parent={this} />
                     <BreadcrumbComponent />

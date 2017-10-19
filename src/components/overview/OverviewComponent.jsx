@@ -172,7 +172,7 @@ class OverviewTopComponent extends React.Component {
         if (_data != null) {
             return (
                 <div>
-                    <div className="content bg-gray-lighter overview-head-padding">
+                    <div className="block-header bg-gray-lighter overview-head-padding">
                         <ul className="block-options-simple push-10-r">
                             <button className="btn btn-square btn-sm btn-primary" onClick={this.onClickConfigLayoutButton.bind(this, _data)} data-toggle="modal" data-target="#modal-fromleft" style={{ margin: '0 2px' }}>
                                 <i className="glyphicon glyphicon-cog"></i> {_data.com} | {_data.baud_rate}</button>
