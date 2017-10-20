@@ -210,28 +210,12 @@ class OverviewTopComponent extends React.Component {
         let _data = this.state.data;
         if (_data != null) {
             return (
-                <div>
-                    <div className="block-header bg-gray-lighter overview-head-padding">
-                        <div className="block-options-simple push-10-r">
-                            <button className="btn btn-square btn-sm btn-primary" onClick={this.onClickConfigLayoutButton.bind(this, _data)} data-toggle="modal" data-target="#modal-fromleft" style={{ margin: '0 2px' }}>
-                                <i className="glyphicon glyphicon-cog"></i> {_data.com} | {_data.baud_rate}</button>
-                        </div>
-
-                        <div className="block-options-simple block-options-simple-left">
-                            <button className="btn btn-default" data-toggle="layout" data-action="sidebar_toggle" type="button">
-                                <i className="fa fa-navicon"></i>
-                            </button> 
-                        </div>
-                        <BreadcrumbComponent />
-                    </div>
-
-                    <div className="content main-content-padding animated bounceInDown">
-                        <Scrollbars style={{ height: StateManager.uiState.OverviewTopContentHeight }}>
-                            {
-                                this.renderRows(_data.rows)
-                            }
-                        </Scrollbars>
-                    </div>
+                <div className="main-content-padding animated bounceInDown">
+                    <Scrollbars style={{ height: StateManager.uiState.OverviewTopContentHeight }}>
+                        {
+                            this.renderRows(_data.rows)
+                        }
+                    </Scrollbars>
                 </div>
             )
         } else {

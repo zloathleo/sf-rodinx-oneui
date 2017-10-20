@@ -4,15 +4,13 @@ import ReactDOM from 'react-dom';
 import { useStrict } from 'mobx';
 
 import Constants from './constants/Constants.jsx';
-import StateManager from './states/StateManager.jsx';
 
 import DataSim from './mock/DataSim.jsx';
-
-import PageContainerComponent from './components/main/PageContainerComponent.jsx';
-import LoginComponent from './components/LoginComponent.jsx';
+import PageContainerComponent from './components/index/PageContainerComponent.jsx';
 
 //css
 import './assets/css/font.css';
+import './assets/css/main.css';
 import './assets/css/style.css';
 
 class App extends React.Component {

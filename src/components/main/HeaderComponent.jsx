@@ -3,40 +3,36 @@ import React from 'react';
 import Constants from '../../constants/Constants.jsx';
 import StateManager from '../../states/StateManager.jsx';
 
+import BreadcrumbComponent from './BreadcrumbComponent.jsx';
+
 class HeaderComponent extends React.Component {
 
     constructor(props) {
         super(props);
     }
 
-    clickAdminLoginButton() {
-        if (StateManager.appState.activeMainModule == Constants.Values.Main_Module_Login) {
-            StateManager.appState.setActiveMainModule(Constants.Values.Main_Module_Overview);
-        } else {
-            StateManager.appState.setActiveMainModule(Constants.Values.Main_Module_Login);
-        }
-
-    }
-
     render() {
         return (
-            <header id="header-navbar" className="content-mini content-mini-full">
-                <ul className="nav-header pull-right">
+            <div className="block-header bg-gray-lighter overview-head-padding">
+                <ul className="nav-header pull-right push-10-r">
                     <li>
-                        <button className="btn btn-default" type="button" onClick={this.clickAdminLoginButton}>
-                            <i className="fa fa-tasks"></i>
-                        </button>
+                        <button className="btn btn-square btn-primary" data-toggle="modal" data-target="#modal-fromleft" style={{ margin: '0 2px' }}>
+                            <i className="glyphicon glyphicon-cog"></i> 123
+                    </button>
                     </li>
                 </ul>
-
                 <ul className="nav-header pull-left">
                     <li>
-                        <button className="btn btn-default" data-toggle="layout" data-action="sidebar_toggle" type="button">
+                        <button className="btn btn-square btn-default" data-toggle="layout" data-action="sidebar_toggle" type="button">
                             <i className="fa fa-navicon"></i>
                         </button>
                     </li>
+                    <li>
+                        <BreadcrumbComponent />
+                    </li>
                 </ul>
-            </header>
+
+            </div>
         )
     }
 
