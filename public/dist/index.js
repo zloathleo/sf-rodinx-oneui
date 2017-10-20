@@ -5021,6 +5021,10 @@ exports.default = {
     getCharForNumber: function getCharForNumber(i) {
         return "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i, i + 1);
     },
+    getNumberForChar: function getNumberForChar(c) {
+        var c1 = c.substring(0, 1);
+        return "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(c1);
+    },
     renderColor: function renderColor(_status) {
         switch (_status) {
             case 0:
@@ -6019,7 +6023,7 @@ exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _desc, _value, _class, _descriptor, _descriptor2;
+var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3;
 
 var _mobx = __webpack_require__(4);
 
@@ -6085,6 +6089,8 @@ var DataState = (_class = function () {
         _initDefineProp(this, 'detailJson', _descriptor, this);
 
         _initDefineProp(this, 'dashboardRTJson', _descriptor2, this);
+
+        _initDefineProp(this, 'deviceChangeJson', _descriptor3, this);
     } //0:guest 1:admin 
 
     //device名称
@@ -6102,6 +6108,11 @@ var DataState = (_class = function () {
             this.detailJson = _json;
         }
     }, {
+        key: 'setDeviceChangeJson',
+        value: function setDeviceChangeJson(_json) {
+            this.deviceChangeJson = _json;
+        }
+    }, {
         key: 'resetDetailJson',
         value: function resetDetailJson() {
             this.detailJson = undefined;
@@ -6116,6 +6127,11 @@ var DataState = (_class = function () {
         return undefined;
     }
 }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, 'dashboardRTJson', [_mobx.observable], {
+    enumerable: true,
+    initializer: function initializer() {
+        return undefined;
+    }
+}), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'deviceChangeJson', [_mobx.observable], {
     enumerable: true,
     initializer: function initializer() {
         return undefined;
@@ -6137,7 +6153,7 @@ exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _desc, _value, _class, _descriptor, _descriptor2;
+var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4;
 
 var _mobx = __webpack_require__(4);
 
@@ -6195,6 +6211,10 @@ var ModalsState = (_class = function () {
         _initDefineProp(this, 'content', _descriptor2, this);
 
         this.okFunc = undefined;
+
+        _initDefineProp(this, 'alertContent', _descriptor3, this);
+
+        _initDefineProp(this, 'alertType', _descriptor4, this);
     } //内容
 
 
@@ -6205,6 +6225,23 @@ var ModalsState = (_class = function () {
             this.title = _title;
             this.content = _content;
             this.okFunc = _okFunc;
+        }
+    }, {
+        key: 'resetModal',
+        value: function resetModal() {
+            //当促发action的时候，改变对应的数据
+            this.title = undefined;
+            this.content = undefined;
+            this.okFunc = undefined;
+        } //内容
+
+    }, {
+        key: 'setAlert',
+        //类型
+        value: function setAlert(_alertType, _alertContent) {
+            //当促发action的时候，改变对应的数据
+            this.alertType = _alertType;
+            this.alertContent = _alertContent;
         }
     }]);
 
@@ -6219,7 +6256,17 @@ var ModalsState = (_class = function () {
     initializer: function initializer() {
         return undefined;
     }
-}), _applyDecoratedDescriptor(_class.prototype, 'setModal', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setModal'), _class.prototype)), _class);
+}), _applyDecoratedDescriptor(_class.prototype, 'setModal', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setModal'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'resetModal', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'resetModal'), _class.prototype), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'alertContent', [_mobx.observable], {
+    enumerable: true,
+    initializer: function initializer() {
+        return '';
+    }
+}), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, 'alertType', [_mobx.observable], {
+    enumerable: true,
+    initializer: function initializer() {
+        return 0;
+    }
+}), _applyDecoratedDescriptor(_class.prototype, 'setAlert', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setAlert'), _class.prototype)), _class);
 exports.default = ModalsState;
 
 /***/ }),
@@ -6289,7 +6336,7 @@ var UIState = (_class = function () {
     function UIState() {
         _classCallCheck(this, UIState);
 
-        this.OverviewTopContentHeight = document.documentElement.clientWidth < 760 ? document.documentElement.clientHeight - (60 + 42 + 43 + 8) : document.documentElement.clientHeight - (61 + 42 + 47 + 10);
+        this.OverviewTopContentHeight = document.documentElement.clientWidth < 760 ? document.documentElement.clientHeight - (60 + 42 + 43 + 8) : document.documentElement.clientHeight - (60 + 46 + 11 + 47);
 
         _initDefineProp(this, 'tempUnit', _descriptor, this);
     }
@@ -16633,8 +16680,6 @@ var PageContainerComponent = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         { id: 'page-container', className: 'sidebar-l sidebar_close side-scroll header-navbar-fixed' },
-        _react2.default.createElement(_SidebarComponent2.default, null),
-        _react2.default.createElement(_HeaderComponent2.default, null),
         _react2.default.createElement(_MainComponent2.default, null),
         _react2.default.createElement(_FootComponent2.default, null),
         _react2.default.createElement(_ModalComponent2.default, null),
@@ -16658,11 +16703,21 @@ module.exports = PageContainerComponent;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _class;
+
 var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _mobxReact = __webpack_require__(3);
+
+var _StateManager = __webpack_require__(2);
+
+var _StateManager2 = _interopRequireDefault(_StateManager);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -16670,7 +16725,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var AlertComponent = function (_React$Component) {
+var AlertComponent = (0, _mobxReact.observer)(_class = function (_React$Component) {
     _inherits(AlertComponent, _React$Component);
 
     function AlertComponent() {
@@ -16680,18 +16735,31 @@ var AlertComponent = function (_React$Component) {
     }
 
     _createClass(AlertComponent, [{
-        key: "render",
+        key: 'render',
         value: function render() {
-            return _react2.default.createElement(
-                "div",
-                { className: "alert alert-success", role: "alert" },
-                "abc"
-            );
+            var _content = _StateManager2.default.modalsState.alertContent;
+            if (_content) {
+                var _React$createElement;
+
+                return _react2.default.createElement(
+                    'div',
+                    (_React$createElement = { className: 'alert alert-success' }, _defineProperty(_React$createElement, 'className', 'animated bounceInDown'), _defineProperty(_React$createElement, 'style', {
+                        position: 'fixed',
+                        width: '600px',
+                        bottom: '30px',
+                        left: '30px',
+                        zIndex: '1040'
+                    }), _React$createElement),
+                    _StateManager2.default.modalsState.alertContent
+                );
+            } else {
+                return null;
+            }
         }
     }]);
 
     return AlertComponent;
-}(_react2.default.Component);
+}(_react2.default.Component)) || _class;
 
 module.exports = AlertComponent;
 
@@ -16764,6 +16832,7 @@ var RealtimeComponent = function (_React$Component) {
                             _StateManager2.default.dataState.setDetailJson(_json.device);
                         }
                     } else {}
+                    _StateManager2.default.dataState.setDeviceChangeJson(_json.device_change);
                     this.doLoopRequest();
                 }.bind(this));
             }.bind(this), 1000 * 3);
@@ -17068,7 +17137,7 @@ var MainComponent = function (_React$Component2) {
     value: function render() {
       return _react2.default.createElement(
         'main',
-        { id: 'main-container' },
+        { style: { backgroundColor: '#f5f5f5' } },
         _react2.default.createElement(Content, null),
         _react2.default.createElement(_LoadingComponent2.default, null)
       );
@@ -17530,6 +17599,7 @@ var LayoutConfigModalContent = function (_React$Component) {
             var _this2 = this;
 
             var _ports = this.props.ports.rows;
+            var _overviewData = this.props.overviewData;
             return _react2.default.createElement(
                 'div',
                 null,
@@ -17545,7 +17615,7 @@ var LayoutConfigModalContent = function (_React$Component) {
                         'select',
                         { ref: function ref(_ref) {
                                 return _this2.inputPort = _ref;
-                            }, className: 'form-control', size: '1' },
+                            }, className: 'form-control', defaultValue: _overviewData.com, size: '1' },
                         _ports.map(function (item, i) {
                             return _react2.default.createElement(
                                 'option',
@@ -17565,9 +17635,9 @@ var LayoutConfigModalContent = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'select',
-                        { ref: function ref(_ref) {
+                        { className: 'form-control', ref: function ref(_ref) {
                                 return _this2.inputBoadRate = _ref;
-                            }, className: 'form-control', size: '1' },
+                            }, defaultValue: _overviewData.baud_rate, size: '1' },
                         _react2.default.createElement(
                             'option',
                             { value: 9600 },
@@ -17630,21 +17700,63 @@ var AppendButtonPanel = function (_React$Component2) {
     return AppendButtonPanel;
 }(_react2.default.Component);
 
-var OverviewTopComponent = function (_React$Component3) {
-    _inherits(OverviewTopComponent, _React$Component3);
+var RemoveButtonPanel = function (_React$Component3) {
+    _inherits(RemoveButtonPanel, _React$Component3);
+
+    function RemoveButtonPanel() {
+        _classCallCheck(this, RemoveButtonPanel);
+
+        return _possibleConstructorReturn(this, (RemoveButtonPanel.__proto__ || Object.getPrototypeOf(RemoveButtonPanel)).apply(this, arguments));
+    }
+
+    _createClass(RemoveButtonPanel, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'col-xs-6 col-sm-2', style: { padding: '3px' }, onClick: this.props.addCallback },
+                _react2.default.createElement(
+                    'a',
+                    { className: 'block block-link-hover3 text-center', href: '#', style: { marginBottom: '0px' } },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'block block-bordered', style: { marginBottom: '0px' } },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'block-content', style: { margin: '1px', textAlign: 'center', padding: '24px 0px' } },
+                            _react2.default.createElement('i', { className: 'fa fa-times-circle fa-2x', style: { padding: '0px', color: '#5c90d2' } }),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'font-w600 push-5-t' },
+                                this.props.title
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return RemoveButtonPanel;
+}(_react2.default.Component);
+
+var OverviewTopComponent = function (_React$Component4) {
+    _inherits(OverviewTopComponent, _React$Component4);
 
     function OverviewTopComponent(props) {
         _classCallCheck(this, OverviewTopComponent);
 
-        var _this4 = _possibleConstructorReturn(this, (OverviewTopComponent.__proto__ || Object.getPrototypeOf(OverviewTopComponent)).call(this, props));
+        var _this5 = _possibleConstructorReturn(this, (OverviewTopComponent.__proto__ || Object.getPrototypeOf(OverviewTopComponent)).call(this, props));
 
-        _this4.state = { data: undefined };
-        _this4.updateCurrentOverview = _this4.updateCurrentOverview.bind(_this4);
-        _this4.renderRows = _this4.renderRows.bind(_this4);
-        _this4.renderColumns = _this4.renderColumns.bind(_this4);
-        _this4.clickAddDeviceButton = _this4.clickAddDeviceButton.bind(_this4);
-        _this4.clickAddRowButton = _this4.clickAddRowButton.bind(_this4);
-        return _this4;
+        _this5.state = { data: undefined };
+        _this5.updateCurrentOverview = _this5.updateCurrentOverview.bind(_this5);
+        _this5.renderRows = _this5.renderRows.bind(_this5);
+        _this5.renderColumns = _this5.renderColumns.bind(_this5);
+        _this5.clickAddDeviceButton = _this5.clickAddDeviceButton.bind(_this5);
+        _this5.clickAddRowButton = _this5.clickAddRowButton.bind(_this5);
+        _this5.clickRemoveItemButton = _this5.clickRemoveItemButton.bind(_this5);
+        _this5.clickRemoveLastRowButton = _this5.clickRemoveLastRowButton.bind(_this5);
+        return _this5;
     }
 
     _createClass(OverviewTopComponent, [{
@@ -17660,11 +17772,11 @@ var OverviewTopComponent = function (_React$Component3) {
         key: 'onClickConfigLayoutButton',
         value: function onClickConfigLayoutButton(_layoutData) {
             _OverviewService2.default.requestPorts(function (json) {
-                var _this5 = this;
+                var _this6 = this;
 
                 _StateManager2.default.modalsState.setModal('Layout Config', _react2.default.createElement(LayoutConfigModalContent, { ref: function ref(_ref) {
-                        return _this5.modalContent = _ref;
-                    }, ports: json }), function () {
+                        return _this6.modalContent = _ref;
+                    }, ports: json, overviewData: this.state.data }), function () {
 
                     var _inputPort = this.modalContent.inputPort.value;
                     var _inputBoadRate = this.modalContent.inputBoadRate.value;
@@ -17700,6 +17812,7 @@ var OverviewTopComponent = function (_React$Component3) {
             _OverviewService2.default.requestUpdateOverview(this.state.data, function (json) {
                 _OverviewService2.default.requestOverview(function (json) {
                     this.setState({ data: json });
+                    _StateManager2.default.dataState.overviewJson = json;
                     _StateManager2.default.appState.setMainLoading(false);
                 }.bind(this));
             }.bind(this));
@@ -17721,13 +17834,36 @@ var OverviewTopComponent = function (_React$Component3) {
             }
         }
     }, {
+        key: 'clickRemoveItemButton',
+        value: function clickRemoveItemButton(_item) {
+            _StateManager2.default.modalsState.setModal('Confirm', _react2.default.createElement(
+                'div',
+                null,
+                'Delete Device ',
+                _item.name,
+                ' ?'
+            ), function () {
+                var _rowIndex = _Utils2.default.getNumberForChar(_item.name);
+                var _columnIndex = _item.name.substring(1, 2);
+                var _items = _StateManager2.default.dataState.overviewJson.rows[_rowIndex].items;
+                _items.pop();
+                this.updateCurrentOverview();
+            }.bind(this));
+        }
+    }, {
+        key: 'clickRemoveLastRowButton',
+        value: function clickRemoveLastRowButton(rows) {
+            rows.pop();
+            this.updateCurrentOverview();
+        }
+    }, {
         key: 'renderColumns',
         value: function renderColumns(row) {
             var items = row.items;
 
             var existColumns = items.map(function (item, num) {
-                return _react2.default.createElement(_ItemComponent2.default, { data: item, isLast: num + 1 == items.length });
-            });
+                return _react2.default.createElement(_ItemComponent2.default, { data: item, isLast: num + 1 == items.length, parent: this });
+            }.bind(this));
             if (items.length < 6) {
                 existColumns.push(_react2.default.createElement(AppendButtonPanel, { title: 'Add Device', addCallback: this.clickAddDeviceButton.bind(this, row) }));
             }
@@ -17751,8 +17887,10 @@ var OverviewTopComponent = function (_React$Component3) {
             existRows.push(_react2.default.createElement(
                 'div',
                 { className: 'row main-overview-content-padding-margin' },
-                _react2.default.createElement(AppendButtonPanel, { title: 'Add Row', addCallback: this.clickAddRowButton.bind(this, rows) })
+                _react2.default.createElement(AppendButtonPanel, { title: 'Add Row', addCallback: this.clickAddRowButton.bind(this, rows) }),
+                _react2.default.createElement(RemoveButtonPanel, { title: 'Remove Last Device', addCallback: this.clickRemoveLastRowButton.bind(this, rows) })
             ));
+            // existRows.push();
             return existRows;
         }
     }, {
@@ -17767,7 +17905,7 @@ var OverviewTopComponent = function (_React$Component3) {
                         'div',
                         { className: 'block-header bg-gray-lighter overview-head-padding' },
                         _react2.default.createElement(
-                            'ul',
+                            'div',
                             { className: 'block-options-simple push-10-r' },
                             _react2.default.createElement(
                                 'button',
@@ -17777,6 +17915,15 @@ var OverviewTopComponent = function (_React$Component3) {
                                 _data.com,
                                 ' | ',
                                 _data.baud_rate
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'block-options-simple block-options-simple-left' },
+                            _react2.default.createElement(
+                                'button',
+                                { className: 'btn btn-default', 'data-toggle': 'layout', 'data-action': 'sidebar_toggle', type: 'button' },
+                                _react2.default.createElement('i', { className: 'fa fa-navicon' })
                             )
                         ),
                         _react2.default.createElement(_BreadcrumbComponent2.default, null)
@@ -17800,8 +17947,8 @@ var OverviewTopComponent = function (_React$Component3) {
     return OverviewTopComponent;
 }(_react2.default.Component);
 
-var OverviewComponent = (0, _mobxReact.observer)(_class = function (_React$Component4) {
-    _inherits(OverviewComponent, _React$Component4);
+var OverviewComponent = (0, _mobxReact.observer)(_class = function (_React$Component5) {
+    _inherits(OverviewComponent, _React$Component5);
 
     function OverviewComponent() {
         _classCallCheck(this, OverviewComponent);
@@ -19959,6 +20106,11 @@ var AddressSetModalContent = function (_React$Component) {
         value: function render() {
             var _this2 = this;
 
+            var _itemData = this.props.data;
+            var _addr = _itemData.addr;
+            if (_addr == -1) {
+                _addr = '';
+            }
             return _react2.default.createElement(
                 'div',
                 null,
@@ -19972,7 +20124,7 @@ var AddressSetModalContent = function (_React$Component) {
                     ),
                     _react2.default.createElement('input', { ref: function ref(_ref) {
                             return _this2.inputAddress = _ref;
-                        }, className: 'form-control', type: 'text', name: 'address', placeholder: 'Enter the Device Address..' })
+                        }, className: 'form-control', defaultValue: _addr, type: 'number', name: 'address', placeholder: 'Enter the Device Address..' })
                 ),
                 _react2.default.createElement(
                     'div',
@@ -20011,7 +20163,10 @@ var ItemComponent = (0, _mobxReact.observer)(_class = function (_React$Component
     function ItemComponent(props) {
         _classCallCheck(this, ItemComponent);
 
-        return _possibleConstructorReturn(this, (ItemComponent.__proto__ || Object.getPrototypeOf(ItemComponent)).call(this, props));
+        var _this3 = _possibleConstructorReturn(this, (ItemComponent.__proto__ || Object.getPrototypeOf(ItemComponent)).call(this, props));
+
+        _this3.onClickRemoveItem = _this3.onClickRemoveItem.bind(_this3);
+        return _this3;
     }
 
     //设置地址
@@ -20024,26 +20179,16 @@ var ItemComponent = (0, _mobxReact.observer)(_class = function (_React$Component
 
             _StateManager2.default.modalsState.setModal(_item.name + ' Device Settings', _react2.default.createElement(AddressSetModalContent, { ref: function ref(_ref) {
                     return _this4.modalContent = _ref;
-                } }), function () {
-
+                }, data: _item }), function () {
                 _OverviewService2.default.requestUpdateDeviceAddress(_item.name, this.modalContent.inputAddress.value, '', '', function (json) {
-                    console.log('result:' + json);
+                    // StateManager.modalsState.setAlert(1,'config address success!');
                 });
             }.bind(this));
         }
     }, {
         key: 'onClickRemoveItem',
         value: function onClickRemoveItem(_item, _event) {
-            console.log(_item);
-            _StateManager2.default.modalsState.setModal('Confirm', _react2.default.createElement(
-                'div',
-                null,
-                'Delete Device ',
-                _item.name,
-                ' ?'
-            ), function () {
-                // StateManager.dataState.overviewJson.rows
-            }.bind(this));
+            this.props.parent.clickRemoveItemButton(_item);
         }
 
         //进入detail
@@ -20069,6 +20214,7 @@ var ItemComponent = (0, _mobxReact.observer)(_class = function (_React$Component
         value: function render() {
             var _item = this.props.data;
             var _isLast = this.props.isLast;
+            var _deviceName = _item.name;
 
             var color1 = '#9E9E9E';
             var color2 = '#9E9E9E';
@@ -20076,7 +20222,7 @@ var ItemComponent = (0, _mobxReact.observer)(_class = function (_React$Component
             var rtJson = _StateManager2.default.dataState.dashboardRTJson;
             if (rtJson) {
                 var _status = rtJson.status;
-                var _status_values = _status[_item.name];
+                var _status_values = _status[_deviceName];
                 if (_status_values) {
                     var _status1 = _status_values[0];
                     var _status2 = _status_values[1];
@@ -20085,9 +20231,28 @@ var ItemComponent = (0, _mobxReact.observer)(_class = function (_React$Component
                 }
             }
 
-            var tool = null;
+            //按钮
+            var optionsHtml = null;
+            //硬件发生变化
+            if (_StateManager2.default.dataState.deviceChangeJson) {
+                if (_StateManager2.default.dataState.deviceChangeJson.indexOf(_deviceName) >= 0) {
+                    optionsHtml = _react2.default.createElement(
+                        'ul',
+                        { className: 'block-options' },
+                        _react2.default.createElement(
+                            'li',
+                            null,
+                            _react2.default.createElement(
+                                'span',
+                                { className: 'label', style: { backgroundColor: 'red' } },
+                                'changed'
+                            )
+                        )
+                    );
+                }
+            }
             if (_isLast) {
-                tool = _react2.default.createElement(
+                optionsHtml = _react2.default.createElement(
                     'ul',
                     { className: 'block-options' },
                     _react2.default.createElement(
@@ -20155,7 +20320,7 @@ var ItemComponent = (0, _mobxReact.observer)(_class = function (_React$Component
                     _react2.default.createElement(
                         'div',
                         { className: 'block-header bg-gray-lighter', style: { margin: '1px', padding: '10px 10px 10px 15px' } },
-                        tool,
+                        optionsHtml,
                         _react2.default.createElement(
                             'a',
                             { className: 'link-effect', href: '#', 'data-toggle': 'modal', 'data-target': '#modal-fromleft', onClick: this.onClickSetAddressButton.bind(this, _item) },
@@ -20261,7 +20426,7 @@ var Descript = function (_React$Component) {
                 { className: 'col-xs-12', style: { padding: '0px 5px' } },
                 _react2.default.createElement(
                     'div',
-                    { className: 'block block-bordered' },
+                    { className: 'block block-bordered', style: { marginBottom: '1px' } },
                     _react2.default.createElement(
                         'div',
                         { className: 'block-content' },
@@ -22386,6 +22551,11 @@ var ModalComponent = function (_React$Component4) {
     }
 
     _createClass(ModalComponent, [{
+        key: 'onClose',
+        value: function onClose() {
+            _StateManager2.default.modalsState.resetModal();
+        }
+    }, {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
@@ -22411,7 +22581,7 @@ var ModalComponent = function (_React$Component4) {
                                         null,
                                         _react2.default.createElement(
                                             'button',
-                                            { 'data-dismiss': 'modal', type: 'button' },
+                                            { 'data-dismiss': 'modal', type: 'button', onClick: this.onClose },
                                             _react2.default.createElement('i', { className: 'si si-close' })
                                         )
                                     )
@@ -22429,7 +22599,7 @@ var ModalComponent = function (_React$Component4) {
                             { className: 'modal-footer' },
                             _react2.default.createElement(
                                 'button',
-                                { className: 'btn btn-sm btn-default', type: 'button', 'data-dismiss': 'modal' },
+                                { className: 'btn btn-sm btn-default', type: 'button', 'data-dismiss': 'modal', onClick: this.onClose },
                                 'Close'
                             ),
                             _react2.default.createElement(OKButton, null)

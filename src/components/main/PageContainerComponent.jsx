@@ -21,8 +21,8 @@ class PageContainerComponent extends React.Component {
   render() {
     return (
       <div id="page-container" className="sidebar-l sidebar_close side-scroll header-navbar-fixed">
-        <SidebarComponent />
-        <HeaderComponent />
+        {/* <SidebarComponent /> */}
+        {/* <HeaderComponent /> */}
         <MainComponent />
         <FootComponent />
         <ModalComponent />

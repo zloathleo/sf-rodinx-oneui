@@ -21,7 +21,7 @@ class Descript extends React.Component {
         let _parent = this.props.parent;
         return (
             <div className="col-xs-12" style={{ padding: '0px 5px' }}>
-                <div className="block block-bordered">
+                <div className="block block-bordered" style={{ marginBottom: '1px' }}>
                     <div className="block-content">
                         <div className="row" >
                             <div className="col-xs-12 col-sm-6" >

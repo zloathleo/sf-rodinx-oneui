@@ -25,8 +25,8 @@ class RealtimeComponent extends React.Component {
             OverviewService.requestServer(rtType, StateManager.dataState.device, function (_json) {
                 if (rtType == 1) {
                     if (_json.dashboard) {
-                        StateManager.dataState.setDashboardRTJson(_json.dashboard);
-                    }
+                        StateManager.dataState.setDashboardRTJson(_json.dashboard); 
+                    } 
                 } else if (rtType == 2) {
                     if (_json.device) {
                         StateManager.dataState.setDetailJson(_json.device);
@@ -34,6 +34,7 @@ class RealtimeComponent extends React.Component {
                 } else {
 
                 }
+                StateManager.dataState.setDeviceChangeJson(_json.device_change);
                 this.doLoopRequest();
             }.bind(this));
         }.bind(this), 1000 * 3);

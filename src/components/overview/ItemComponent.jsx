@@ -9,11 +9,16 @@ import OverviewService from '../../services/OverviewService.jsx';
 
 class AddressSetModalContent extends React.Component {
     render() {
+        let _itemData = this.props.data;
+        let _addr = _itemData.addr;
+        if (_addr == -1) {
+            _addr = '';
+        }
         return (
             <div>
                 <div className="form-group">
                     <label className="col-xs-12" >Address</label>
-                    <input ref={(_ref) => this.inputAddress = _ref} className="form-control" type="text" name="address" placeholder="Enter the Device Address.." />
+                    <input ref={(_ref) => this.inputAddress = _ref} className="form-control" defaultValue={_addr} type="number" name="address" placeholder="Enter the Device Address.." />
                 </div>
 
                 <div className="form-group">
@@ -36,23 +41,20 @@ class ItemComponent extends React.Component {
 
     constructor(props) {
         super(props);
+        this.onClickRemoveItem = this.onClickRemoveItem.bind(this);
     }
 
     //设置地址
     onClickSetAddressButton(_item, _event) {
-        StateManager.modalsState.setModal(_item.name + ' Device Settings', <AddressSetModalContent ref={(_ref) => this.modalContent = _ref} />, function () {
-
+        StateManager.modalsState.setModal(_item.name + ' Device Settings', <AddressSetModalContent ref={(_ref) => this.modalContent = _ref} data={_item} />, function () {
             OverviewService.requestUpdateDeviceAddress(_item.name, this.modalContent.inputAddress.value, '', '', function (json) {
-                console.log('result:' + json);
+                // StateManager.modalsState.setAlert(1,'config address success!');
             });
         }.bind(this));
     }
 
     onClickRemoveItem(_item, _event) {
-        console.log(_item);
-        StateManager.modalsState.setModal('Confirm', <div>Delete Device {_item.name} ?</div>, function () {
-            // StateManager.dataState.overviewJson.rows
-        }.bind(this));
+        this.props.parent.clickRemoveItemButton(_item);
     }
 
     //进入detail
@@ -74,6 +76,7 @@ class ItemComponent extends React.Component {
     render() {
         let _item = this.props.data;
         let _isLast = this.props.isLast;
+        let _deviceName = _item.name;
 
         let color1 = '#9E9E9E';
         let color2 = '#9E9E9E';
@@ -81,7 +84,7 @@ class ItemComponent extends React.Component {
         let rtJson = StateManager.dataState.dashboardRTJson;
         if (rtJson) {
             let _status = rtJson.status;
-            let _status_values = _status[_item.name];
+            let _status_values = _status[_deviceName];
             if (_status_values) {
                 let _status1 = _status_values[0];
                 let _status2 = _status_values[1];
@@ -90,9 +93,20 @@ class ItemComponent extends React.Component {
             }
         }
 
-        let tool = null;
+        //按钮
+        let optionsHtml = null;
+        //硬件发生变化
+        if (StateManager.dataState.deviceChangeJson) {
+            if (StateManager.dataState.deviceChangeJson.indexOf(_deviceName) >= 0) {
+                optionsHtml = (<ul className="block-options">
+                    <li>
+                        <span className="label" style={{ backgroundColor: 'red' }}>changed</span>
+                    </li>
+                </ul>)
+            }
+        }
         if (_isLast) {
-            tool = <ul className="block-options">
+            optionsHtml = <ul className="block-options">
                 <li> <button type="button" onClick={this.onClickRemoveItem.bind(this, _item)} data-toggle="modal" data-target="#modal-fromleft" ><i className="glyphicon glyphicon-remove"></i></button> </li>
             </ul>
         }
@@ -124,7 +138,7 @@ class ItemComponent extends React.Component {
         return (<div className="col-xs-6 col-sm-2" style={{ padding: '3px' }}>
             <a className="block block-link-hover2 block-bordered" style={{ marginBottom: '0px' }}>
                 <div className="block-header bg-gray-lighter" style={{ margin: '1px', padding: '10px 10px 10px 15px' }}>
-                    {tool}
+                    {optionsHtml}
                     <a className="link-effect" href="#" data-toggle="modal" data-target="#modal-fromleft" onClick={this.onClickSetAddressButton.bind(this, _item)}>
                         <span className="block-title">{_item.name}</span>
                         <span className="block-title">-{_item.addr == -1 ? 'NA' : _item.addr}</span>

@@ -37,10 +37,10 @@ class MainComponent extends React.Component {
 
   render() {
     return (
-      <main id="main-container">
+      <main style={{ backgroundColor: '#f5f5f5' }}>
         {/* <div className="content" style={{ padding: '0px' }}> */}
-          <Content />
-          <LoadingComponent />
+        <Content />
+        <LoadingComponent />
         {/* </div> */}
       </main>
     )

@@ -48,6 +48,10 @@ class ModalComponent extends React.Component {
         super(props);
     }
 
+    onClose(){
+        StateManager.modalsState.resetModal();
+    }
+
     render() {
         return (
             <div className="modal fade" id="modal-fromleft" tabindex="-1" role="dialog" aria-hidden="true" style={{ display: 'none' }}>
@@ -57,7 +61,7 @@ class ModalComponent extends React.Component {
                             <div className="block-header bg-primary-dark">
                                 <ul className="block-options">
                                     <li>
-                                        <button data-dismiss="modal" type="button"><i className="si si-close"></i></button>
+                                        <button data-dismiss="modal" type="button" onClick={this.onClose}><i className="si si-close"></i></button>
                                     </li>
                                 </ul>
                                 <ModalTitle />
@@ -67,7 +71,7 @@ class ModalComponent extends React.Component {
                             </div>
                         </div>
                         <div className="modal-footer">
-                            <button className="btn btn-sm btn-default" type="button" data-dismiss="modal">Close</button>
+                            <button className="btn btn-sm btn-default" type="button" data-dismiss="modal" onClick={this.onClose}>Close</button>
                             <OKButton />
                         </div>
                     </div>

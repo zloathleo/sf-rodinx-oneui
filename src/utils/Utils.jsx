@@ -3,6 +3,11 @@ export default {
         return "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i, i + 1);
     },
 
+    getNumberForChar(c) {
+        let c1 = c.substring(0, 1);
+        return "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(c1);
+    },
+
     renderColor(_status) {
         switch (_status) {
             case 0: {
