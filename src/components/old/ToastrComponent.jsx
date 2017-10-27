@@ -1,9 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-
-import StateManager from '../../states/StateManager.jsx';
-
-@observer
+  
 class ToastrComponent extends React.Component {
 
     constructor(props) {

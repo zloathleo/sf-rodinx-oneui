@@ -181,26 +181,45 @@ body {
     z-index: 1030;
     -webkit-box-shadow: 0 2px 5px rgba(0,0,0,0.02);
     box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-}/* 小屏幕（平板，大于等于 768px） */
+}
+
+/* header */
+.nav-header.pull-right>li { 
+    margin-left: 0px; 
+}
+
+.nav-header.pull-right>li>button { 
+    margin: 0px 2px 0px 0px;
+} 
+/* header *//* 小屏幕（平板，大于等于 768px） */
 .main-out-content-padding{
     padding: 0px ; 
 } 
 
 .main-overview-content-hr{
-    margin: 0px 10px !important;  
+    margin: 5px 10px 5px 10px !important;  
+    border-top: 1.5px solid #eee;
 }
-
-/* detail */
-.main-detail-padding-margin {
-    padding: 1px !important;
-    margin: 10px !important;
-}  
 
 /* overview */
 .main-overview-content-padding-margin { 
-    padding: 5px 10px 5px 10px !important;
+    padding: 0px 0px 0px 0px !important;
     margin: 0px !important;
 }  
+
+.main-overview-item-padding{
+    padding: 0px 0px !important;  
+}
+
+
+
+/* detail */
+.main-detail-padding-margin {
+    padding: 1px 1px 1px 1px !important;
+    margin: 0px !important;
+}  
+
+
 
 .setting-table-item-label-padding {
     padding: 3px 10px 3px 0px !important;
@@ -209,6 +228,13 @@ body {
 .setting-table-item-padding {
     padding: 3px 0px !important;
 } 
+
+.setting-table-header-th {
+    color: #777 !important;
+    background-color: #eee !important;
+    border-bottom-color: #eee !important;
+    font-size: 12px !important;
+}
 
 /* 小屏手机 */
 @media only screen and (max-width: 992px){
@@ -228,11 +254,11 @@ body {
     } 
 
     .setting-table-item-label-padding {
-        padding: 10px 10px 10px 0px !important;
+        padding: 10px 10px 0px 0px !important;
     }
 
     .setting-table-item-padding {
-        padding: 10px 0px !important;
+        padding: 10px 0px 0px 0px !important;
     }
 }
      
@@ -249,7 +275,7 @@ body {
 }
 
 .main-content-padding {
-    padding: 10px 13px 1px 10px !important;
+    padding: 15px 15px 1px 15px !important;
 }
 
 .bs-callout {

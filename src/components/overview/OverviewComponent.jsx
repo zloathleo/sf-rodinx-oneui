@@ -1,51 +1,21 @@
 import React from 'react';
-import { observer } from 'mobx-react';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 import Constants from '../../constants/Constants.jsx';
-import StateManager from '../../states/StateManager.jsx';
-import Utils from '../../utils/Utils.jsx'
+import Utils from '../../utils/Utils.jsx';
+import EventProxy from '../../utils/EventProxy.jsx';
+import AppState from '../../states/AppState.jsx';
 
-import OverviewService from '../../services/OverviewService.jsx'
-import BreadcrumbComponent from '../main/BreadcrumbComponent.jsx'
-
-import ItemComponent from './ItemComponent.jsx'
-import DeviceDetailComponent from './DeviceDetailComponent.jsx'
-
-class LayoutConfigModalContent extends React.Component {
-    render() {
-        let _ports = this.props.ports.rows;
-        let _overviewData = this.props.overviewData;
-        return (
-            <div>
-                <div className="form-group">
-                    <label className="col-xs-12">I/O Port</label>
-                    <select ref={(_ref) => this.inputPort = _ref} className="form-control" defaultValue={_overviewData.com} size="1">
-                        {
-                            _ports.map(function (item, i) {
-                                return <option value={item}>{item}</option>
-                            })
-                        }
-                    </select>
-                </div>
-
-                <div className="form-group">
-                    <label className="col-xs-12">Boad Rate</label>
-                    <select className="form-control" ref={(_ref) => this.inputBoadRate = _ref} defaultValue={_overviewData.baud_rate} size="1">
-                        <option value={9600} >9600</option>
-                        <option value={38400} >38400</option>
-                    </select>
-                </div>
-            </div>
-        )
-    }
-}
+import OverviewService from '../../services/OverviewService.jsx';
+import RefreshUI from '../common/RefreshUI.jsx';
+import ItemComponent from './ItemComponent.jsx';
+import DeviceDetailComponent from './DeviceDetailComponent.jsx';
 
 //Add item
 class AppendButtonPanel extends React.Component {
     render() {
         return (
-            <div className="col-xs-6 col-sm-2" style={{ padding: '3px' }} onClick={this.props.addCallback}>
+            <div className="col-xs-6 col-sm-2 main-overview-item-padding" onClick={this.props.addCallback}>
                 <a className="block block-link-hover3 text-center" href="#" style={{ marginBottom: '0px' }}>
                     <div className="block block-bordered" style={{ marginBottom: '0px' }}>
                         <div className="block-content" style={{ margin: '1px', textAlign: 'center', padding: '24px 0px' }}>
@@ -62,7 +32,7 @@ class AppendButtonPanel extends React.Component {
 class RemoveButtonPanel extends React.Component {
     render() {
         return (
-            <div className="col-xs-6 col-sm-2" style={{ padding: '3px' }} onClick={this.props.addCallback}>
+            <div className="col-xs-6 col-sm-2 main-overview-item-padding" onClick={this.props.addCallback} data-toggle="modal" data-target="#modal-fromleft" >
                 <a className="block block-link-hover3 text-center" href="#" style={{ marginBottom: '0px' }}>
                     <div className="block block-bordered" style={{ marginBottom: '0px' }}>
                         <div className="block-content" style={{ margin: '1px', textAlign: 'center', padding: '24px 0px' }}>
@@ -76,39 +46,75 @@ class RemoveButtonPanel extends React.Component {
     }
 }
 
-class OverviewTopComponent extends React.Component {
+class OverviewComponent extends RefreshUI {
     constructor(props) {
         super(props);
-        this.state = { data: undefined };
+
         this.updateCurrentOverview = this.updateCurrentOverview.bind(this);
+        this.refreshAllOverview = this.refreshAllOverview.bind(this);
+        
         this.renderRows = this.renderRows.bind(this);
         this.renderColumns = this.renderColumns.bind(this);
+
         this.clickAddDeviceButton = this.clickAddDeviceButton.bind(this);
         this.clickAddRowButton = this.clickAddRowButton.bind(this);
         this.clickRemoveItemButton = this.clickRemoveItemButton.bind(this);
         this.clickRemoveLastRowButton = this.clickRemoveLastRowButton.bind(this);
     }
 
+    componentWillMount() {
+        super.componentWillMount();
+        EventProxy.on(Constants.Event.Dashboard_Save_Key, (_value) => {
+            if (_value == 'com') {
+                //提交更新
+                this.updateCurrentOverview();
+            } else if (_value == 'addr') {
+                this.refreshAllOverview();
+            }
+        });
+    }
+
+    componentWillUnmount() {
+        super.componentWillUnmount();
+        EventProxy.off(Constants.Event.Dashboard_Save_Key);
+    }
+
     componentDidMount() {
+        console.log('overview request data');
+        this.refreshAllOverview();
+    }
+
+    refreshAllOverview() {
         OverviewService.requestOverview(function (json) {
             this.setState({ data: json });
-            StateManager.dataState.overviewJson = json;
-            StateManager.appState.setMainLoading(false);
+            EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Invisible });
+            //刷新其他UI
+            EventProxy.trigger(Constants.Event.MainUI_Key, { uiName: Constants.Event.MainUI_Value_Overview, data: json });
         }.bind(this));
     }
 
-    onClickConfigLayoutButton(_layoutData) {
-        OverviewService.requestPorts(function (json) {
-            StateManager.modalsState.setModal('Layout Config', <LayoutConfigModalContent ref={(_ref) => this.modalContent = _ref} ports={json} overviewData={this.state.data} />, function () {
+    formatRefreshData(_data) {
+        return _data;
+    }
 
-                const _inputPort = this.modalContent.inputPort.value;
-                const _inputBoadRate = this.modalContent.inputBoadRate.value;
-                console.log(_inputPort, _inputBoadRate);
-                this.state.data.com = _inputPort;
-                this.state.data.baud_rate = parseInt(_inputBoadRate);
+    getRefreshDataFunc(_callback) {
+        let _overviewData = this.state.data;
+        if (_overviewData.rows.length == 0) {
+            _callback(null);
+        } else {
+            OverviewService.requestServer(1, undefined, _callback);
+        }
+    }
 
-                console.log(this.state.data);
-                this.updateCurrentOverview();
+    updateCurrentOverview() {
+        EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Visible });
+        OverviewService.requestUpdateOverview(this.state.data, function (json) {
+            OverviewService.requestOverview(function (json) {
+
+                this.setState({ data: json });
+                EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Invisible });
+                //刷新其他UI
+                EventProxy.trigger(Constants.Event.MainUI_Key, { data: json });
             }.bind(this));
         }.bind(this));
     }
@@ -131,17 +137,6 @@ class OverviewTopComponent extends React.Component {
         this.updateCurrentOverview();
     }
 
-    updateCurrentOverview() {
-        StateManager.appState.setMainLoading(true);
-        OverviewService.requestUpdateOverview(this.state.data, function (json) {
-            OverviewService.requestOverview(function (json) {
-                this.setState({ data: json });
-                StateManager.dataState.overviewJson = json;
-                StateManager.appState.setMainLoading(false);
-            }.bind(this));
-        }.bind(this));
-    }
-
     clickAddRowButton(rows) {
         let length = rows.length;
         if (length >= 22) {
@@ -158,30 +153,64 @@ class OverviewTopComponent extends React.Component {
     }
 
     clickRemoveItemButton(_item) {
-        StateManager.modalsState.setModal('Confirm', <div>Delete Device {_item.name} ?</div>, function () {
+        let _modalContent = <div>Delete Device {_item.name} ?</div>;
+        let _okFunc = function () {
+            console.log('ok');
             let _rowIndex = Utils.getNumberForChar(_item.name);
             let _columnIndex = _item.name.substring(1, 2);
-            let _items = StateManager.dataState.overviewJson.rows[_rowIndex].items;
+
+            let _overviewData = this.state.data;
+            let _items = _overviewData.rows[_rowIndex].items;
             _items.pop();
             this.updateCurrentOverview();
-        }.bind(this));
+        }.bind(this);
+
+        let _dispatch = {
+            uiName: 'Confirm',
+            data: { title: 'Confirm' },
+            exParams: {
+                content: _modalContent,
+                okFunc: _okFunc
+            }
+        }
+        EventProxy.trigger(Constants.Event.ModalUI_Key, _dispatch);
     }
 
     clickRemoveLastRowButton(rows) {
-        rows.pop();
-        this.updateCurrentOverview();
+        let length = rows.length;
+        let _lastRowName = Utils.getCharForNumber(length - 1);
 
+        let _modalContent = <div>Remove Row {_lastRowName} ?</div>;
+        let _okFunc = function () {
+            rows.pop();
+            this.updateCurrentOverview();
+        }.bind(this);
+
+        let _dispatch = {
+            uiName: 'Confirm',
+            data: { title: 'Confirm' },
+            exParams: {
+                content: _modalContent,
+                okFunc: _okFunc
+            }
+        }
+        EventProxy.trigger(Constants.Event.ModalUI_Key, _dispatch);
     }
 
+    ///render
     renderColumns(row) {
         let items = row.items;
+        let _refreshData = this.state.refreshData;
 
         let existColumns = items.map(function (item, num) {
-            return (<ItemComponent data={item} isLast={(num + 1) == items.length} parent={this} />)
+            return (<ItemComponent data={item} refreshData={_refreshData} isLast={(num + 1) == items.length} parent={this} />)
         }.bind(this));
-        if (items.length < 6) {
-            existColumns.push(<AppendButtonPanel title='Add Device' addCallback={this.clickAddDeviceButton.bind(this, row)} />);
+        if (AppState.User_Name == 'admin') {
+            if (items.length < 6) {
+                existColumns.push(<AppendButtonPanel title='Add Device' addCallback={this.clickAddDeviceButton.bind(this, row)} />);
+            }
         }
+
         return existColumns;
     }
 
@@ -198,45 +227,34 @@ class OverviewTopComponent extends React.Component {
                 </div>
             )
         }.bind(this));
-        existRows.push(<div className="row main-overview-content-padding-margin">
-            <AppendButtonPanel title='Add Row' addCallback={this.clickAddRowButton.bind(this, rows)} />
-            <RemoveButtonPanel title='Remove Last Device' addCallback={this.clickRemoveLastRowButton.bind(this, rows)} />
-        </div>);
-        // existRows.push();
+        if (AppState.User_Name == 'admin') {
+            if (rows.length == 0) {
+                existRows.push(<div className="row main-overview-content-padding-margin">
+                    <AppendButtonPanel title='Add Row' addCallback={this.clickAddRowButton.bind(this, rows)} />
+                </div>);
+            } else {
+                existRows.push(<div className="row main-overview-content-padding-margin">
+                    <AppendButtonPanel title='Add Row' addCallback={this.clickAddRowButton.bind(this, rows)} />
+                    <RemoveButtonPanel title='Remove Last Row' addCallback={this.clickRemoveLastRowButton.bind(this, rows)} />
+                </div>);
+            }
+
+        }
         return existRows;
     }
 
     render() {
-        let _data = this.state.data;
-        if (_data != null) {
+        let _overviewData = this.state.data;
+        if (_overviewData != null) {
             return (
-                <div className="main-content-padding animated bounceInDown">
-                    <Scrollbars style={{ height: StateManager.uiState.OverviewTopContentHeight }}>
-                        {
-                            this.renderRows(_data.rows)
-                        }
+                <div className="main-content-padding animated bounceIn">
+                    <Scrollbars renderTrackHorizontal={function () { return <div />; }} renderThumbHorizontal={function () { return <div />; }} style={{ height: Constants.UI.OverviewComponentContentHeight }}>
+                        {this.renderRows(_overviewData.rows)}
                     </Scrollbars>
                 </div>
             )
         } else {
             return null;
-        }
-    }
-
-}
-
-@observer
-class OverviewComponent extends React.Component {
-
-    render() {
-        if (StateManager.appState.activeModuleLevel1Name == undefined) {
-            return (
-                <OverviewTopComponent />
-            )
-        } else if (StateManager.appState.activeModuleLevel1Name == Constants.Values.Overview_Level1_Detail) {
-            return (
-                <DeviceDetailComponent />
-            )
         }
     }
 

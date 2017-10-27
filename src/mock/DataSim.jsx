@@ -3,7 +3,7 @@ import FetchMock from 'fetch-mock';
 
 export default {
     init: function () {
-        FetchMock.get('/server?type=1&device=A0', Mock.mock(
+        FetchMock.get('/server?type=1&device=undefined', Mock.mock(
             {
                 "server_time": "2017-07-01 12:00:00",
                 "user": "guest1",

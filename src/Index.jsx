@@ -1,7 +1,6 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom';
-import { useStrict } from 'mobx';
 
 import Constants from './constants/Constants.jsx';
 

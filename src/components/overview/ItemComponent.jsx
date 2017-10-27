@@ -1,9 +1,9 @@
 import React from 'react';
-import { observer } from 'mobx-react';
 
 import Constants from '../../constants/Constants.jsx';
 import Utils from '../../utils/Utils.jsx';
-import StateManager from '../../states/StateManager.jsx';
+import EventProxy from '../../utils/EventProxy.jsx';
+import AppState from '../../states/AppState.jsx';
 
 import OverviewService from '../../services/OverviewService.jsx';
 
@@ -36,7 +36,6 @@ class AddressSetModalContent extends React.Component {
 }
 
 
-@observer
 class ItemComponent extends React.Component {
 
     constructor(props) {
@@ -46,11 +45,28 @@ class ItemComponent extends React.Component {
 
     //设置地址
     onClickSetAddressButton(_item, _event) {
-        StateManager.modalsState.setModal(_item.name + ' Device Settings', <AddressSetModalContent ref={(_ref) => this.modalContent = _ref} data={_item} />, function () {
-            OverviewService.requestUpdateDeviceAddress(_item.name, this.modalContent.inputAddress.value, '', '', function (json) {
-                // StateManager.modalsState.setAlert(1,'config address success!');
-            });
-        }.bind(this));
+        if (AppState.User_Name == 'admin') {
+            let _modalContent = <AddressSetModalContent ref={(_ref) => this.addressSetModalContent = _ref} data={_item} />;
+            let _okFunc = function () {
+
+                //todo
+                OverviewService.requestUpdateDeviceAddress(_item.name, this.addressSetModalContent.inputAddress.value, '', '', function (json) {
+                    console.log('AddressSetModalContent ok');
+                    EventProxy.trigger(Constants.Event.Dashboard_Save_Key, 'addr');
+                });
+
+            }.bind(this);
+            let _dispatch = {
+                uiName: 'AddressSetModalContent',
+                data: { title: 'Device ' + _item.name + ' Settings' },
+                exParams: {
+                    content: _modalContent,
+                    okFunc: _okFunc
+                }
+            }
+            EventProxy.trigger(Constants.Event.ModalUI_Key, _dispatch);
+        }
+
     }
 
     onClickRemoveItem(_item, _event) {
@@ -59,14 +75,16 @@ class ItemComponent extends React.Component {
 
     //进入detail
     onClickItem(_item) {
-        console.log('_item:', _item);
         if (_item.addr != -1) {
-            StateManager.appState.setMainLoading(true);
+            EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Visible });
             OverviewService.requestDeviceDetail(_item.name, function (json) {
-                StateManager.dataState.device = _item.name;
-                StateManager.dataState.detailJson = json;
-                StateManager.appState.setActiveModuleLevel1Name(Constants.Values.Overview_Level1_Detail);
-                StateManager.appState.setMainLoading(false);
+
+                EventProxy.trigger(Constants.Event.MainUI_Key, {
+                    uiName: Constants.Event.MainUI_Value_Overview_Detail,
+                    data: json
+                });
+
+                EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Invisible });
             }.bind(this));
         } else {
             this.onClickSetAddressButton(_item, undefined);
@@ -75,15 +93,18 @@ class ItemComponent extends React.Component {
 
     render() {
         let _item = this.props.data;
+        let _refreshData = this.props.refreshData;
         let _isLast = this.props.isLast;
         let _deviceName = _item.name;
 
         let color1 = '#9E9E9E';
         let color2 = '#9E9E9E';
 
-        let rtJson = StateManager.dataState.dashboardRTJson;
-        if (rtJson) {
-            let _status = rtJson.status;
+        //按钮
+        let optionsHtml = null;
+        if (_refreshData) {
+            let _dashboardJson = _refreshData.dashboard;
+            let _status = _dashboardJson.status;
             let _status_values = _status[_deviceName];
             if (_status_values) {
                 let _status1 = _status_values[0];
@@ -91,28 +112,29 @@ class ItemComponent extends React.Component {
                 color1 = Utils.renderColor(_status1);
                 color2 = Utils.renderColor(_status2);
             }
-        }
 
-        //按钮
-        let optionsHtml = null;
-        //硬件发生变化
-        if (StateManager.dataState.deviceChangeJson) {
-            if (StateManager.dataState.deviceChangeJson.indexOf(_deviceName) >= 0) {
-                optionsHtml = (<ul className="block-options">
-                    <li>
-                        <span className="label" style={{ backgroundColor: 'red' }}>changed</span>
-                    </li>
-                </ul>)
+            //硬件发生变化
+            if (_refreshData.device_change) {
+                if (_refreshData.device_change.indexOf(_deviceName) >= 0) {
+                    optionsHtml = (<ul className="block-options">
+                        <li>
+                            <span className="label" style={{ backgroundColor: 'red' }}>changed</span>
+                        </li>
+                    </ul>)
+                }
             }
         }
-        if (_isLast) {
-            optionsHtml = <ul className="block-options">
-                <li> <button type="button" onClick={this.onClickRemoveItem.bind(this, _item)} data-toggle="modal" data-target="#modal-fromleft" ><i className="glyphicon glyphicon-remove"></i></button> </li>
-            </ul>
+
+        if (AppState.User_Name == 'admin') {
+            if (_isLast) {
+                //删除按钮
+                optionsHtml = <ul className="block-options">
+                    <li> <button type="button" onClick={this.onClickRemoveItem.bind(this, _item)} data-toggle="modal" data-target="#modal-fromleft" ><i className="glyphicon glyphicon-remove"></i></button> </li>
+                </ul>
+            }
         }
 
-        //未设地址
-
+        //未设地址 
         let _row = <div className="row">
             <div className="col-xs-6" style={{ padding: '0', textAlign: 'center' }}>
                 <i className="glyphicon glyphicon-fire" style={{ fontSize: '1.6em', color: color1 }}></i>
@@ -125,29 +147,50 @@ class ItemComponent extends React.Component {
         </div>
 
         let _content = null;
-        if (_item.addr == -1) {
-            _content = <div className="block-content" style={{ margin: '1px', padding: '8px 20px 5px', cursor: 'pointer' }} data-toggle="modal" data-target="#modal-fromleft" onClick={this.onClickItem.bind(this, _item)}>
-                {_row}
-            </div>
+        if (AppState.User_Name == 'admin') {
+            if (_item.addr == -1) {
+                _content = <div className="block-content" style={{ margin: '1px', padding: '8px 20px 5px', cursor: 'pointer' }} data-toggle="modal" data-target="#modal-fromleft" onClick={this.onClickItem.bind(this, _item)}>
+                    {_row}
+                </div>
+            } else {
+                _content = <div className="block-content" style={{ margin: '1px', padding: '8px 20px 5px', cursor: 'pointer' }} onClick={this.onClickItem.bind(this, _item)}>
+                    {_row}
+                </div>
+            }
         } else {
-            _content = <div className="block-content" style={{ margin: '1px', padding: '8px 20px 5px', cursor: 'pointer' }} onClick={this.onClickItem.bind(this, _item)}>
-                {_row}
-            </div>
+            if (_item.addr == -1) {
+                _content = <div className="block-content" style={{ margin: '1px', padding: '8px 20px 5px', cursor: 'pointer' }}>
+                    {_row}
+                </div>
+            } else {
+                _content = <div className="block-content" style={{ margin: '1px', padding: '8px 20px 5px', cursor: 'pointer' }} onClick={this.onClickItem.bind(this, _item)}>
+                    {_row}
+                </div>
+            }
         }
 
-        return (<div className="col-xs-6 col-sm-2" style={{ padding: '3px' }}>
-            <a className="block block-link-hover2 block-bordered" style={{ marginBottom: '0px' }}>
+        let _titleContent = null;
+        if (AppState.User_Name == 'admin') {
+            _titleContent = (<a className="link-effect" href="#" data-toggle="modal" data-target="#modal-fromleft" onClick={this.onClickSetAddressButton.bind(this, _item)}>
+                <span className="block-title">{_item.name}</span>
+                <span className="block-title">-{_item.addr == -1 ? 'NA' : _item.addr}</span>
+            </a>)
+        } else {
+            _titleContent = (<a className="link-effect" href="#">
+                <span className="block-title">{_item.name}</span>
+                <span className="block-title">-{_item.addr == -1 ? 'NA' : _item.addr}</span>
+            </a>)
+        }
+
+        return (<div className="col-xs-6 col-sm-2 main-overview-item-padding">
+            <a className="block block-link-hover3 block-bordered" style={{ marginBottom: '0px' }}>
                 <div className="block-header bg-gray-lighter" style={{ margin: '1px', padding: '10px 10px 10px 15px' }}>
                     {optionsHtml}
-                    <a className="link-effect" href="#" data-toggle="modal" data-target="#modal-fromleft" onClick={this.onClickSetAddressButton.bind(this, _item)}>
-                        <span className="block-title">{_item.name}</span>
-                        <span className="block-title">-{_item.addr == -1 ? 'NA' : _item.addr}</span>
-                    </a>
+                    {_titleContent}
                 </div>
                 {
                     _content
                 }
-
             </a>
         </div>)
     }

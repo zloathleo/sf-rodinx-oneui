@@ -1,21 +1,11 @@
 import React from 'react';
 
 import Constants from '../../constants/Constants.jsx';
-import StateManager from '../../states/StateManager.jsx';
 
 class HeaderComponent extends React.Component {
 
     constructor(props) {
         super(props);
-    }
-
-    clickAdminLoginButton() {
-        if (StateManager.appState.activeMainModule == Constants.Values.Main_Module_Login) {
-            StateManager.appState.setActiveMainModule(Constants.Values.Main_Module_Overview);
-        } else {
-            StateManager.appState.setActiveMainModule(Constants.Values.Main_Module_Login);
-        }
-
     }
 
     render() {

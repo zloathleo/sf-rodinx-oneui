@@ -1,7 +1,10 @@
 import React from 'react';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 import Constants from '../../constants/Constants.jsx';
-import StateManager from '../../states/StateManager.jsx';
+import EventProxy from '../../utils/EventProxy.jsx';
+
+import AppState from '../../states/AppState.jsx';
 
 import OverviewService from '../../services/OverviewService.jsx'
 
@@ -53,30 +56,10 @@ class TemplateUseModalContent extends React.Component {
         console.log('clickFileChoose');
         if (_files) {
             let _selectedFile = _files[0];
-
-            // var data = new FormData()
-            // data.append('file', _selectedFile);
-            // data.append('device', 'A0');
-            // data.append('ch', 'ch1');
-
-            // fetch('/templates', {
-            //     method: 'post',
-            //     body: data
-            // }).then(function (response) {
-            //     //ok 范围 200-299  
-            //     if (response.ok) {
-            //         response.json().then(function (data) {
-            //             console.log(data);;
-            //         });
-            //     } else {
-            //         return new Error(response.statusText);
-            //     }
-            // })
         }
     }
 
     render() {
-        // let _data = this.props.data;
         return (
             <div>
                 <div className="form-group">
@@ -148,52 +131,56 @@ class DeviceCHSettings extends React.Component {
 
     //保存模板
     onClickSaveTemplateButton() {
-        OverviewService.requestDownloadTemplate(StateManager.dataState.device, this.props.name, 'u');
-
-        // StateManager.modalsState.setModal('Template Save', <TemplateSaveModalContent ref={(_ref) => this.modalContent = _ref} />, function () {
-
-        //     const _inputTemplateName = this.modalContent.inputTemplateName;
-        //     const _templateName = _inputTemplateName.value;
-
-        //     OverviewService.requestSaveTemplate(_templateName, StateManager.dataState.detailJson.name, this.props.name, 'u', function (json) {
-        //         console.log('ok:', json);
-        //     }.bind(this));
-
-        // }.bind(this));
+        OverviewService.requestDownloadTemplate(this.props.deviceName, this.props.name, 'u');
     }
 
     //使用模板
     onClickUseTemplateButton() {
-        StateManager.modalsState.setModal('Template Choose', <TemplateUseModalContent ref={(_ref) => this.modalContent = _ref} />, function () {
-
-            let _files = this.modalContent.inputFilePath.files;
+        let _modalContent = <TemplateUseModalContent ref={(_ref) => this.templateUseModalContent = _ref} />;
+        let _okFunc = function () {
+            //todo
+            let _files = this.templateUseModalContent.inputFilePath.files;
             if (_files) {
                 let _selectedFile = _files[0];
                 console.log(_selectedFile);
 
-                OverviewService.requestUpdateTemplate(StateManager.dataState.device, this.props.name, _selectedFile, function (json) {
+                OverviewService.requestUpdateTemplate(this.props.deviceName, this.props.name, _selectedFile, function (json) {
                     console.log('ok:', json);
                 }.bind(this));
-
             }
 
+        }.bind(this);
 
-        }.bind(this));
-
+        let _dispatch = {
+            uiName: 'UseUserSettingsChange',
+            data: { title: 'Confirm' },
+            exParams: {
+                content: _modalContent,
+                okFunc: _okFunc
+            }
+        }
+        EventProxy.trigger(Constants.Event.ModalUI_Key, _dispatch);
     }
 
     render() {
         let _ch = this.props.data;
+        let _updateTool = null;
+        if (AppState.User_Name == 'admin') {
+            _updateTool = (
+                <ul className="block-options">
+                    <li> <button type="button" onClick={this.onClickSaveTemplateButton.bind(this)} >
+                        <i className="glyphicon glyphicon-save"></i></button> </li>
+                    <li> <button type="button" onClick={this.onClickUseTemplateButton.bind(this)} data-toggle="modal" data-target="#modal-fromleft" >
+                        <i className="glyphicon glyphicon-open"></i></button> </li>
+                </ul>
+            )
+        }
+
         return (
-            <div className="col-xs-12 col-sm-6" style={{ padding: '0px 3px' }} >
+            <div className="col-xs-12 col-sm-6" style={{ padding: '0px 0px' }} >
                 <div className="block block-bordered end-block-margin-bottom">
                     <div className="block-header bg-gray-lighter">
-                        <ul className="block-options">
-                            <li> <button type="button" onClick={this.onClickSaveTemplateButton.bind(this)} >
-                                <i className="glyphicon glyphicon-save"></i></button> </li>
-                            <li> <button type="button" onClick={this.onClickUseTemplateButton.bind(this)} data-toggle="modal" data-target="#modal-fromleft" >
-                                <i className="glyphicon glyphicon-open"></i></button> </li>
-                        </ul>
+                        {_updateTool}
                         <h3 className="block-title">{this.props.name}</h3>
                     </div>
                     <div className="block-content" style={{ padding: '10px 10px 1px' }}>
@@ -222,12 +209,12 @@ class DeviceCHSettings extends React.Component {
                         </table>
 
 
-                        <table className="table table-striped table-vcenter table-header-bg">
+                        <table className="table table-striped table-vcenter table-header-bg" style={{ marginTop: '20px' }}>
                             <thead>
                                 <tr>
-                                    <th className="text-center" style={{ width: '40%', padding: '3px' }}>Name</th>
-                                    <th className="text-center" style={{ width: '30%', padding: '3px' }}>FileA</th>
-                                    <th className="text-center" style={{ width: '30%', padding: '3px' }}>FileB</th>
+                                    <th className="text-center setting-table-header-th" style={{ width: '40%', padding: '3px' }}>Name</th>
+                                    <th className="text-center setting-table-header-th" style={{ width: '30%', padding: '3px' }}>FileA</th>
+                                    <th className="text-center setting-table-header-th" style={{ width: '30%', padding: '3px' }}>FileB</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -259,20 +246,40 @@ class DeviceUserSettingsComponent extends React.Component {
 
     constructor(props) {
         super(props);
-        this.mergeData = this.mergeData.bind(this);
+        this.save = this.save.bind(this);
     }
 
-    mergeData() {
+    componentWillMount() {
+        EventProxy.on(Constants.Event.UserSettingsUI_Save_Key, (_value) => {
+            if (_value) {
+                this.save();
+            }
+        });
+    }
+
+    componentWillUnmount() {
+        EventProxy.off(Constants.Event.UserSettingsUI_Save_Key);
+    }
+
+    save() {
         this.ch1SettingsPanel.mergeData();
         this.ch2SettingsPanel.mergeData();
+        let _data = this.props.data;
+        OverviewService.requestUpdateDeviceSettings(_data.name, 'u', _data, function (_json) {
+            console.log(_json);
+        });
     }
 
     render() {
         let _data = this.props.data;
         return (
-            <div className="row animated bounceIn main-detail-padding-margin">
-                <DeviceCHSettings ref={(_ref) => this.ch1SettingsPanel = _ref} name={'CH1'} data={_data.ch1} />
-                <DeviceCHSettings ref={(_ref) => this.ch2SettingsPanel = _ref} name={'CH2'} data={_data.ch2} />
+            <div className="main-content-padding animated bounceIn">
+                <Scrollbars renderTrackHorizontal={function () { return <div />; }} renderThumbHorizontal={function () { return <div />; }} style={{ height: Constants.UI.OverviewComponentContentHeight }}>
+                    <div className="row main-detail-padding-margin">
+                        <DeviceCHSettings ref={(_ref) => this.ch1SettingsPanel = _ref} name={'CH1'} deviceName={_data.name} data={_data.ch1} />
+                        <DeviceCHSettings ref={(_ref) => this.ch2SettingsPanel = _ref} name={'CH2'} deviceName={_data.name} data={_data.ch2} />
+                    </div>
+                </Scrollbars>
             </div>
         )
     }

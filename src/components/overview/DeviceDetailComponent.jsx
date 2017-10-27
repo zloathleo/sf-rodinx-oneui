@@ -1,18 +1,16 @@
 import React from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { observer } from 'mobx-react';
 
+import EventProxy from '../../utils/EventProxy.jsx';
 import Constants from '../../constants/Constants.jsx';
-import StateManager from '../../states/StateManager.jsx';
 import Utils from '../../utils/Utils.jsx';
 
-import OverviewService from '../../services/OverviewService.jsx'
+import OverviewService from '../../services/OverviewService.jsx';
+import RefreshUI from '../common/RefreshUI.jsx';
+import Switcher from '../common/Switcher.jsx';
 
-import Switcher from '../common/Switcher.jsx'
-import BreadcrumbComponent from '../main/BreadcrumbComponent.jsx'
-
-import DeviceUserSettingsComponent from './DeviceUserSettingsComponent.jsx'
-import DeviceFactorySettingsComponent from './DeviceFactorySettingsComponent.jsx'
+import DeviceUserSettingsComponent from './DeviceUserSettingsComponent.jsx';
+import DeviceFactorySettingsComponent from './DeviceFactorySettingsComponent.jsx';
 
 //设备详情
 class Descript extends React.Component {
@@ -20,7 +18,7 @@ class Descript extends React.Component {
     render() {
         let _parent = this.props.parent;
         return (
-            <div className="col-xs-12" style={{ padding: '0px 5px' }}>
+            <div className="col-xs-12" style={{ padding: '0px 0px' }}>
                 <div className="block block-bordered" style={{ marginBottom: '1px' }}>
                     <div className="block-content">
                         <div className="row" >
@@ -57,31 +55,45 @@ class Descript extends React.Component {
 
 }
 
-
-@observer
 class CHDetailTempTr extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = { unit: 'C' };
+    }
+
+    componentWillMount() {
+        EventProxy.on(Constants.Event.Detail_UnitChange_Key, (_unit) => {
+            this.setState({ unit: _unit });
+        });
+    }
+
+    componentWillUnmount() {
+        EventProxy.off(Constants.Event.Detail_UnitChange_Key);
+    }
 
     render() {
         let _value = this.props.value;
-        if (StateManager.uiState.tempUnit == 'C') {
+        if (this.state.unit == 'C') {
             _value = this.props.value;
         } else {
             _value = this.props.value * 1.8 + 32;
         }
+        let _valueDisplay = _value.toFixed(1);
 
         let _status = this.props.status;
         if (_status == 3) {
             return (
                 <tr>
                     <td>{this.props.field}</td>
-                    <td className="text-right font-w600 font-ds-digital-s20"><del>{_value}</del></td>
+                    <td className="text-right font-w600 font-ds-digital-s20"><del>{_valueDisplay}</del></td>
                 </tr>
             )
         } else {
             return (
                 <tr>
                     <td>{this.props.field}</td>
-                    <td className="text-right font-w600 font-ds-digital-s20">{_value}</td>
+                    <td className="text-right font-w600 font-ds-digital-s20">{_valueDisplay}</td>
                 </tr>
             )
         }
@@ -89,6 +101,7 @@ class CHDetailTempTr extends React.Component {
 }
 
 class CHDetailTr extends React.Component {
+
     render() {
         let _status = this.props.status;
         if (_status == 3) {
@@ -111,19 +124,10 @@ class CHDetailTr extends React.Component {
     }
 }
 
-@observer
 class CHDetail extends React.Component {
     render() {
-        let _chdata = undefined;
-
-        let deviceJson = StateManager.dataState.detailJson;
-        if (deviceJson) {
-            if (this.props.name == 'CH1') {
-                _chdata = deviceJson.ch1;
-            } else {
-                _chdata = deviceJson.ch2;
-            }
-        } else {
+        let _chdata = this.props.data;
+        if (!_chdata) {
             return null;
         }
         let _status = _chdata.status;
@@ -131,7 +135,7 @@ class CHDetail extends React.Component {
         let _text = Utils.renderText(_status);
 
         return (
-            <div className="col-xs-12 col-sm-6" style={{ padding: '0px 3px' }} >
+            <div className="col-xs-12 col-sm-6" style={{ padding: '0px 0px 0px 0px' }} >
                 <div className="block block-bordered end-block-margin-bottom">
 
                     <div className="block-header bg-gray-lighter main-content-item-header">
@@ -168,145 +172,37 @@ class CHDetail extends React.Component {
     }
 }
 
-@observer
-class DeviceContentComponent extends React.Component {
+class DeviceDetailComponent extends RefreshUI {
 
     constructor(props) {
         super(props);
-        this.settingsData = undefined;
-        this.onClickUserSettingsButton = this.onClickUserSettingsButton.bind(this);
-        this.onClickFactorySettingsButton = this.onClickFactorySettingsButton.bind(this);
         this.unitSwitcherChange = this.unitSwitcherChange.bind(this);
-        this.onClickSaveSettings = this.onClickSaveSettings.bind(this);
     }
 
-    //保存settings
-    onClickSaveSettings() {
-        if (StateManager.appState.activeModuleLevel2Name == Constants.Values.Overview_Level2_UserSettings) {
-            this.userSettingsComponent.mergeData();
-            console.log(JSON.stringify(this.settingsData));
-            OverviewService.requestUpdateDeviceSettings(StateManager.dataState.device, 'u', this.settingsData, function (json) {
-
-            });
-        } else if (StateManager.appState.activeModuleLevel2Name == Constants.Values.Overview_Level2_FactorySettings) {
-            OverviewService.requestUpdateDeviceSettings(StateManager.dataState.device, 's', this.settingsData, function (json) {
-
-            });
-        }
+    unitSwitcherChange(selectedItem) {//第一选项是否选中 即摄氏度是否选中   
+        EventProxy.trigger(Constants.Event.Detail_UnitChange_Key, selectedItem);
     }
 
-    onClickUserSettingsButton() {
-        StateManager.appState.setMainLoading(true);
-        OverviewService.requestDeviceSettings(StateManager.dataState.device, 'u', 'm', function (json) {
-            this.settingsData = json;
-            StateManager.appState.setMainLoading(false);
-            StateManager.appState.setActiveModuleLevel2Name(Constants.Values.Overview_Level2_UserSettings);
-        }.bind(this));
+    formatRefreshData(_data) {
+        return _data.device;
     }
 
-    onClickFactorySettingsButton() {
-        StateManager.appState.setMainLoading(true);
-        OverviewService.requestDeviceSettings(StateManager.dataState.device, 's', 'm', function (json) {
-            this.settingsData = json;
-            StateManager.appState.setMainLoading(false);
-            StateManager.appState.setActiveModuleLevel2Name(Constants.Values.Overview_Level2_FactorySettings);
-        }.bind(this));
-    }
-
-    unitSwitcherChange(selectedItem) {//第一选项是否选中 即摄氏度是否选中  
-        StateManager.uiState.setTempUnit(selectedItem);
+    getRefreshDataFunc(_callback) {
+        let _detailData = this.props.data;
+        OverviewService.requestServer(2, _detailData.name, _callback);
     }
 
     render() {
-        if (StateManager.appState.activeModuleLevel2Name == Constants.Values.Overview_Level2_UserSettings) {
-            return (
-                <DeviceUserSettingsComponent ref={(_ref) => this.userSettingsComponent = _ref} data={this.settingsData} />
-            )
-        } else if (StateManager.appState.activeModuleLevel2Name == Constants.Values.Overview_Level2_FactorySettings) {
-            return (
-                <DeviceFactorySettingsComponent ref={(_ref) => this.factorySettingsComponent = _ref} data={this.settingsData} />
-            )
-        } else {
-            return (
-                <div className="row animated bounceIn main-detail-padding-margin">
-                    <CHDetail name={'CH1'} />
-                    <CHDetail name={'CH2'} />
-                    <Descript parent={this} />
-                </div>
-            )
-        }
-    }
-}
-
-
-@observer
-class ButtonGroup extends React.Component {
-
-    render() {
-        let _parent = this.props.parent;
-        if (StateManager.appState.activeModuleLevel2Name == Constants.Values.Overview_Level2_UserSettings) {
-            return (
-                <ul className="block-options-simple push-10-r">
-                    <button className="btn btn-square btn-sm btn-primary" onClick={_parent.onClickSaveSettings} style={{ margin: '0 2px 0 0' }}>
-                        <i className="fa fa-check"></i> <span>Save</span></button>
-                </ul>
-            )
-        } else if (StateManager.appState.activeModuleLevel2Name == Constants.Values.Overview_Level2_FactorySettings) {
-            return (
-                <ul className="block-options-simple push-10-r">
-                    <button className="btn btn-square btn-sm btn-danger" onClick={_parent.onClickSaveSettings} style={{ margin: '0 2px 0 0' }}>
-                        <i className="fa fa-check"></i> <span>Save</span></button>
-                </ul>
-            )
-        } else {
-            return (
-                <ul className="block-options-simple push-10-r">
-                    <button className="btn btn-square btn-sm btn-danger" onClick={_parent.onClickFactorySettingsDelegate} style={{ margin: '0 2px 0 0' }}>
-                        <i className="fa fa-wrench" aria-hidden="true"></i> <span className="hidden-xs hidden-sm">FactorySettings</span></button>
-
-                    <button className="btn btn-square btn-sm btn-primary" onClick={_parent.onClickUserSettingsDelegate} style={{ margin: '0 2px 0 0' }}>
-                        <i className="glyphicon glyphicon-cog"></i> <span className="hidden-xs hidden-sm">UserSettings</span></button>
-                </ul>
-            )
-        }
-    }
-}
-
-
-class DeviceDetailComponent extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.onClickUserSettingsDelegate = this.onClickUserSettingsDelegate.bind(this);
-        this.onClickFactorySettingsDelegate = this.onClickFactorySettingsDelegate.bind(this);
-        this.onClickSaveSettings = this.onClickSaveSettings.bind(this);
-    }
-
-    //保存settings
-    onClickSaveSettings() {
-        this.deviceContentComponent.onClickSaveSettings();
-    }
-
-    onClickFactorySettingsDelegate() {
-        this.deviceContentComponent.onClickFactorySettingsButton();
-    }
-
-    onClickUserSettingsDelegate() {
-        this.deviceContentComponent.onClickUserSettingsButton();
-    }
-
-    render() {
+        let _detailData = this.state.refreshData ? this.state.refreshData : this.props.data;
         return (
-            <div>
-                <div className="block-header bg-gray-lighter overview-head-padding">
-                    <ButtonGroup parent={this} />
-                    <BreadcrumbComponent />
-                </div>
-                <div className="block-content main-content-padding"  >
-                    <Scrollbars style={{ height: StateManager.uiState.OverviewTopContentHeight }}>
-                        <DeviceContentComponent ref={(_ref) => this.deviceContentComponent = _ref} />
-                    </Scrollbars>
-                </div>
+            <div className="main-content-padding animated bounceIn">
+                <Scrollbars renderTrackHorizontal={function () { return <div />; }} renderThumbHorizontal={function () { return <div />; }} style={{ height: Constants.UI.OverviewComponentContentHeight }}>
+                    <div className="row main-detail-padding-margin">
+                        <CHDetail data={_detailData.ch1} name={'CH1'} />
+                        <CHDetail data={_detailData.ch2} name={'CH2'} />
+                        <Descript parent={this} />
+                    </div>
+                </Scrollbars>
             </div>
         )
     }
