@@ -169,9 +169,9 @@ class DeviceCHSettings extends React.Component {
             _updateTool = (
                 <ul className="block-options">
                     <li> <button type="button" onClick={this.onClickSaveTemplateButton.bind(this)} >
-                        <i className="glyphicon glyphicon-save"></i></button> </li>
-                    <li> <button type="button" onClick={this.onClickUseTemplateButton.bind(this)} data-toggle="modal" data-target="#modal-fromleft" >
                         <i className="glyphicon glyphicon-open"></i></button> </li>
+                    <li> <button type="button" onClick={this.onClickUseTemplateButton.bind(this)} data-toggle="modal" data-target="#modal-fromleft" >
+                        <i className="glyphicon glyphicon-save"></i></button> </li>
                 </ul>
             )
         }

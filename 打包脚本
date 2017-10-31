@@ -8,3 +8,8 @@ electron-packager <sourcedir> <sourcedir> --platform= <platform> win32,darwin --
 #--platform=<platform> ： 打包的系统(darwin、win32、linux)
 #--arch=<arch> ： 系统位数(ia32、x64)
 # --icon=<icon> ： 指定应用的图标(Mac 为 .icns 文件，Windows 为 .ico 或 .png)
+
+
+
+//上传到分支
+git push origin develop-20171020:develop-20171020

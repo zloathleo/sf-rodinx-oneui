@@ -5,6 +5,7 @@ import Utils from '../../utils/Utils.jsx';
 import EventProxy from '../../utils/EventProxy.jsx';
 import AppState from '../../states/AppState.jsx';
 
+import DeviceChangeModalContent from '../modal/DeviceChangeModalContent.jsx';
 import OverviewService from '../../services/OverviewService.jsx';
 
 class AddressSetModalContent extends React.Component {
@@ -66,11 +67,41 @@ class ItemComponent extends React.Component {
             }
             EventProxy.trigger(Constants.Event.ModalUI_Key, _dispatch);
         }
-
     }
 
     onClickRemoveItem(_item, _event) {
         this.props.parent.clickRemoveItemButton(_item);
+    }
+
+    //设备变化
+    clickItemChanged(_item, _event) {
+        //
+        console.log('clickItemChanged:', _item);
+        if (AppState.User_Name == 'admin') {
+            let _modalContent = <DeviceChangeModalContent ref={(_ref) => this.deviceChangeModalContent = _ref} />;
+            let _okFunc = function () {
+
+                //同步设备设置
+                let _choose = this.deviceChangeModalContent.inputChoose.value();
+
+                OverviewService.requestSynchronizeDevice(_item.name, _choose);
+
+                // OverviewService.requestUpdateDeviceAddress(_item.name, this.addressSetModalContent.inputAddress.value, '', '', function (json) {
+                //     console.log('AddressSetModalContent ok');
+                //     EventProxy.trigger(Constants.Event.Dashboard_Save_Key, 'addr');
+                // });
+
+            }.bind(this);
+            let _dispatch = {
+                uiName: 'DeviceChangeModalContent',
+                data: { title: 'Device Changed' },
+                exParams: {
+                    content: _modalContent,
+                    okFunc: _okFunc
+                }
+            }
+            EventProxy.trigger(Constants.Event.ModalUI_Key, _dispatch);
+        }
     }
 
     //进入detail
@@ -113,26 +144,34 @@ class ItemComponent extends React.Component {
                 color2 = Utils.renderColor(_status2);
             }
 
-            //硬件发生变化
-            if (_refreshData.device_change) {
-                if (_refreshData.device_change.indexOf(_deviceName) >= 0) {
-                    optionsHtml = (<ul className="block-options">
-                        <li>
-                            <span className="label" style={{ backgroundColor: 'red' }}>changed</span>
-                        </li>
-                    </ul>)
+            let _deleteIconHtml = null;
+            let _changeIconHtml = null;
+            let _isDeviceChange = _refreshData.device_change && _refreshData.device_change.indexOf(_deviceName) >= 0;
+            if (AppState.User_Name == 'admin') {
+                if (_isLast) {
+                    //删除按钮
+                    _deleteIconHtml = <li> <button type="button" onClick={this.onClickRemoveItem.bind(this, _item)} data-toggle="modal" data-target="#modal-fromleft" ><i className="glyphicon glyphicon-remove"></i></button> </li>
+                }
+                //硬件发生变化
+                if (_isDeviceChange) {
+                    _changeIconHtml = <li> <a href='#' className="label" onClick={this.clickItemChanged.bind(this, _item)} data-toggle="modal" data-target="#modal-fromleft" style={{ backgroundColor: 'red', color: '#fff' }}>changed</a></li>
+                }
+            } else {
+                //硬件发生变化
+                if (_isDeviceChange) {
+                    _changeIconHtml = <li> <span href='#' className="label" style={{ backgroundColor: 'red' }}>changed</span>  </li>
                 }
             }
+
+            optionsHtml = (
+                <ul className="block-options">
+                    {_changeIconHtml}
+                    {_deleteIconHtml}
+                </ul>
+            )
         }
 
-        if (AppState.User_Name == 'admin') {
-            if (_isLast) {
-                //删除按钮
-                optionsHtml = <ul className="block-options">
-                    <li> <button type="button" onClick={this.onClickRemoveItem.bind(this, _item)} data-toggle="modal" data-target="#modal-fromleft" ><i className="glyphicon glyphicon-remove"></i></button> </li>
-                </ul>
-            }
-        }
+
 
         //未设地址 
         let _row = <div className="row">

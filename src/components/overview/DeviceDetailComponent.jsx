@@ -41,7 +41,7 @@ class Descript extends React.Component {
                                     <li>
                                         <span>TEMP UNIT</span>
                                         <span className="pull-right font-w600">
-                                            <Switcher style={{ width: '100' }} valueChangeFunc={_parent.unitSwitcherChange} value='C' items={[{ display: 'C', value: 'C' }, { display: 'F', value: 'F' }]} />
+                                            <Switcher style={{ width: '100' }} valueChangeFunc={_parent.unitSwitcherChange} value={Constants.Event.Detail_UnitChange_Value} items={[{ display: 'C', value: 'C' }, { display: 'F', value: 'F' }]} />
                                         </span>
                                     </li>
                                 </ul>
@@ -180,6 +180,7 @@ class DeviceDetailComponent extends RefreshUI {
     }
 
     unitSwitcherChange(selectedItem) {//第一选项是否选中 即摄氏度是否选中   
+        Constants.Event.Detail_UnitChange_Value = selectedItem;
         EventProxy.trigger(Constants.Event.Detail_UnitChange_Key, selectedItem);
     }
 

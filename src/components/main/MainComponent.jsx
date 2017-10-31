@@ -10,6 +10,7 @@ import OverviewComponent from '../overview/OverviewComponent.jsx';
 import DeviceDetailComponent from '../overview/DeviceDetailComponent.jsx';
 import DeviceUserSettingsComponent from '../overview/DeviceUserSettingsComponent.jsx';
 import DeviceFactorySettingsComponent from '../overview/DeviceFactorySettingsComponent.jsx';
+import AlarmComponent from '../alarm/AlarmComponent.jsx';
 
 class MainContent extends EventDriveUI {
 
@@ -28,6 +29,8 @@ class MainContent extends EventDriveUI {
       return <DeviceUserSettingsComponent data={this.state.data} />;
     } else if (this.state.uiName == Constants.Event.MainUI_Value_Overview_Detail_FactorySettings) {
       return <DeviceFactorySettingsComponent data={this.state.data} />;
+    } else if (this.state.uiName == Constants.Event.MainUI_Value_Alarm) {
+      return <AlarmComponent data={this.state.data} />;
     } else {
       return null;
     }

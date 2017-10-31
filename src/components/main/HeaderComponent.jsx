@@ -27,6 +27,12 @@ class HeaderComponent extends React.Component {
         });
     }
 
+    onClickAlarm() {
+        EventProxy.trigger(Constants.Event.MainUI_Key, {
+            uiName: Constants.Event.MainUI_Value_Alarm
+        });
+    }
+
     onClickLogout() {
         AppState.User_Name = 'guest';
         this.setState({ updateCount: this.state.updateCount++ });
@@ -90,7 +96,7 @@ class HeaderComponent extends React.Component {
                                     </a>
                                 </li>
                                 <li>
-                                    <a tabindex="-1" href="#">
+                                    <a tabindex="-1" href="#" onClick={this.onClickAlarm}>
                                         <i className="si si-user pull-right"></i>
                                         Alarm</a>
                                 </li>

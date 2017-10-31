@@ -9,6 +9,7 @@ export default {
         MainUI_Value_Overview_Detail: 'Overview_Detail',
         MainUI_Value_Overview_Detail_UserSettings: 'UserSettings',
         MainUI_Value_Overview_Detail_FactorySettings: 'FactorySettings',
+        MainUI_Value_Alarm: 'Alarm',
 
         //loading
         LoadUI_Key: 'LoadUI_Key',
@@ -25,6 +26,7 @@ export default {
 
         //unit change
         Detail_UnitChange_Key: 'Detail_UnitChange_Key',
+        Detail_UnitChange_Value: 'C', 
 
         //User Settings
         UserSettingsUI_Save_Key: 'UserSettingsUI_Save_Key',
@@ -48,7 +50,7 @@ export default {
     Values: {
         Mock: false,
         // ServerUrl: '',
-        ServerUrl: 'http://192.168.1.166:8080',
+        ServerUrl: 'http://192.168.1.181:8080',
 
         Main_Is_Loading: 'main_is_loading',
         Main_Module_Login: 'LOGIN',

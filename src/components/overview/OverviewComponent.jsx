@@ -99,7 +99,7 @@ class OverviewComponent extends RefreshUI {
 
     getRefreshDataFunc(_callback) {
         let _overviewData = this.state.data;
-        if (_overviewData.rows.length == 0) {
+        if (!_overviewData || _overviewData.rows.length == 0) {
             _callback(null);
         } else {
             OverviewService.requestServer(1, undefined, _callback);

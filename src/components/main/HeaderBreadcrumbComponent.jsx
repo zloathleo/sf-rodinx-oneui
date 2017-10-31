@@ -21,7 +21,7 @@ class HeaderBreadcrumbComponent extends EventDriveUI {
     }
 
     //detail
-    onClickLevel1Link(_deviceName) { 
+    onClickLevel1Link(_deviceName) {
         EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Visible });
         OverviewService.requestDeviceDetail(_deviceName, function (json) {
             EventProxy.trigger(Constants.Event.MainUI_Key, {
@@ -48,7 +48,7 @@ class HeaderBreadcrumbComponent extends EventDriveUI {
                     <li>{_detailData.name}</li>
                 </ol>
             );
-        } else {
+        } else if (this.state.uiName == Constants.Event.MainUI_Value_Overview_Detail_UserSettings || this.state.uiName == Constants.Event.MainUI_Value_Overview_Detail_FactorySettings) {
             //settings
             let _settingData = this.state.data;
             return (
@@ -56,6 +56,14 @@ class HeaderBreadcrumbComponent extends EventDriveUI {
                     <li><a className="link-effect" href="#" onClick={this.onClickModuleLink.bind(this)}>OVERVIEW</a></li>
                     <li><a className="link-effect" href="#" onClick={this.onClickLevel1Link.bind(this, _settingData.name)}>{_settingData.name}</a></li>
                     <li>{this.state.uiName}</li>
+                </ol>
+            );
+        } else if (this.state.uiName == Constants.Event.MainUI_Value_Alarm) {
+            //settings
+            let _settingData = this.state.data;
+            return (
+                <ol className="breadcrumb push-10-t">
+                    <li>{Constants.Event.MainUI_Value_Alarm}</li>
                 </ol>
             );
         }

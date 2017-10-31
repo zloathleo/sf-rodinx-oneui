@@ -124,7 +124,7 @@ class HeaderRightToolbarComponent extends EventDriveUI {
                 return (
                     <ul className="nav-header pull-right">
                         <li>
-                            <button className="btn btn-square btn-primary">
+                            <button className="btn btn-square btn-primary" disabled>
                                 <i className="glyphicon glyphicon-cog"></i> {_text}
                             </button>
                         </li>
@@ -168,7 +168,7 @@ class HeaderRightToolbarComponent extends EventDriveUI {
                 </ul>
             );
         } else {
-
+            return null;
         }
     }
 

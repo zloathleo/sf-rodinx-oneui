@@ -1,52 +1,55 @@
 {
-    "enable": 1,
-    "file": 0,
-    "filea": {
-        "ac": {
-            "ac_gain": 3.000,
-            "ac_on_th": 1998,
-            "ac_on_tl": 601,
-            "fc": 98,
-            "max": 1998,
-            "min": 301
+    "server_time": "2017-07-01 12:00:00",
+    "modify_time": "2017-07-01 12:00:00",
+    "devices": {
+        "A1": {
+            "name": "A1",
+            "addr": 1,
+            "status": 0,
+            "ch1": {
+                "enable": true,
+                "file": 0,
+                "onth": 2000,
+                "ontl": 600,
+                "max": 1600,
+                "min": 400,
+                "ac": 1500,
+                "dc": 1000,
+                "freq": 99,
+                "type": "IR",
+                "status": 1,
+                "fault": "00",
+                "temp": 29,
+                "fq": 75
+            },
+            "ch2": {
+                "onth": 2000,
+                "ontl": 600,
+                "max": 1600,
+                "min": 400,
+                "ac": 1999,
+                "dc": 462,
+                "freq": 99,
+                "type": "IR",
+                "status": 1,
+                "fault": "00",
+                "temp": 29,
+                "fq": 99
+            }
         },
-        "dc": {
-            "dc_gain": 2.000,
-            "dc_on_th": 1998,
-            "dc_on_tl": 1
-        },
-        "frequency": {
-            "freq_on_th": 125,
-            "freq_on_tl": 1
-        },
-        "public": {
-            "ffrt": 4,
-            "otd": 2
+        "status": {
+            "A1": [
+                0,
+                0
+            ],
+            "A2": [
+                0,
+                0
+            ],
+            "A3": [
+                0,
+                0
+            ]
         }
-    },
-    "fileb": {
-        "ac": {
-            "ac_gain": 1.000,
-            "ac_on_th": 1999,
-            "ac_on_tl": 600,
-            "fc": 99,
-            "max": 1999,
-            "min": 300
-        },
-        "dc": {
-            "dc_gain": 1.000,
-            "dc_on_th": 1999,
-            "dc_on_tl": 0
-        },
-        "frequency": {
-            "freq_on_th": 126,
-            "freq_on_tl": 0
-        },
-        "public": {
-            "ffrt": 3,
-            "otd": 1
-        }
-    },
-    "name": "ch1",
-    "type": "UV"
+    }
 }

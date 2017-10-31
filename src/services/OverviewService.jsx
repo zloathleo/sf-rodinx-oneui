@@ -74,4 +74,11 @@ export default {
         MyFetch.fetchUpdateFile(this.ip + '/templates', { method: 'POST', body: form }, _then);
     },
 
+    //同步放大器设置 /detail/{deviceName}/settings 
+    requestSynchronizeDevice: function (deviceName, _source, _then) {
+        var form = new URLSearchParams();
+        form.set('source', _source);
+        MyFetch.fetch(this.ip + '/detail/' + deviceName + '/settings', { method: 'PUT', body: form }, _then);
+    },
+
 }
