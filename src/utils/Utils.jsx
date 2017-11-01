@@ -41,11 +41,11 @@ export default {
         switch (_status) {
             case 0: {
                 //无火
-                return 'Off';
+                return 'FlameOff';
             }
             case 1: {
                 //有火
-                return 'On';
+                return 'FlameOn';
             }
             case 2: {
                 //报警
