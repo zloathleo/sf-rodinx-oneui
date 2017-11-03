@@ -30,6 +30,7 @@ export default {
 
         //User Settings
         UserSettingsUI_Save_Key: 'UserSettingsUI_Save_Key',
+        UserSettingsUI_Save_Success_Key: 'UserSettingsUI_Save_Success_Key',
 
         //Factory Settings
         FactorySettingsUI_Save_Key: 'FactorySettingsUI_Save_Key',

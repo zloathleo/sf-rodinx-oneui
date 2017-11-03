@@ -10,25 +10,29 @@ class ModalComponent extends EventDriveUI {
         super(props);
         this.uiEventKey = Constants.Event.ModalUI_Key;
         this.onSubmit = this.onSubmit.bind(this);
-        this.onClose = this.onClose.bind(this); 
+        this.onClose = this.onClose.bind(this);
+        // this._lastConetnt = undefined;
     }
 
+
     onClose() {
-        this.setState({ uiName: undefined, data: undefined, _exParams: undefined });
+        // this.setState({ uiName: undefined, data: undefined, _exParams: undefined });
     }
 
     onSubmit() {
         let _exParams = this.state.exParams;
         if (_exParams && _exParams.okFunc) {
             _exParams.okFunc();
-        }  
+        }
     }
 
     render() {
         let _data = this.state.data;
+
         let _exParams = this.state.exParams;
 
         let _content = _exParams ? _exParams.content : null; 
+
         return (
             <div className="modal fade" id="modal-fromleft" tabindex="-1" role="dialog" aria-hidden="true" style={{ display: 'none' }}>
                 <div className="modal-dialog modal-dialog-fromleft">

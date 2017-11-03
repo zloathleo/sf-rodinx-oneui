@@ -13,8 +13,7 @@ class VirtualComponent extends React.Component {
     render() {
         return (
             <div> 
-                <ModalComponent />
-                <AlertComponent /> 
+                <ModalComponent /> 
                 <LoadingComponent />
             </div>
         )

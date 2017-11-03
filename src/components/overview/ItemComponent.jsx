@@ -5,6 +5,8 @@ import Utils from '../../utils/Utils.jsx';
 import EventProxy from '../../utils/EventProxy.jsx';
 import AppState from '../../states/AppState.jsx';
 
+import ValueInput from '../common/ValueInput.jsx';
+
 import DeviceChangeModalContent from '../modal/DeviceChangeModalContent.jsx';
 import OverviewService from '../../services/OverviewService.jsx';
 
@@ -19,7 +21,7 @@ class AddressSetModalContent extends React.Component {
             <div>
                 <div className="form-group">
                     <label className="col-xs-12" >Address</label>
-                    <input ref={(_ref) => this.inputAddress = _ref} className="form-control" defaultValue={_addr} type="number" name="address" placeholder="Enter the Device Address.." />
+                    <ValueInput ref={(_ref) => this.inputAddress = _ref} className="form-control" value={_addr} type="number" name="address" placeholder="Enter the Device Address.." />
                 </div>
 
                 <div className="form-group">
@@ -48,12 +50,14 @@ class ItemComponent extends React.Component {
     onClickSetAddressButton(_item, _event) {
         if (AppState.User_Name == 'admin') {
             let _modalContent = <AddressSetModalContent ref={(_ref) => this.addressSetModalContent = _ref} data={_item} />;
+ 
             let _okFunc = function () {
 
                 //todo
-                OverviewService.requestUpdateDeviceAddress(_item.name, this.addressSetModalContent.inputAddress.value, '', '', function (json) {
+                OverviewService.requestUpdateDeviceAddress(_item.name, this.addressSetModalContent.inputAddress.value(), '', '', function (json) {
                     console.log('AddressSetModalContent ok');
                     EventProxy.trigger(Constants.Event.Dashboard_Save_Key, 'addr');
+
                 });
 
             }.bind(this);
@@ -134,19 +138,24 @@ class ItemComponent extends React.Component {
         //按钮
         let optionsHtml = null;
         if (_refreshData) {
-            let _dashboardJson = _refreshData.dashboard;
-            let _status = _dashboardJson.status;
-            let _status_values = _status[_deviceName];
-            if (_status_values) {
-                let _status1 = _status_values[0];
-                let _status2 = _status_values[1];
-                color1 = Utils.renderColor(_status1);
-                color2 = Utils.renderColor(_status2);
-            }
-
             let _deleteIconHtml = null;
             let _changeIconHtml = null;
-            let _isDeviceChange = _refreshData.device_change && _refreshData.device_change.indexOf(_deviceName) >= 0;
+
+            let _device = _refreshData.devices[_deviceName];
+
+            let _isDeviceChange = false;
+            if (_item.addr == -1) {
+                //未设地址 
+            } else {
+                if (_device) {
+                    let _status_dex = _device.status;
+                    let _status_values = Utils.parseState(_status_dex);
+                    color1 = Utils.renderCh1Color(_status_values);
+                    color2 = Utils.renderCh2Color(_status_values);
+                    _isDeviceChange = Utils.isDeviceChange(_status_values);
+                }
+            }
+
             if (AppState.User_Name == 'admin') {
                 if (_isLast) {
                     //删除按钮

@@ -11,7 +11,7 @@ class RefreshUI extends React.Component {
         this.timeOut = 1000 * 1;
         this.refreshInterval = undefined;
         this.doLoopRequest = this.doLoopRequest.bind(this);
-        this._doLoopCallback = this._doLoopCallback.bind(this);
+        this.doLoopCallback = this.doLoopCallback.bind(this);
         this.formatRefreshData = this.formatRefreshData.bind(this);
     }
 
@@ -36,7 +36,7 @@ class RefreshUI extends React.Component {
         return _data;
     }
 
-    _doLoopCallback(_json) {
+    doLoopCallback(_json) {
         if (_json) {
             this.setState({ refreshData: this.formatRefreshData(_json) });
         }
@@ -45,10 +45,7 @@ class RefreshUI extends React.Component {
 
     doLoopRequest() {
         this.refreshInterval = setTimeout(this.getRefreshDataFunc.bind(this, function (_json) {
-            if (_json) {
-                this.setState({ refreshData: this.formatRefreshData(_json) });
-            }
-            this.doLoopRequest();
+            this.doLoopCallback(_json);
         }.bind(this)), this.timeOut);
     }
 

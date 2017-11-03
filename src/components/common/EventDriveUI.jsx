@@ -7,6 +7,7 @@ class EventDriveUI extends React.Component {
         super(props);
         this.uiEventKey = undefined;
         this.uiDefaultValue = undefined;
+        this.refreshUI = this.refreshUI.bind(this);
     }
 
     componentWillMount() {
@@ -14,9 +15,13 @@ class EventDriveUI extends React.Component {
         if (this.uiEventKey) {
             EventProxy.on(this.uiEventKey, (_dispatch) => {
                 //_dispatch = { uiName: _dispatch.uiName, data: _dispatch.data, exParams: _dispatch.exParams }
-                this.setState(_dispatch);
+                this.refreshUI(_dispatch);
             });
         }
+    }
+
+    refreshUI(_dispatch) {
+        this.setState(_dispatch);
     }
 
     componentWillUnmount() {

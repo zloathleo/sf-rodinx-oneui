@@ -20,6 +20,8 @@ class App extends React.Component {
     }
 
     _init_config() {
+        toastr.options.positionClass = "toast-bottom-center";
+        toastr.options.timeOut = 1500;
         if (Constants.Values.Mock) {
             //模拟数据开关
             DataSim.init();

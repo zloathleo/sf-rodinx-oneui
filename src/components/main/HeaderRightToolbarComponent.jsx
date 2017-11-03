@@ -21,6 +21,7 @@ class HeaderRightToolbarComponent extends EventDriveUI {
     onClickUserSettingsButton(_detailData) {
         EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Visible });
         OverviewService.requestDeviceSettings(_detailData.name, 'u', 'm', function (json) {
+            toastr.success('Load UserSettings Success.');
             EventProxy.trigger(Constants.Event.MainUI_Key, {
                 uiName: Constants.Event.MainUI_Value_Overview_Detail_UserSettings,
                 data: json
@@ -157,13 +158,28 @@ class HeaderRightToolbarComponent extends EventDriveUI {
                 );
             } else {
                 return null;
-            } 
+            }
         } else if (this.state.uiName == Constants.Event.MainUI_Value_Overview_Detail_FactorySettings) {
             return (
                 <ul className="nav-header pull-right">
                     <li>
                         <button className="btn btn-square btn-danger" onClick={this.onClickSaveFactorySettingsButton} data-toggle="modal" data-target="#modal-fromleft">
                             <i className="fa fa-check"></i> <span>Save</span></button>
+                    </li>
+                </ul>
+            );
+        } else if (this.state.uiName == Constants.Event.MainUI_Value_Alarm) {
+            return (
+                <ul className="nav-header pull-right">
+                    <li>
+                        <input className="form-control" type="date" />
+                    </li>
+                    <li>
+                        <input className="form-control" type="time" />
+                    </li>
+                    <li>
+                        <button className="btn btn-square btn-primary"  >
+                            <i className="glyphicon glyphicon-cog"></i> <span className="hidden-xs hidden-sm">Search</span></button>
                     </li>
                 </ul>
             );

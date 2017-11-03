@@ -46,6 +46,7 @@ class HeaderComponent extends React.Component {
             let _password = md5(this.loginModalContent.inputPassword.value).toUpperCase();
             UserService.requestLogin(_password, function (json) {
                 AppState.User_Name = 'admin';
+                toastr.success('Login Success.');
                 this.setState({ updateCount: this.state.updateCount++ });
                 EventProxy.trigger(Constants.Event.MainUI_Key, {
                     uiName: Constants.Event.MainUI_Value_Overview

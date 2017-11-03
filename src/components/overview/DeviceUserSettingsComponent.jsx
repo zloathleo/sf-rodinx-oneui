@@ -3,11 +3,11 @@ import { Scrollbars } from 'react-custom-scrollbars';
 
 import Constants from '../../constants/Constants.jsx';
 import EventProxy from '../../utils/EventProxy.jsx';
-
+import Utils from '../../utils/Utils.jsx';
 import AppState from '../../states/AppState.jsx';
 
 import OverviewService from '../../services/OverviewService.jsx'
-
+import RefreshUI from '../common/RefreshUI.jsx';
 import Switcher from '../common/Switcher.jsx'
 import EnableSwitcher from '../common/EnableSwitcher.jsx'
 
@@ -144,8 +144,23 @@ class DeviceCHSettings extends React.Component {
                 let _selectedFile = _files[0];
                 console.log(_selectedFile);
 
-                OverviewService.requestUpdateTemplate(this.props.deviceName, this.props.name, _selectedFile, function (json) {
+                let _deviceName = this.props.deviceName;
+                let _chName = this.props.name;
+                OverviewService.requestUpdateTemplate(_deviceName, _chName, _selectedFile, function (json) {
                     console.log('ok:', json);
+                    toastr.success('Use Template Success.UI will Refresh...');
+
+                    setTimeout(function () {
+                        OverviewService.requestDeviceSettings(_deviceName, 'u', 'm', function (json) {
+                            EventProxy.trigger(Constants.Event.UserSettingsUI_Save_Success_Key, 'refresh');
+
+                            setTimeout(function () {
+                                EventProxy.trigger(Constants.Event.UserSettingsUI_Save_Success_Key, json);
+                                toastr.success('Refresh UserSettings Success.');
+                            }, 300);
+                        });
+                    }.bind(this), 2000);
+
                 }.bind(this));
             }
 
@@ -190,19 +205,19 @@ class DeviceCHSettings extends React.Component {
                                 <tr>
                                     <td className="text-right setting-table-item-label-padding" style={{ paddingRight: '20px' }} >Burner Type</td>
                                     <td className="text-right setting-table-item-padding" style={{ width: '60%' }}>
-                                        <Switcher ref={(_ref) => this.inputBurnerType = _ref} style={{ width: '100%' }} value={_ch.type} items={[{ display: 'IR', value: 'IR' }, { display: 'UV', value: 'UV' }]} />
+                                        {<Switcher ref={(_ref) => this.inputBurnerType = _ref} style={{ width: '100%' }} value={_ch.type} items={[{ display: 'IR', value: 'IR' }, { display: 'UV', value: 'UV' }]} />}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td className="text-right setting-table-item-label-padding" style={{ paddingRight: '20px' }} >Channel En</td>
                                     <td className="text-right setting-table-item-padding" style={{ width: '60%' }}>
-                                        <EnableSwitcher ref={(_ref) => this.inputChannelEnable = _ref} style={{ width: '100%' }} value={_ch.enable} />
+                                        {<Switcher ref={(_ref) => this.inputChannelEnable = _ref} style={{ width: '100%' }} value={_ch.enable} items={[{ display: 'Enable', value: 1 }, { display: 'Disable', value: 0 }]} />}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td className="text-right setting-table-item-label-padding" style={{ paddingRight: '20px' }} >File</td>
                                     <td className="text-right setting-table-item-padding" style={{ width: '60%' }}>
-                                        <Switcher ref={(_ref) => this.inputFile = _ref} style={{ width: '100%' }} value={_ch.file} items={[{ display: 'File A', value: 0 }, { display: 'File B', value: 1 }]} />
+                                        {<Switcher ref={(_ref) => this.inputFile = _ref} style={{ width: '100%' }} value={_ch.file} items={[{ display: 'File A', value: 0 }, { display: 'File B', value: 1 }]} />}
                                     </td>
                                 </tr>
                             </tbody>
@@ -242,7 +257,7 @@ class DeviceCHSettings extends React.Component {
     }
 }
 
-class DeviceUserSettingsComponent extends React.Component {
+class DeviceUserSettingsComponent extends RefreshUI {
 
     constructor(props) {
         super(props);
@@ -250,14 +265,20 @@ class DeviceUserSettingsComponent extends React.Component {
     }
 
     componentWillMount() {
+        super.componentWillMount();
         EventProxy.on(Constants.Event.UserSettingsUI_Save_Key, (_value) => {
             if (_value) {
                 this.save();
             }
         });
+
+        EventProxy.on(Constants.Event.UserSettingsUI_Save_Success_Key, (_data) => {
+            this.setState({ data: _data });
+        });
     }
 
     componentWillUnmount() {
+        super.componentWillUnmount();
         EventProxy.off(Constants.Event.UserSettingsUI_Save_Key);
     }
 
@@ -265,13 +286,65 @@ class DeviceUserSettingsComponent extends React.Component {
         this.ch1SettingsPanel.mergeData();
         this.ch2SettingsPanel.mergeData();
         let _data = this.props.data;
+        EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Visible });
         OverviewService.requestUpdateDeviceSettings(_data.name, 'u', _data, function (_json) {
-            console.log(_json);
+            // console.log(_json); 
+            toastr.success('Save UserSettings Success.UI will Refresh...');
+            EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Invisible });
+
+            setTimeout(function () {
+                OverviewService.requestDeviceSettings(_data.name, 'u', 'm', function (json) {
+                    EventProxy.trigger(Constants.Event.UserSettingsUI_Save_Success_Key, 'refresh');
+                    setTimeout(function () {
+                        EventProxy.trigger(Constants.Event.UserSettingsUI_Save_Success_Key, json);
+                        toastr.success('Refresh UserSettings Success.');
+                    }, 300);
+
+                });
+            }, 1000);
+
         });
     }
 
-    render() {
+    doLoopCallback(_json) {
+        let _detailData = this.props.data;
+        let _status_dex = _json.devices[_detailData.name];
+        let _status_values = Utils.parseState(_status_dex.status);
+        //offline则退到首页
+        if (_status_values.ch1lineonoff == 0 || _status_values.ch2lineonoff == 0) {
+            toastr.info('Device is Off Line.UI will return back.');
+            setTimeout(function () {
+                EventProxy.trigger(Constants.Event.MainUI_Key, {
+                    uiName: Constants.Event.MainUI_Value_Overview
+                });
+            }, 2000);
+            return;
+        }
+
+        if (_status_values.ch1change > 0 || _status_values.ch1change > 0) {
+            toastr.info('Device is changed.');
+            setTimeout(function () {
+                this.doLoopRequest();
+            }.bind(this), 2000);
+            return;
+        }
+        this.doLoopRequest();
+    }
+
+    formatRefreshData(_data) {
+        return undefined;
+    }
+
+    getRefreshDataFunc(_callback) {
         let _data = this.props.data;
+        OverviewService.requestServer(0, _data.name, _callback);
+    }
+
+    render() {
+        if (this.state.data && this.state.data == 'refresh') {
+            return null;
+        }
+        let _data = this.state.data ? this.state.data : this.props.data;
         return (
             <div className="main-content-padding animated bounceIn">
                 <Scrollbars renderTrackHorizontal={function () { return <div />; }} renderThumbHorizontal={function () { return <div />; }} style={{ height: Constants.UI.OverviewComponentContentHeight }}>

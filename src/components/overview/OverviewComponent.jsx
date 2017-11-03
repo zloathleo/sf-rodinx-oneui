@@ -87,6 +87,8 @@ class OverviewComponent extends RefreshUI {
     refreshAllOverview() {
         OverviewService.requestOverview(function (json) {
             this.setState({ data: json });
+
+            toastr.success('Refresh Overview Success.');
             EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Invisible });
             //刷新其他UI
             EventProxy.trigger(Constants.Event.MainUI_Key, { uiName: Constants.Event.MainUI_Value_Overview, data: json });
@@ -102,7 +104,7 @@ class OverviewComponent extends RefreshUI {
         if (!_overviewData || _overviewData.rows.length == 0) {
             _callback(null);
         } else {
-            OverviewService.requestServer(1, undefined, _callback);
+            OverviewService.requestServer(0, '', _callback);
         }
     }
 
@@ -112,6 +114,7 @@ class OverviewComponent extends RefreshUI {
             OverviewService.requestOverview(function (json) {
 
                 this.setState({ data: json });
+                toastr.success('Update Overview Success.');
                 EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Invisible });
                 //刷新其他UI
                 EventProxy.trigger(Constants.Event.MainUI_Key, { data: json });
