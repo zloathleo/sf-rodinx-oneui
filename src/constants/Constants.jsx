@@ -49,9 +49,9 @@ export default {
         LocalStorage_Server_URL: 'localStorage_server_url',
     },
     Values: {
-        Mock: true,
-        ServerUrl: '',
-        // ServerUrl: 'http://192.168.1.206:8080',
+        Mock: false,
+        // ServerUrl: '',
+        ServerUrl: 'http://192.168.1.210:80',
 
         Main_Is_Loading: 'main_is_loading',
         Main_Module_Login: 'LOGIN',

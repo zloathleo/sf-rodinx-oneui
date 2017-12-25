@@ -82,17 +82,27 @@ class HeaderRightToolbarComponent extends EventDriveUI {
 
     //配置com口和波特率
     onClickConfigLayoutButton(_overviewData) {
+
+
+
         OverviewService.requestPorts(function (json) {
             let _modalContent = <LayoutConfigModalContent ports={json} overviewData={_overviewData} ref={(_ref) => this.layoutConfigModalContent = _ref} />;
             let _okFunc = function () {
 
                 const _inputPort = this.layoutConfigModalContent.inputPort.value;
                 const _inputBoadRate = this.layoutConfigModalContent.inputBoadRate.value;
-                _overviewData.com = _inputPort;
-                _overviewData.baud_rate = parseInt(_inputBoadRate);
-                console.log('LayoutConfigModalContent _okFunc:', _overviewData);
-                //todo 
-                EventProxy.trigger(Constants.Event.Dashboard_Save_Key, 'com');
+                console.log(_inputPort + ':' + _inputBoadRate);
+
+                EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Visible });
+                OverviewService.requestUpdateOverviewV3(0, undefined, _inputPort, parseInt(_inputBoadRate), function (json) {
+
+                    this.setState({ data: json });
+                    toastr.success('Update Overview Success.');
+                    EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Invisible });
+                    //刷新其他UI
+                    EventProxy.trigger(Constants.Event.MainUI_Key, { data: json });
+
+                }.bind(this)); 
 
             }.bind(this);
             let _dispatch = {

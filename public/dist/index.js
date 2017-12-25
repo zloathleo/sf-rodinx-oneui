@@ -127,9 +127,9 @@ exports.default = {
                 LocalStorage_Server_URL: 'localStorage_server_url'
         },
         Values: {
-                Mock: true,
-                ServerUrl: '',
-                // ServerUrl: 'http://192.168.1.206:8080',
+                Mock: false,
+                // ServerUrl: '',
+                ServerUrl: 'http://192.168.1.210:80',
 
                 Main_Is_Loading: 'main_is_loading',
                 Main_Module_Login: 'LOGIN',
@@ -446,6 +446,22 @@ exports.default = {
     //查询Overview
     requestOverview: function requestOverview(_then) {
         _MyFetch2.default.fetch(this.ip + '/dashboard', { method: 'GET' }, _then);
+    },
+
+    //更新Overview v3
+    requestUpdateOverviewV3: function requestUpdateOverviewV3(command, row, com, baudrate, _then) {
+        var form = new URLSearchParams();
+        form.set('command', command);
+        if (row) {
+            form.set('row', row);
+        }
+        if (com) {
+            form.set('com', com);
+        }
+        if (baudrate) {
+            form.set('baudrate', baudrate);
+        }
+        _MyFetch2.default.fetch(this.ip + '/dashboard', { method: 'PATCH', body: form }, _then);
     },
 
     //更新Overview
@@ -16237,6 +16253,7 @@ var HeaderRightToolbarComponent = function (_EventDriveUI) {
     }, {
         key: 'onClickConfigLayoutButton',
         value: function onClickConfigLayoutButton(_overviewData) {
+
             _OverviewService2.default.requestPorts(function (json) {
                 var _this2 = this;
 
@@ -16247,11 +16264,17 @@ var HeaderRightToolbarComponent = function (_EventDriveUI) {
 
                     var _inputPort = this.layoutConfigModalContent.inputPort.value;
                     var _inputBoadRate = this.layoutConfigModalContent.inputBoadRate.value;
-                    _overviewData.com = _inputPort;
-                    _overviewData.baud_rate = parseInt(_inputBoadRate);
-                    console.log('LayoutConfigModalContent _okFunc:', _overviewData);
-                    //todo 
-                    _EventProxy2.default.trigger(_Constants2.default.Event.Dashboard_Save_Key, 'com');
+                    console.log(_inputPort + ':' + _inputBoadRate);
+
+                    _EventProxy2.default.trigger(_Constants2.default.Event.LoadUI_Key, { uiName: _Constants2.default.Event.LoadUI_Value_Visible });
+                    _OverviewService2.default.requestUpdateOverviewV3(0, undefined, _inputPort, parseInt(_inputBoadRate), function (json) {
+
+                        this.setState({ data: json });
+                        toastr.success('Update Overview Success.');
+                        _EventProxy2.default.trigger(_Constants2.default.Event.LoadUI_Key, { uiName: _Constants2.default.Event.LoadUI_Value_Invisible });
+                        //刷新其他UI
+                        _EventProxy2.default.trigger(_Constants2.default.Event.MainUI_Key, { data: json });
+                    }.bind(this));
                 }.bind(this);
                 var _dispatch = {
                     uiName: 'overview configuration',
@@ -16755,39 +16778,79 @@ var RemoveButtonPanel = function (_React$Component2) {
     return RemoveButtonPanel;
 }(_react2.default.Component);
 
+var AutoAssignButtonPanel = function (_React$Component3) {
+    _inherits(AutoAssignButtonPanel, _React$Component3);
+
+    function AutoAssignButtonPanel() {
+        _classCallCheck(this, AutoAssignButtonPanel);
+
+        return _possibleConstructorReturn(this, (AutoAssignButtonPanel.__proto__ || Object.getPrototypeOf(AutoAssignButtonPanel)).apply(this, arguments));
+    }
+
+    _createClass(AutoAssignButtonPanel, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'col-xs-6 col-sm-2 main-overview-item-padding', onClick: this.props.addCallback },
+                _react2.default.createElement(
+                    'a',
+                    { className: 'block block-link-hover3 text-center', href: '#', style: { marginBottom: '0px' } },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'block block-bordered', style: { marginBottom: '0px' } },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'block-content', style: { margin: '1px', textAlign: 'center', padding: '24px 0px' } },
+                            _react2.default.createElement('i', { className: 'fa fa-times-circle fa-2x', style: { padding: '0px', color: '#5c90d2' } }),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'font-w600 push-5-t' },
+                                this.props.title
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return AutoAssignButtonPanel;
+}(_react2.default.Component);
+
 var OverviewComponent = function (_RefreshUI) {
     _inherits(OverviewComponent, _RefreshUI);
 
     function OverviewComponent(props) {
         _classCallCheck(this, OverviewComponent);
 
-        var _this3 = _possibleConstructorReturn(this, (OverviewComponent.__proto__ || Object.getPrototypeOf(OverviewComponent)).call(this, props));
+        var _this4 = _possibleConstructorReturn(this, (OverviewComponent.__proto__ || Object.getPrototypeOf(OverviewComponent)).call(this, props));
 
-        _this3.updateCurrentOverview = _this3.updateCurrentOverview.bind(_this3);
-        _this3.refreshAllOverview = _this3.refreshAllOverview.bind(_this3);
+        _this4.updateCurrentOverview = _this4.updateCurrentOverview.bind(_this4);
+        _this4.refreshAllOverview = _this4.refreshAllOverview.bind(_this4);
 
-        _this3.renderRows = _this3.renderRows.bind(_this3);
-        _this3.renderColumns = _this3.renderColumns.bind(_this3);
+        _this4.renderRows = _this4.renderRows.bind(_this4);
+        _this4.renderColumns = _this4.renderColumns.bind(_this4);
 
-        _this3.clickAddDeviceButton = _this3.clickAddDeviceButton.bind(_this3);
-        _this3.clickAddRowButton = _this3.clickAddRowButton.bind(_this3);
-        _this3.clickRemoveItemButton = _this3.clickRemoveItemButton.bind(_this3);
-        _this3.clickRemoveLastRowButton = _this3.clickRemoveLastRowButton.bind(_this3);
-        return _this3;
+        _this4.clickAddDeviceButton = _this4.clickAddDeviceButton.bind(_this4);
+        _this4.clickAddRowButton = _this4.clickAddRowButton.bind(_this4);
+        _this4.clickRemoveItemButton = _this4.clickRemoveItemButton.bind(_this4);
+        _this4.clickRemoveLastRowButton = _this4.clickRemoveLastRowButton.bind(_this4);
+        return _this4;
     }
 
     _createClass(OverviewComponent, [{
         key: 'componentWillMount',
         value: function componentWillMount() {
-            var _this4 = this;
+            var _this5 = this;
 
             _get(OverviewComponent.prototype.__proto__ || Object.getPrototypeOf(OverviewComponent.prototype), 'componentWillMount', this).call(this);
             _EventProxy2.default.on(_Constants2.default.Event.Dashboard_Save_Key, function (_value) {
                 if (_value == 'com') {
                     //提交更新
-                    _this4.updateCurrentOverview();
+                    _this5.updateCurrentOverview();
                 } else if (_value == 'addr') {
-                    _this4.refreshAllOverview();
+                    _this5.refreshAllOverview();
                 }
             });
         }
@@ -16848,34 +16911,29 @@ var OverviewComponent = function (_RefreshUI) {
     }, {
         key: 'clickAddDeviceButton',
         value: function clickAddDeviceButton(row) {
-            var length = row.items.length;
-            var newItem = {
-                name: row.title + length,
-                addr: -1,
-                chs: [{
-                    name: "CH1"
-                }, {
-                    name: "CH2"
-                }]
-            };
-            row.items.push(newItem);
-            this.updateCurrentOverview();
+            console.log(row);
+            _EventProxy2.default.trigger(_Constants2.default.Event.LoadUI_Key, { uiName: _Constants2.default.Event.LoadUI_Value_Visible });
+            _OverviewService2.default.requestUpdateOverviewV3(3, row.title, undefined, undefined, function (json) {
+
+                this.setState({ data: json });
+                toastr.success('Update Overview Success.');
+                _EventProxy2.default.trigger(_Constants2.default.Event.LoadUI_Key, { uiName: _Constants2.default.Event.LoadUI_Value_Invisible });
+                //刷新其他UI
+                _EventProxy2.default.trigger(_Constants2.default.Event.MainUI_Key, { data: json });
+            }.bind(this));
         }
     }, {
         key: 'clickAddRowButton',
         value: function clickAddRowButton(rows) {
-            var length = rows.length;
-            if (length >= 22) {
-                alert('too many rows:' + length);
-            } else {
-                var newRow = {
-                    index: length,
-                    title: _Utils2.default.getCharForNumber(length),
-                    items: []
-                };
-                rows.push(newRow);
-                this.updateCurrentOverview();
-            }
+            _EventProxy2.default.trigger(_Constants2.default.Event.LoadUI_Key, { uiName: _Constants2.default.Event.LoadUI_Value_Visible });
+            _OverviewService2.default.requestUpdateOverviewV3(1, undefined, undefined, undefined, function (json) {
+
+                this.setState({ data: json });
+                toastr.success('Update Overview Success.');
+                _EventProxy2.default.trigger(_Constants2.default.Event.LoadUI_Key, { uiName: _Constants2.default.Event.LoadUI_Value_Invisible });
+                //刷新其他UI
+                _EventProxy2.default.trigger(_Constants2.default.Event.MainUI_Key, { data: json });
+            }.bind(this));
         }
     }, {
         key: 'clickRemoveItemButton',
@@ -16888,14 +16946,17 @@ var OverviewComponent = function (_RefreshUI) {
                 ' ?'
             );
             var _okFunc = function () {
-                console.log('ok');
-                var _rowIndex = _Utils2.default.getNumberForChar(_item.name);
-                var _columnIndex = _item.name.substring(1, 2);
+                var rowName = _item.name.substr(0, 1);
+                console.log('rowName:', rowName);
+                _EventProxy2.default.trigger(_Constants2.default.Event.LoadUI_Key, { uiName: _Constants2.default.Event.LoadUI_Value_Visible });
+                _OverviewService2.default.requestUpdateOverviewV3(4, rowName, undefined, undefined, function (json) {
 
-                var _overviewData = this.state.data;
-                var _items = _overviewData.rows[_rowIndex].items;
-                _items.pop();
-                this.updateCurrentOverview();
+                    this.setState({ data: json });
+                    toastr.success('Update Overview Success.');
+                    _EventProxy2.default.trigger(_Constants2.default.Event.LoadUI_Key, { uiName: _Constants2.default.Event.LoadUI_Value_Invisible });
+                    //刷新其他UI
+                    _EventProxy2.default.trigger(_Constants2.default.Event.MainUI_Key, { data: json });
+                }.bind(this));
             }.bind(this);
 
             var _dispatch = {
@@ -16911,8 +16972,8 @@ var OverviewComponent = function (_RefreshUI) {
     }, {
         key: 'clickRemoveLastRowButton',
         value: function clickRemoveLastRowButton(rows) {
-            var length = rows.length;
-            var _lastRowName = _Utils2.default.getCharForNumber(length - 1);
+            var _lastRow = rows[rows.length - 1];
+            var _lastRowName = _lastRow.title;
 
             var _modalContent = _react2.default.createElement(
                 'div',
@@ -16922,8 +16983,16 @@ var OverviewComponent = function (_RefreshUI) {
                 ' ?'
             );
             var _okFunc = function () {
-                rows.pop();
-                this.updateCurrentOverview();
+                console.log('rowName:', _lastRowName);
+                _EventProxy2.default.trigger(_Constants2.default.Event.LoadUI_Key, { uiName: _Constants2.default.Event.LoadUI_Value_Visible });
+                _OverviewService2.default.requestUpdateOverviewV3(2, _lastRowName, undefined, undefined, function (json) {
+
+                    this.setState({ data: json });
+                    toastr.success('Update Overview Success.');
+                    _EventProxy2.default.trigger(_Constants2.default.Event.LoadUI_Key, { uiName: _Constants2.default.Event.LoadUI_Value_Invisible });
+                    //刷新其他UI
+                    _EventProxy2.default.trigger(_Constants2.default.Event.MainUI_Key, { data: json });
+                }.bind(this));
             }.bind(this);
 
             var _dispatch = {
@@ -16935,6 +17004,19 @@ var OverviewComponent = function (_RefreshUI) {
                 }
             };
             _EventProxy2.default.trigger(_Constants2.default.Event.ModalUI_Key, _dispatch);
+        }
+    }, {
+        key: 'clickAutoAssignButton',
+        value: function clickAutoAssignButton() {
+            _EventProxy2.default.trigger(_Constants2.default.Event.LoadUI_Key, { uiName: _Constants2.default.Event.LoadUI_Value_Visible });
+            _OverviewService2.default.requestUpdateOverviewV3(5, undefined, undefined, undefined, function (json) {
+
+                this.setState({ data: json });
+                toastr.success('Update Overview Success.');
+                _EventProxy2.default.trigger(_Constants2.default.Event.LoadUI_Key, { uiName: _Constants2.default.Event.LoadUI_Value_Invisible });
+                //刷新其他UI
+                _EventProxy2.default.trigger(_Constants2.default.Event.MainUI_Key, { data: json });
+            }.bind(this));
         }
 
         ///render
@@ -16983,7 +17065,8 @@ var OverviewComponent = function (_RefreshUI) {
                         'div',
                         { className: 'row main-overview-content-padding-margin' },
                         _react2.default.createElement(AppendButtonPanel, { title: 'Add Row', addCallback: this.clickAddRowButton.bind(this, rows) }),
-                        _react2.default.createElement(RemoveButtonPanel, { title: 'Remove Last Row', addCallback: this.clickRemoveLastRowButton.bind(this, rows) })
+                        _react2.default.createElement(RemoveButtonPanel, { title: 'Remove Last Row', addCallback: this.clickRemoveLastRowButton.bind(this, rows) }),
+                        _react2.default.createElement(AutoAssignButtonPanel, { title: 'Auto Assign', addCallback: this.clickAutoAssignButton.bind(this) })
                     ));
                 }
             }

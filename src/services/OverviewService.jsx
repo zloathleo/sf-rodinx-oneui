@@ -19,6 +19,22 @@ export default {
         MyFetch.fetch(this.ip + '/dashboard', { method: 'GET' }, _then);
     },
 
+    //更新Overview v3
+    requestUpdateOverviewV3: function (command, row, com, baudrate, _then) {
+        var form = new URLSearchParams();
+        form.set('command', command);
+        if (row) {
+            form.set('row', row);
+        }
+        if (com) {
+            form.set('com', com);
+        }
+        if (baudrate) {
+            form.set('baudrate', baudrate);
+        }
+        MyFetch.fetch(this.ip + '/dashboard', { method: 'PATCH', body: form }, _then);
+    },
+
     //更新Overview
     requestUpdateOverview: function (obj, _then) {
         var form = new URLSearchParams();

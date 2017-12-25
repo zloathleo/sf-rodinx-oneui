@@ -46,13 +46,30 @@ class RemoveButtonPanel extends React.Component {
     }
 }
 
+class AutoAssignButtonPanel extends React.Component {
+    render() {
+        return (
+            <div className="col-xs-6 col-sm-2 main-overview-item-padding" onClick={this.props.addCallback} >
+                <a className="block block-link-hover3 text-center" href="#" style={{ marginBottom: '0px' }}>
+                    <div className="block block-bordered" style={{ marginBottom: '0px' }}>
+                        <div className="block-content" style={{ margin: '1px', textAlign: 'center', padding: '24px 0px' }}>
+                            <i className="fa fa-times-circle fa-2x" style={{ padding: '0px', color: '#5c90d2' }}></i>
+                            <div className="font-w600 push-5-t">{this.props.title}</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        )
+    }
+}
+
 class OverviewComponent extends RefreshUI {
     constructor(props) {
         super(props);
 
         this.updateCurrentOverview = this.updateCurrentOverview.bind(this);
         this.refreshAllOverview = this.refreshAllOverview.bind(this);
-        
+
         this.renderRows = this.renderRows.bind(this);
         this.renderColumns = this.renderColumns.bind(this);
 
@@ -123,49 +140,47 @@ class OverviewComponent extends RefreshUI {
     }
 
     clickAddDeviceButton(row) {
-        let length = row.items.length;
-        let newItem = {
-            name: row.title + length,
-            addr: -1,
-            chs: [
-                {
-                    name: "CH1"
-                },
-                {
-                    name: "CH2"
-                }
-            ]
-        }
-        row.items.push(newItem);
-        this.updateCurrentOverview();
+        console.log(row);
+        EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Visible });
+        OverviewService.requestUpdateOverviewV3(3, row.title, undefined, undefined, function (json) {
+
+            this.setState({ data: json });
+            toastr.success('Update Overview Success.');
+            EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Invisible });
+            //刷新其他UI
+            EventProxy.trigger(Constants.Event.MainUI_Key, { data: json });
+
+        }.bind(this));
     }
 
     clickAddRowButton(rows) {
-        let length = rows.length;
-        if (length >= 22) {
-            alert('too many rows:' + length);
-        } else {
-            let newRow = {
-                index: length,
-                title: Utils.getCharForNumber(length),
-                items: []
-            }
-            rows.push(newRow);
-            this.updateCurrentOverview();
-        }
+        EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Visible });
+        OverviewService.requestUpdateOverviewV3(1, undefined, undefined, undefined, function (json) {
+
+            this.setState({ data: json });
+            toastr.success('Update Overview Success.');
+            EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Invisible });
+            //刷新其他UI
+            EventProxy.trigger(Constants.Event.MainUI_Key, { data: json });
+
+        }.bind(this));
     }
 
     clickRemoveItemButton(_item) {
         let _modalContent = <div>Delete Device {_item.name} ?</div>;
         let _okFunc = function () {
-            console.log('ok');
-            let _rowIndex = Utils.getNumberForChar(_item.name);
-            let _columnIndex = _item.name.substring(1, 2);
+            let rowName = _item.name.substr(0, 1);
+            console.log('rowName:', rowName);
+            EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Visible });
+            OverviewService.requestUpdateOverviewV3(4, rowName, undefined, undefined, function (json) {
 
-            let _overviewData = this.state.data;
-            let _items = _overviewData.rows[_rowIndex].items;
-            _items.pop();
-            this.updateCurrentOverview();
+                this.setState({ data: json });
+                toastr.success('Update Overview Success.');
+                EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Invisible });
+                //刷新其他UI
+                EventProxy.trigger(Constants.Event.MainUI_Key, { data: json });
+
+            }.bind(this));
         }.bind(this);
 
         let _dispatch = {
@@ -180,13 +195,22 @@ class OverviewComponent extends RefreshUI {
     }
 
     clickRemoveLastRowButton(rows) {
-        let length = rows.length;
-        let _lastRowName = Utils.getCharForNumber(length - 1);
+        let _lastRow = rows[rows.length - 1];
+        let _lastRowName = _lastRow.title;
 
         let _modalContent = <div>Remove Row {_lastRowName} ?</div>;
         let _okFunc = function () {
-            rows.pop();
-            this.updateCurrentOverview();
+            console.log('rowName:', _lastRowName);
+            EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Visible });
+            OverviewService.requestUpdateOverviewV3(2, _lastRowName, undefined, undefined, function (json) {
+
+                this.setState({ data: json });
+                toastr.success('Update Overview Success.');
+                EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Invisible });
+                //刷新其他UI
+                EventProxy.trigger(Constants.Event.MainUI_Key, { data: json });
+
+            }.bind(this));
         }.bind(this);
 
         let _dispatch = {
@@ -198,6 +222,19 @@ class OverviewComponent extends RefreshUI {
             }
         }
         EventProxy.trigger(Constants.Event.ModalUI_Key, _dispatch);
+    }
+
+    clickAutoAssignButton() {
+        EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Visible });
+        OverviewService.requestUpdateOverviewV3(5, undefined, undefined, undefined, function (json) {
+
+            this.setState({ data: json });
+            toastr.success('Update Overview Success.');
+            EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Invisible });
+            //刷新其他UI
+            EventProxy.trigger(Constants.Event.MainUI_Key, { data: json });
+
+        }.bind(this));
     }
 
     ///render
@@ -239,6 +276,7 @@ class OverviewComponent extends RefreshUI {
                 existRows.push(<div className="row main-overview-content-padding-margin">
                     <AppendButtonPanel title='Add Row' addCallback={this.clickAddRowButton.bind(this, rows)} />
                     <RemoveButtonPanel title='Remove Last Row' addCallback={this.clickRemoveLastRowButton.bind(this, rows)} />
+                    <AutoAssignButtonPanel title='Auto Assign' addCallback={this.clickAutoAssignButton.bind(this)} />
                 </div>);
             }
 
