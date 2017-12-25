@@ -52,6 +52,14 @@ export default {
         MyFetch.fetch(this.ip + '/dashboard/' + deviceName, { method: 'PATCH', body: form }, _then);
     },
 
+    //更改地址
+    requestUpdateDeviceAddressV3: function (addr, _then) {
+        var form = new URLSearchParams();
+        form.set('addr', addr);
+
+        MyFetch.fetch(this.ip + '/address', { method: 'PUT', body: form }, _then);
+    },
+
     //查询device detail
     requestDeviceDetail: function (deviceName, _then) {
         MyFetch.fetch(this.ip + '/detail/' + deviceName, { method: 'GET' }, _then);

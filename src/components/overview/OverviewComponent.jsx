@@ -10,6 +10,7 @@ import OverviewService from '../../services/OverviewService.jsx';
 import RefreshUI from '../common/RefreshUI.jsx';
 import ItemComponent from './ItemComponent.jsx';
 import DeviceDetailComponent from './DeviceDetailComponent.jsx';
+import AddressSetModalContent from './AddressSetModalContent.jsx'
 
 //Add item
 class AppendButtonPanel extends React.Component {
@@ -53,7 +54,24 @@ class AutoAssignButtonPanel extends React.Component {
                 <a className="block block-link-hover3 text-center" href="#" style={{ marginBottom: '0px' }}>
                     <div className="block block-bordered" style={{ marginBottom: '0px' }}>
                         <div className="block-content" style={{ margin: '1px', textAlign: 'center', padding: '24px 0px' }}>
-                            <i className="fa fa-times-circle fa-2x" style={{ padding: '0px', color: '#5c90d2' }}></i>
+                            <i className="fa fa-th fa-2x" style={{ padding: '0px', color: '#5c90d2' }}></i>
+                            <div className="font-w600 push-5-t">{this.props.title}</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        )
+    }
+}
+
+class SettingAddressButtonPanel extends React.Component {
+    render() {
+        return (
+            <div className="col-xs-6 col-sm-2 main-overview-item-padding" onClick={this.props.addCallback} data-toggle="modal" data-target="#modal-fromleft" >
+                <a className="block block-link-hover3 text-center" href="#" style={{ marginBottom: '0px' }}>
+                    <div className="block block-bordered" style={{ marginBottom: '0px' }}>
+                        <div className="block-content" style={{ margin: '1px', textAlign: 'center', padding: '24px 0px' }}>
+                            <i className="fa fa-link fa-2x" style={{ padding: '0px', color: '#5c90d2' }}></i>
                             <div className="font-w600 push-5-t">{this.props.title}</div>
                         </div>
                     </div>
@@ -237,6 +255,27 @@ class OverviewComponent extends RefreshUI {
         }.bind(this));
     }
 
+    clickSettingAddressButton() {
+        let _modalContent = <AddressSetModalContent ref={(_ref) => this.addressSetModalContent = _ref} />;
+
+        let _okFunc = function () {
+            OverviewService.requestUpdateDeviceAddressV3(this.addressSetModalContent.inputAddress.value(), function (json) {
+                console.log('AddressSetModalContent ok');
+                EventProxy.trigger(Constants.Event.Dashboard_Save_Key, 'addr');
+            });
+
+        }.bind(this);
+        let _dispatch = {
+            uiName: 'AddressSetModalContent',
+            data: { title: 'Address Settings' },
+            exParams: {
+                content: _modalContent,
+                okFunc: _okFunc
+            }
+        }
+        EventProxy.trigger(Constants.Event.ModalUI_Key, _dispatch);
+    }
+
     ///render
     renderColumns(row) {
         let items = row.items;
@@ -276,6 +315,7 @@ class OverviewComponent extends RefreshUI {
                 existRows.push(<div className="row main-overview-content-padding-margin">
                     <AppendButtonPanel title='Add Row' addCallback={this.clickAddRowButton.bind(this, rows)} />
                     <RemoveButtonPanel title='Remove Last Row' addCallback={this.clickRemoveLastRowButton.bind(this, rows)} />
+                    <SettingAddressButtonPanel title='Setting Address' addCallback={this.clickSettingAddressButton.bind(this)} />
                     <AutoAssignButtonPanel title='Auto Assign' addCallback={this.clickAutoAssignButton.bind(this)} />
                 </div>);
             }

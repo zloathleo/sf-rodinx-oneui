@@ -290,7 +290,7 @@ class CHDetail extends React.Component {
         let _text = this.props.name == 'CH1' ? Utils.renderCh1Text(_status_values) : Utils.renderCh2Text(_status_values);
         let _disable = this.props.name == 'CH1' ? _status_values.ch1dis : _status_values.ch2dis;
         return (
-            <div className="col-xs-12 col-sm-6" style={{ padding: '0px 0px 0px 0px' }} >
+            <div className="col-sm-12 col-md-6 " style={{ padding: '0px 0px 0px 0px' }} >
                 <div className="block block-bordered end-block-margin-bottom">
                     <div className="block-header bg-gray-lighter main-content-item-header">
                         <ul className="block-options">

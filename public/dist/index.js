@@ -129,7 +129,7 @@ exports.default = {
         Values: {
                 Mock: false,
                 // ServerUrl: '',
-                ServerUrl: 'http://192.168.1.210:80',
+                ServerUrl: 'http://192.168.1.173:80',
 
                 Main_Is_Loading: 'main_is_loading',
                 Main_Module_Login: 'LOGIN',
@@ -479,6 +479,14 @@ exports.default = {
         form.set('d2', dec2);
 
         _MyFetch2.default.fetch(this.ip + '/dashboard/' + deviceName, { method: 'PATCH', body: form }, _then);
+    },
+
+    //更改地址
+    requestUpdateDeviceAddressV3: function requestUpdateDeviceAddressV3(addr, _then) {
+        var form = new URLSearchParams();
+        form.set('addr', addr);
+
+        _MyFetch2.default.fetch(this.ip + '/address', { method: 'PUT', body: form }, _then);
     },
 
     //查询device detail
@@ -1912,7 +1920,7 @@ var CHDetail = function (_React$Component5) {
             var _disable = this.props.name == 'CH1' ? _status_values.ch1dis : _status_values.ch2dis;
             return _react2.default.createElement(
                 'div',
-                { className: 'col-xs-12 col-sm-6', style: { padding: '0px 0px 0px 0px' } },
+                { className: 'col-sm-12 col-md-6 ', style: { padding: '0px 0px 0px 0px' } },
                 _react2.default.createElement(
                     'div',
                     { className: 'block block-bordered end-block-margin-bottom' },
@@ -16689,6 +16697,10 @@ var _DeviceDetailComponent = __webpack_require__(19);
 
 var _DeviceDetailComponent2 = _interopRequireDefault(_DeviceDetailComponent);
 
+var _AddressSetModalContent = __webpack_require__(93);
+
+var _AddressSetModalContent2 = _interopRequireDefault(_AddressSetModalContent);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -16802,7 +16814,7 @@ var AutoAssignButtonPanel = function (_React$Component3) {
                         _react2.default.createElement(
                             'div',
                             { className: 'block-content', style: { margin: '1px', textAlign: 'center', padding: '24px 0px' } },
-                            _react2.default.createElement('i', { className: 'fa fa-times-circle fa-2x', style: { padding: '0px', color: '#5c90d2' } }),
+                            _react2.default.createElement('i', { className: 'fa fa-th fa-2x', style: { padding: '0px', color: '#5c90d2' } }),
                             _react2.default.createElement(
                                 'div',
                                 { className: 'font-w600 push-5-t' },
@@ -16818,39 +16830,79 @@ var AutoAssignButtonPanel = function (_React$Component3) {
     return AutoAssignButtonPanel;
 }(_react2.default.Component);
 
+var SettingAddressButtonPanel = function (_React$Component4) {
+    _inherits(SettingAddressButtonPanel, _React$Component4);
+
+    function SettingAddressButtonPanel() {
+        _classCallCheck(this, SettingAddressButtonPanel);
+
+        return _possibleConstructorReturn(this, (SettingAddressButtonPanel.__proto__ || Object.getPrototypeOf(SettingAddressButtonPanel)).apply(this, arguments));
+    }
+
+    _createClass(SettingAddressButtonPanel, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'col-xs-6 col-sm-2 main-overview-item-padding', onClick: this.props.addCallback, 'data-toggle': 'modal', 'data-target': '#modal-fromleft' },
+                _react2.default.createElement(
+                    'a',
+                    { className: 'block block-link-hover3 text-center', href: '#', style: { marginBottom: '0px' } },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'block block-bordered', style: { marginBottom: '0px' } },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'block-content', style: { margin: '1px', textAlign: 'center', padding: '24px 0px' } },
+                            _react2.default.createElement('i', { className: 'fa fa-link fa-2x', style: { padding: '0px', color: '#5c90d2' } }),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'font-w600 push-5-t' },
+                                this.props.title
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return SettingAddressButtonPanel;
+}(_react2.default.Component);
+
 var OverviewComponent = function (_RefreshUI) {
     _inherits(OverviewComponent, _RefreshUI);
 
     function OverviewComponent(props) {
         _classCallCheck(this, OverviewComponent);
 
-        var _this4 = _possibleConstructorReturn(this, (OverviewComponent.__proto__ || Object.getPrototypeOf(OverviewComponent)).call(this, props));
+        var _this5 = _possibleConstructorReturn(this, (OverviewComponent.__proto__ || Object.getPrototypeOf(OverviewComponent)).call(this, props));
 
-        _this4.updateCurrentOverview = _this4.updateCurrentOverview.bind(_this4);
-        _this4.refreshAllOverview = _this4.refreshAllOverview.bind(_this4);
+        _this5.updateCurrentOverview = _this5.updateCurrentOverview.bind(_this5);
+        _this5.refreshAllOverview = _this5.refreshAllOverview.bind(_this5);
 
-        _this4.renderRows = _this4.renderRows.bind(_this4);
-        _this4.renderColumns = _this4.renderColumns.bind(_this4);
+        _this5.renderRows = _this5.renderRows.bind(_this5);
+        _this5.renderColumns = _this5.renderColumns.bind(_this5);
 
-        _this4.clickAddDeviceButton = _this4.clickAddDeviceButton.bind(_this4);
-        _this4.clickAddRowButton = _this4.clickAddRowButton.bind(_this4);
-        _this4.clickRemoveItemButton = _this4.clickRemoveItemButton.bind(_this4);
-        _this4.clickRemoveLastRowButton = _this4.clickRemoveLastRowButton.bind(_this4);
-        return _this4;
+        _this5.clickAddDeviceButton = _this5.clickAddDeviceButton.bind(_this5);
+        _this5.clickAddRowButton = _this5.clickAddRowButton.bind(_this5);
+        _this5.clickRemoveItemButton = _this5.clickRemoveItemButton.bind(_this5);
+        _this5.clickRemoveLastRowButton = _this5.clickRemoveLastRowButton.bind(_this5);
+        return _this5;
     }
 
     _createClass(OverviewComponent, [{
         key: 'componentWillMount',
         value: function componentWillMount() {
-            var _this5 = this;
+            var _this6 = this;
 
             _get(OverviewComponent.prototype.__proto__ || Object.getPrototypeOf(OverviewComponent.prototype), 'componentWillMount', this).call(this);
             _EventProxy2.default.on(_Constants2.default.Event.Dashboard_Save_Key, function (_value) {
                 if (_value == 'com') {
                     //提交更新
-                    _this5.updateCurrentOverview();
+                    _this6.updateCurrentOverview();
                 } else if (_value == 'addr') {
-                    _this5.refreshAllOverview();
+                    _this6.refreshAllOverview();
                 }
             });
         }
@@ -17018,6 +17070,31 @@ var OverviewComponent = function (_RefreshUI) {
                 _EventProxy2.default.trigger(_Constants2.default.Event.MainUI_Key, { data: json });
             }.bind(this));
         }
+    }, {
+        key: 'clickSettingAddressButton',
+        value: function clickSettingAddressButton() {
+            var _this7 = this;
+
+            var _modalContent = _react2.default.createElement(_AddressSetModalContent2.default, { ref: function ref(_ref) {
+                    return _this7.addressSetModalContent = _ref;
+                } });
+
+            var _okFunc = function () {
+                _OverviewService2.default.requestUpdateDeviceAddressV3(this.addressSetModalContent.inputAddress.value(), function (json) {
+                    console.log('AddressSetModalContent ok');
+                    _EventProxy2.default.trigger(_Constants2.default.Event.Dashboard_Save_Key, 'addr');
+                });
+            }.bind(this);
+            var _dispatch = {
+                uiName: 'AddressSetModalContent',
+                data: { title: 'Address Settings' },
+                exParams: {
+                    content: _modalContent,
+                    okFunc: _okFunc
+                }
+            };
+            _EventProxy2.default.trigger(_Constants2.default.Event.ModalUI_Key, _dispatch);
+        }
 
         ///render
 
@@ -17066,6 +17143,7 @@ var OverviewComponent = function (_RefreshUI) {
                         { className: 'row main-overview-content-padding-margin' },
                         _react2.default.createElement(AppendButtonPanel, { title: 'Add Row', addCallback: this.clickAddRowButton.bind(this, rows) }),
                         _react2.default.createElement(RemoveButtonPanel, { title: 'Remove Last Row', addCallback: this.clickRemoveLastRowButton.bind(this, rows) }),
+                        _react2.default.createElement(SettingAddressButtonPanel, { title: 'Setting Address', addCallback: this.clickSettingAddressButton.bind(this) }),
                         _react2.default.createElement(AutoAssignButtonPanel, { title: 'Auto Assign', addCallback: this.clickAutoAssignButton.bind(this) })
                     ));
                 }
@@ -17227,39 +17305,34 @@ var ItemComponent = function (_React$Component2) {
         return _this3;
     }
 
-    //设置地址
+    // //设置地址
+    // onClickSetAddressButton(_item, _event) {
+    //     if (AppState.User_Name == 'admin') {
+    //         let _modalContent = <AddressSetModalContent ref={(_ref) => this.addressSetModalContent = _ref} data={_item} />;
 
+    //         let _okFunc = function () {
+
+    //             //todo
+    //             OverviewService.requestUpdateDeviceAddress(_item.name, this.addressSetModalContent.inputAddress.value(), '', '', function (json) {
+    //                 console.log('AddressSetModalContent ok');
+    //                 EventProxy.trigger(Constants.Event.Dashboard_Save_Key, 'addr');
+
+    //             });
+
+    //         }.bind(this);
+    //         let _dispatch = {
+    //             uiName: 'AddressSetModalContent',
+    //             data: { title: 'Device ' + _item.name + ' Settings' },
+    //             exParams: {
+    //                 content: _modalContent,
+    //                 okFunc: _okFunc
+    //             }
+    //         }
+    //         EventProxy.trigger(Constants.Event.ModalUI_Key, _dispatch);
+    //     }
+    // }
 
     _createClass(ItemComponent, [{
-        key: 'onClickSetAddressButton',
-        value: function onClickSetAddressButton(_item, _event) {
-            var _this4 = this;
-
-            if (_AppState2.default.User_Name == 'admin') {
-                var _modalContent = _react2.default.createElement(AddressSetModalContent, { ref: function ref(_ref) {
-                        return _this4.addressSetModalContent = _ref;
-                    }, data: _item });
-
-                var _okFunc = function () {
-
-                    //todo
-                    _OverviewService2.default.requestUpdateDeviceAddress(_item.name, this.addressSetModalContent.inputAddress.value(), '', '', function (json) {
-                        console.log('AddressSetModalContent ok');
-                        _EventProxy2.default.trigger(_Constants2.default.Event.Dashboard_Save_Key, 'addr');
-                    });
-                }.bind(this);
-                var _dispatch = {
-                    uiName: 'AddressSetModalContent',
-                    data: { title: 'Device ' + _item.name + ' Settings' },
-                    exParams: {
-                        content: _modalContent,
-                        okFunc: _okFunc
-                    }
-                };
-                _EventProxy2.default.trigger(_Constants2.default.Event.ModalUI_Key, _dispatch);
-            }
-        }
-    }, {
         key: 'onClickRemoveItem',
         value: function onClickRemoveItem(_item, _event) {
             this.props.parent.clickRemoveItemButton(_item);
@@ -17270,13 +17343,13 @@ var ItemComponent = function (_React$Component2) {
     }, {
         key: 'clickItemChanged',
         value: function clickItemChanged(_item, _event) {
-            var _this5 = this;
+            var _this4 = this;
 
             //
             console.log('clickItemChanged:', _item);
             if (_AppState2.default.User_Name == 'admin') {
                 var _modalContent = _react2.default.createElement(_DeviceChangeModalContent2.default, { ref: function ref(_ref) {
-                        return _this5.deviceChangeModalContent = _ref;
+                        return _this4.deviceChangeModalContent = _ref;
                     } });
                 var _okFunc = function () {
 
@@ -17319,7 +17392,7 @@ var ItemComponent = function (_React$Component2) {
                     _EventProxy2.default.trigger(_Constants2.default.Event.LoadUI_Key, { uiName: _Constants2.default.Event.LoadUI_Value_Invisible });
                 }.bind(this));
             } else {
-                this.onClickSetAddressButton(_item, undefined);
+                // this.onClickSetAddressButton(_item, undefined);
             }
         }
     }, {
@@ -17468,7 +17541,7 @@ var ItemComponent = function (_React$Component2) {
             if (_AppState2.default.User_Name == 'admin') {
                 _titleContent = _react2.default.createElement(
                     'a',
-                    { className: 'link-effect', href: '#', 'data-toggle': 'modal', 'data-target': '#modal-fromleft', onClick: this.onClickSetAddressButton.bind(this, _item) },
+                    { className: 'link-effect', href: '#', onClick: this.onClickItem.bind(this, _item) },
                     _react2.default.createElement(
                         'span',
                         { className: 'block-title' },
@@ -17484,7 +17557,7 @@ var ItemComponent = function (_React$Component2) {
             } else {
                 _titleContent = _react2.default.createElement(
                     'a',
-                    { className: 'link-effect', href: '#' },
+                    { className: 'link-effect', href: '#', onClick: this.onClickItem.bind(this, _item) },
                     _react2.default.createElement(
                         'span',
                         { className: 'block-title' },
@@ -23555,6 +23628,106 @@ module.exports = LoadingComponent;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 84 */,
+/* 85 */,
+/* 86 */,
+/* 87 */,
+/* 88 */,
+/* 89 */,
+/* 90 */,
+/* 91 */,
+/* 92 */,
+/* 93 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _ValueInput = __webpack_require__(64);
+
+var _ValueInput2 = _interopRequireDefault(_ValueInput);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AddressSetModalContent = function (_React$Component) {
+    _inherits(AddressSetModalContent, _React$Component);
+
+    function AddressSetModalContent() {
+        _classCallCheck(this, AddressSetModalContent);
+
+        return _possibleConstructorReturn(this, (AddressSetModalContent.__proto__ || Object.getPrototypeOf(AddressSetModalContent)).apply(this, arguments));
+    }
+
+    _createClass(AddressSetModalContent, [{
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            var _addr = this.props.addr;
+            if (!_addr) {
+                _addr = 0;
+            }
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'div',
+                    { className: 'form-group' },
+                    _react2.default.createElement(
+                        'label',
+                        { className: 'col-xs-12' },
+                        'Address'
+                    ),
+                    _react2.default.createElement(_ValueInput2.default, { ref: function ref(_ref) {
+                            return _this2.inputAddress = _ref;
+                        }, className: 'form-control', value: _addr, type: 'number', name: 'address', placeholder: 'Enter the Device Address..' })
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'form-group' },
+                    _react2.default.createElement(
+                        'label',
+                        { className: 'col-xs-12' },
+                        'CH1 Description'
+                    ),
+                    _react2.default.createElement('input', { ref: function ref(_ref) {
+                            return _this2.inputCh1Desc = _ref;
+                        }, className: 'form-control', type: 'text', name: 'ch1-description', placeholder: 'Enter CH1 Description..' })
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'form-group' },
+                    _react2.default.createElement(
+                        'label',
+                        { className: 'col-xs-12' },
+                        'CH2 Description'
+                    ),
+                    _react2.default.createElement('input', { ref: function ref(_ref) {
+                            return _this2.inputCh2Desc = _ref;
+                        }, className: 'form-control', type: 'text', name: 'ch2-description', placeholder: 'Enter CH2 Description..' })
+                )
+            );
+        }
+    }]);
+
+    return AddressSetModalContent;
+}(_react2.default.Component);
+
+module.exports = AddressSetModalContent;
 
 /***/ })
 /******/ ]);

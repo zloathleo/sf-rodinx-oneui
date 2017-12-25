@@ -46,32 +46,32 @@ class ItemComponent extends React.Component {
         this.onClickRemoveItem = this.onClickRemoveItem.bind(this);
     }
 
-    //设置地址
-    onClickSetAddressButton(_item, _event) {
-        if (AppState.User_Name == 'admin') {
-            let _modalContent = <AddressSetModalContent ref={(_ref) => this.addressSetModalContent = _ref} data={_item} />;
- 
-            let _okFunc = function () {
+    // //设置地址
+    // onClickSetAddressButton(_item, _event) {
+    //     if (AppState.User_Name == 'admin') {
+    //         let _modalContent = <AddressSetModalContent ref={(_ref) => this.addressSetModalContent = _ref} data={_item} />;
 
-                //todo
-                OverviewService.requestUpdateDeviceAddress(_item.name, this.addressSetModalContent.inputAddress.value(), '', '', function (json) {
-                    console.log('AddressSetModalContent ok');
-                    EventProxy.trigger(Constants.Event.Dashboard_Save_Key, 'addr');
+    //         let _okFunc = function () {
 
-                });
+    //             //todo
+    //             OverviewService.requestUpdateDeviceAddress(_item.name, this.addressSetModalContent.inputAddress.value(), '', '', function (json) {
+    //                 console.log('AddressSetModalContent ok');
+    //                 EventProxy.trigger(Constants.Event.Dashboard_Save_Key, 'addr');
 
-            }.bind(this);
-            let _dispatch = {
-                uiName: 'AddressSetModalContent',
-                data: { title: 'Device ' + _item.name + ' Settings' },
-                exParams: {
-                    content: _modalContent,
-                    okFunc: _okFunc
-                }
-            }
-            EventProxy.trigger(Constants.Event.ModalUI_Key, _dispatch);
-        }
-    }
+    //             });
+
+    //         }.bind(this);
+    //         let _dispatch = {
+    //             uiName: 'AddressSetModalContent',
+    //             data: { title: 'Device ' + _item.name + ' Settings' },
+    //             exParams: {
+    //                 content: _modalContent,
+    //                 okFunc: _okFunc
+    //             }
+    //         }
+    //         EventProxy.trigger(Constants.Event.ModalUI_Key, _dispatch);
+    //     }
+    // }
 
     onClickRemoveItem(_item, _event) {
         this.props.parent.clickRemoveItemButton(_item);
@@ -122,7 +122,7 @@ class ItemComponent extends React.Component {
                 EventProxy.trigger(Constants.Event.LoadUI_Key, { uiName: Constants.Event.LoadUI_Value_Invisible });
             }.bind(this));
         } else {
-            this.onClickSetAddressButton(_item, undefined);
+            // this.onClickSetAddressButton(_item, undefined);
         }
     }
 
@@ -219,12 +219,12 @@ class ItemComponent extends React.Component {
 
         let _titleContent = null;
         if (AppState.User_Name == 'admin') {
-            _titleContent = (<a className="link-effect" href="#" data-toggle="modal" data-target="#modal-fromleft" onClick={this.onClickSetAddressButton.bind(this, _item)}>
+            _titleContent = (<a className="link-effect" href="#" onClick={this.onClickItem.bind(this, _item)}>
                 <span className="block-title">{_item.name}</span>
                 <span className="block-title">-{_item.addr == -1 ? 'NA' : _item.addr}</span>
             </a>)
         } else {
-            _titleContent = (<a className="link-effect" href="#">
+            _titleContent = (<a className="link-effect" href="#" onClick={this.onClickItem.bind(this, _item)}>
                 <span className="block-title">{_item.name}</span>
                 <span className="block-title">-{_item.addr == -1 ? 'NA' : _item.addr}</span>
             </a>)
