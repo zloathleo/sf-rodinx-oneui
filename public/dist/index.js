@@ -17201,7 +17201,7 @@ var OverviewComponent = function (_RefreshUI) {
                         { className: 'row main-overview-content-padding-margin' },
                         _react2.default.createElement(AppendButtonPanel, { title: 'Add Row', addCallback: this.clickAddRowButton.bind(this, rows) }),
                         _react2.default.createElement(RemoveButtonPanel, { title: 'Remove Last Row', addCallback: this.clickRemoveLastRowButton.bind(this, rows) }),
-                        _react2.default.createElement(SettingAddressButtonPanel, { title: 'Setting Address', addCallback: this.clickSettingAddressButton.bind(this) }),
+                        _react2.default.createElement(SettingAddressButtonPanel, { title: 'Set Address', addCallback: this.clickSettingAddressButton.bind(this) }),
                         _react2.default.createElement(AutoAssignButtonPanel, { title: 'Auto Assign', addCallback: this.clickAutoAssignButton.bind(this) })
                     ));
                 }
@@ -18648,30 +18648,6 @@ var AddressSetModalContent = function (_React$Component) {
                     _react2.default.createElement(_ValueInput2.default, { ref: function ref(_ref) {
                             return _this2.inputAddress = _ref;
                         }, className: 'form-control', value: _addr, type: 'number', name: 'address', placeholder: 'Enter the Device Address..' })
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'form-group' },
-                    _react2.default.createElement(
-                        'label',
-                        { className: 'col-xs-12' },
-                        'CH1 Description'
-                    ),
-                    _react2.default.createElement('input', { ref: function ref(_ref) {
-                            return _this2.inputCh1Desc = _ref;
-                        }, className: 'form-control', type: 'text', name: 'ch1-description', placeholder: 'Enter CH1 Description..' })
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'form-group' },
-                    _react2.default.createElement(
-                        'label',
-                        { className: 'col-xs-12' },
-                        'CH2 Description'
-                    ),
-                    _react2.default.createElement('input', { ref: function ref(_ref) {
-                            return _this2.inputCh2Desc = _ref;
-                        }, className: 'form-control', type: 'text', name: 'ch2-description', placeholder: 'Enter CH2 Description..' })
                 )
             );
         }

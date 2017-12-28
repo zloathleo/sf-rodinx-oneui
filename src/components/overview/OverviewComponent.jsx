@@ -315,7 +315,7 @@ class OverviewComponent extends RefreshUI {
                 existRows.push(<div className="row main-overview-content-padding-margin">
                     <AppendButtonPanel title='Add Row' addCallback={this.clickAddRowButton.bind(this, rows)} />
                     <RemoveButtonPanel title='Remove Last Row' addCallback={this.clickRemoveLastRowButton.bind(this, rows)} />
-                    <SettingAddressButtonPanel title='Setting Address' addCallback={this.clickSettingAddressButton.bind(this)} />
+                    <SettingAddressButtonPanel title='Set Address' addCallback={this.clickSettingAddressButton.bind(this)} />
                     <AutoAssignButtonPanel title='Auto Assign' addCallback={this.clickAutoAssignButton.bind(this)} />
                 </div>);
             }
